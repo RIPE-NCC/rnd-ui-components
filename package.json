@@ -1,0 +1,26 @@
+{
+  "name": "@ripe-rnd/ui-components",
+  "version": "0.0.1",
+  "description": "Generic reusable UI components made with React",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.ripe.net:7999/rnd/ui-components.git"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "components"
+  ],
+  "author": "Jasper den Hertog",
+  "license": "ISC",
+  "devDependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-feather": "^1.1.0",
+    "styled-components": "^3.2.6"
+  }
+}
