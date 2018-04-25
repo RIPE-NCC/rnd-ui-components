@@ -1,4 +1,47 @@
 import React from "react";
+import styled from "styled-components";
+import { oimSilver, oimAntracite, oimMarkerYellow } from "../themes/colors";
+
+const StyledSuggestionPane = styled.div`
+  position: absolute;
+  display: block;
+  background-color: white;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+
+  span.suggestion-hint:first-child {
+    color: ${oimSilver};
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0;
+  }
+
+  .sub-item-list {
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+
+    & > li {
+      width: calc(100% + 15px);
+      overflow-x: hidden;
+      padding: 10px 0 10px 15px;
+      margin-left: -15px;
+      margin-right: 15px;
+      margin-bottom: 0;
+    }
+
+    & > li.hover {
+      background-color: ${oimMarkerYellow};
+      cursor: pointer;
+    }
+  }
+
+  .sub-item-list > li:last-child {
+    margin-bottom: 8px;
+  }
+`;
 
 class SuggestionPane extends React.Component {
   constructor(props) {
@@ -12,8 +55,8 @@ class SuggestionPane extends React.Component {
 
   stepSuggestion = step => {
     const fSuggestionArray = this.props.suggestionArray
-      .map(so => so.suggestions)
-      .reduce((fmap, suggestions) => fmap.concat(suggestions), []),
+        .map(so => so.suggestions)
+        .reduce((fmap, suggestions) => fmap.concat(suggestions), []),
       // curIdx en newIdx are 1-based to avoid having to check for one of them being zero separately.
       curIdx =
         (this.state.selectedSuggestion &&
@@ -46,7 +89,7 @@ class SuggestionPane extends React.Component {
 
       case 27: //escape
         e.preventDefault();
-        this.props.closeSuggestionPane.bind(this)();
+        this.props.closeSuggestionPane();
         break;
 
       case 13: //enter
@@ -81,7 +124,7 @@ class SuggestionPane extends React.Component {
 
   render() {
     return (
-      <div className="suggestion-pane">
+      <StyledSuggestionPane className="suggestion-pane">
         {this.props.suggestionArray.map((l, l_idx) => (
           <div key={`sug_id_${l_idx}`} className="suggester">
             <span key={`h_${l_idx}`} className="suggestion-hint">
@@ -104,7 +147,7 @@ class SuggestionPane extends React.Component {
             </ul>
           </div>
         ))}
-      </div>
+      </StyledSuggestionPane>
     );
   }
 }

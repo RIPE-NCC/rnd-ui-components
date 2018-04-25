@@ -9,7 +9,8 @@ class CountryAutoCompleteInPut extends React.Component {
     super(props);
     this.state = {
       suggestionPaneOpen: false,
-      selectedLocation: null
+      selectedLocationName: this.props.initialCountry.properties.countryNameLong,
+      locationCanceled: false
     };
   }
 
@@ -28,24 +29,27 @@ class CountryAutoCompleteInPut extends React.Component {
 
     // `leftover` keyings by the user saved
     // before cleaning the state.
-    const otherLocationType = { Country: "City", City: "Country" }[
-        this.state.childValues.currentLocationType
-      ],
-      otherSnippet = this.state.childValues[otherLocationType];
+    // const otherLocationType = { Country: "City", City: "Country" }[
+    //     this.state.childValues.currentLocationType
+    //   ],
+    //   otherSnippet = this.state.childValues[otherLocationType];
 
     this.setState({
-      currentLocation: newLocation,
-      selectedLocation: newLocation,
+      //currentLocation: newLocation,
+      selectedLocationName: newLocation.properties.countryNameLong,
+      locationCanceled: true,
+      suggestionPaneOpen: false,
       childValues: {}
     });
 
-    if (otherSnippet) {
-      this.valueHasChanged(otherLocationType, otherSnippet);
-    } else {
-      this.closeSuggestionPane();
-    }
+    // if (otherSnippet) {
+    //   this.valueHasChanged(otherLocationType, otherSnippet);
+    // } else {
+    //   this.closeSuggestionPane();
+    // }
 
     //this.closeSuggestionPane();
+    //this.setState({suggestionPaneOpen: false});
     this.props.onSubmit(newLocation);
   };
 
@@ -79,6 +83,12 @@ class CountryAutoCompleteInPut extends React.Component {
         currentLocationType: k
       }
     });
+
+    if (this.state.locationCanceled) {
+      this.setState({
+        locationCanceled: false
+      })
+    }
   };
 
   openSuggestionPane = () => {
@@ -87,21 +97,21 @@ class CountryAutoCompleteInPut extends React.Component {
 
   closeSuggestionPane = () => {
     console.log("no more suggestions");
-    this.setState({ suggestionPaneOpen: false});
+    console.log(this.props.initialCountry);
+    this.setState({
+      suggestionPaneOpen: false,
+      locationCanceled: true
+    });
   };
 
   render() {
     return (
-      <div>
+      <div className="context-dialog">
         <TextInput
           title="Country"
           defaultValue={this.props.initialCountry.properties.countryNameLong}
           valueHasChanged={this.valueHasChanged}
-          updatedValue={
-            (this.state.selectedLocation &&
-              this.state.selectedLocation.properties.countryNameLong) ||
-            this.props.initialCountry.properties.countryNameLong
-          }
+          updatedValue={this.state.locationCanceled && this.state.selectedLocationName || null}
           emptyHint={this.props.emptyHint}
           closeSuggestionPane={this.closeSuggestionPane}
         />
@@ -126,7 +136,7 @@ CountryAutoCompleteInPut.propTypes = {
   initialCountry: PropTypes.object.isRequired,
   emptyHint: PropTypes.string,
   // the callback that fires when a new country was entered successfully
-  onSubmit: PropTypes.func 
+  onSubmit: PropTypes.func
 };
 
 // CountryAutoCompleteInPut.defaultProps = {

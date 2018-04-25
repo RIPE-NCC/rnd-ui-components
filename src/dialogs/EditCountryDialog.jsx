@@ -1,14 +1,8 @@
 import React from "react";
 
-//import { transformHostLocationToGeoLocation } from "~/app/models/geotraceroute";
 import Dialog from "../dialogs/Dialog.jsx";
 import { TextInput } from "../generic/inputs.jsx";
 import SuggestionPane from "../generic/SuggestionPane.jsx";
-
-//import { makeSuggestionArray } from "../../suggestionengine";
-//import suggesters from "../../suggestionengine/suggesters";
-
-//import { lowScoreTreshold } from "~/app/config/openipmap";
 
 const EditCountryDialog = DialogComponent => {
   return class extends React.Component {
