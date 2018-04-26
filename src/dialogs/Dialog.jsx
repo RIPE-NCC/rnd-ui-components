@@ -33,7 +33,7 @@ const StyledDialogDiv = styled.div`
     left: -6px;
     padding: 0px;
     background-color: transparent;
-    border: 1px solid @oim-silver;
+    border: 1px solid ${oimSilver};
 
     &.locating {
       background-color: ${ripeMagenta};
