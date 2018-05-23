@@ -8,5 +8,8 @@ export { default as EditCountryDialog } from "./dialogs/EditCountryDialog.jsx";
 export { TextInput } from "./generic/inputs.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
 
-// geo specials
+// geo input specials
 export { default as CountryAutoCompleteInput } from "./inputs/CountryAutoCompleteInput.jsx";
+
+// geo
+export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
