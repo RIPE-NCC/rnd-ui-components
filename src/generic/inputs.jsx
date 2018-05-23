@@ -133,7 +133,9 @@ export class TextInput extends React.Component {
           className={this.props.className}
           required="true"
           placeholder={this.props.placeHolder || ""}
-          defaultValue={this.props.defaultValue}
+          // using defaultValue causes the component to be uncontrolled,
+          // we don't want that.
+          //defaultValue={this.props.defaultValue}
           value={this.state.value}
           onChange={this.handleChange}
         />
