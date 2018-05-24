@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 import { geoPath, geoGraticule } from "d3-geo";
 import { select, selectAll } from "d3-selection";
@@ -55,7 +56,7 @@ stroke-width: 0.5;
 stroke-opacity: 1;
 stroke: ${oimAntracite};
 fill: white;
-overflow: visible;
+overflow: ${props => (props.viewMode === "sheet" && "visible") || "hidden"};
 
 .voronoi {
   path.cell,
@@ -189,10 +190,21 @@ path.hop-country {
 }
 `;
 
-const StyledMapControlsContainer = styled.svg`
+const WindowMapControlsContainer = styled.svg`
+  position: absolute;
+  margin-left: -95px;
+  margin-top: 6px;
+
+  .map-controls {
+    cursor: pointer;
+  }
+`;
+
+const SheetMapControlsContainer = styled.svg`
   position: fixed;
-  top: 0;
-  right: 20px;
+  right: 24px;
+  top: 12px;
+  margin: 0;
 
   .map-controls {
     cursor: pointer;
@@ -247,6 +259,10 @@ export class GeoMap extends React.Component {
         height: 0
       };
   }
+
+  StyledMapControlsContainer = (this.props.viewMode === "sheet" &&
+    SheetMapControlsContainer) ||
+  WindowMapControlsContainer;
 
   // createWorld({
   //   countries: topojson.feature(
@@ -826,6 +842,10 @@ export class GeoMap extends React.Component {
         })
     );
 
+    const StyledMapControlsContainer =
+      (this.props.viewMode == "sheet" && SheetMapControlsContainer) ||
+      WindowMapControlsContainer;
+
     return (
       /* 
        * Remember boys and girls:
@@ -846,6 +866,7 @@ export class GeoMap extends React.Component {
 
       [
         <StyledGeoMap
+          viewMode={this.props.viewMode}
           key="mc"
           className="mapContainer"
           //width={this.props.width}
@@ -918,6 +939,7 @@ export class GeoMap extends React.Component {
         )*/}
         </StyledGeoMap>,
         <StyledMapControlsContainer
+          viewMode={this.props.viewMode}
           key="mcc"
           className="map-controls-container"
           width="80"
@@ -1014,7 +1036,18 @@ export class GeoMap extends React.Component {
   }
 }
 
+GeoMap.propTypes = {
+  viewMode: PropTypes.string,
+  scale: PropTypes.number,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number,
+  rotate: PropTypes.arrayOf(PropTypes.number),
+  translate: PropTypes.arrayOf(PropTypes.number),
+  projection: PropTypes.func.isRequired
+};
+
 GeoMap.defaultProps = {
+  viewMode: "sheet",
   landStrokeWidth: 0.1,
   animateMapTransition: true, // use d3 animations, or not.
   // These are d3 projection properties. Changing these calculates a new projection.
