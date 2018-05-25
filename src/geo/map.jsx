@@ -27,10 +27,31 @@ import {
 } from "../themes/colors";
 
 const MAXZOOM = 12;
-const COUNTRYGEOINFOURL = "./geo/world-geo150_ne50m.topo.json";
+const DEFAULT_GEO_OBJECTS_KEY = "openipmapCountries-ne50m";
+const SMALL_COUNTRIES_ONLY_OBJECTS_KEY = "countries_110m";
 
-export const loadCountryGeoInfo = async countryGeoInfoUrl => {
-  const fetchUrl = countryGeoInfoUrl || COUNTRYGEOINFOURL;
+export const loadCountryGeoInfo = async ({ ...props }) => {
+  /*
+  * arguments:
+  * 
+  * detail              : [ 10m, 50m, 110m]
+  * places              : [15, 150, null]
+  * countryGeoInfoUrl   : custom place to load topojson from
+  * showAntarctica      : true|false
+  * 
+  * filename should be of format `world-geo<PLACES>_ne<DETAIL>.topo.json
+  */
+  const detail = props.detail || "50m",
+    places = (typeof props.places === "undefined" && "150") || props.places;
+
+  const fetchUrl =
+    props.countryGeoInfoUrl ||
+    `./geo/world${(places && "-geo") || ""}${(places && places) ||
+      "" ||
+      ""}_ne${detail}.topo.json`;
+  const geoKey =
+    (detail === "50m" && DEFAULT_GEO_OBJECTS_KEY) ||
+    SMALL_COUNTRIES_ONLY_OBJECTS_KEY;
   let response = await fetch(fetchUrl).catch(err => {
     console.log(err);
     console.log(`${fetchUrl} does not exist.`);
@@ -40,8 +61,7 @@ export const loadCountryGeoInfo = async countryGeoInfoUrl => {
     console.log(error);
     return null;
   });
-  return topojson.feature(geoData, geoData.objects["openipmapCountries-ne50m"])
-    .features;
+  return topojson.feature(geoData, geoData.objects[geoKey]).features;
 };
 
 const StyledGeoMap = styled.svg`/* all browsers except Chrome only want to transform from the transform-origin 0 0 */
@@ -83,6 +103,12 @@ rect.tr-target {
 
 .tr-segment.backdrop text {
   opacity: 0.3;
+}
+
+
+path.outline {
+  stroke-width: 2pt;
+  fill: none;
 }
 
 path.tr-target {
@@ -258,22 +284,38 @@ export class GeoMap extends React.Component {
         width: 0,
         height: 0
       };
+
+    this.countries = null;
   }
+
+  filterCountries = countries =>
+    countries.filter(
+      c =>
+        (this.props.showAntarctica && true) ||
+        (c.properties.id !== "ATA" &&
+          (!c.properties.adm0_a3 || c.properties.adm0_a3 !== "ATA"))
+    );
+
+  renderD3World = ({ update }) => {
+    // The id should be set by the user of the GeoMap component
+    // this.mapContainer is the innerRef set by the styled Component.
+    console.log("rerender d3 world");
+    let mapID = this.mapContainer.id;
+    let world = select(this.refs.d3countries)
+      .selectAll("path")
+      .data(this.countries);
+    world
+      .enter()
+      .insert("path")
+      .attr("class", "land")
+      .attr("id", c => c.properties.id)
+      .attr("d", this.defaultPath);
+    this.setState({ worldInitialized: true });
+  };
 
   StyledMapControlsContainer = (this.props.viewMode === "sheet" &&
     SheetMapControlsContainer) ||
   WindowMapControlsContainer;
-
-  // createWorld({
-  //   countries: topojson.feature(
-  //     countries,
-  //     countries.objects["openipmapCountries-ne50m"]
-  //   ).features, //.filter(country => country.id !== '-99' && country),
-  //   places: topojson.feature(
-  //     countries,
-  //     countries.objects["openipmapCities-geo15"]
-  //   ).features
-  // })
 
   /* This function looks for the end of all transitions on a d3.selectAll collection
    * d3 only has builtin support for the "end" event on each and every element in the selectAll collection.
@@ -298,40 +340,28 @@ export class GeoMap extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Awas! fast world loading!");
     if (this.props.countries) {
-      let world = select(this.refs.d3countries)
-        .selectAll("path")
-        .data(this.props.countries);
-      world
-        .enter()
-        .insert("path")
-        .attr("class", "land")
-        .attr("id", c => c.properties.id)
-        .attr("d", this.defaultPath);
-      this.setState({ worldInitialized: true });
+      console.log("Awas! fast world loading!");
+
+      this.countries = this.filterCountries(this.props.countries);
+      this.renderD3World({ update: false });
     }
+
+    this.setState({ worldInitialized: true });
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("countries received");
-    if (nextProps.countries) {
-      let world = select(this.refs.d3countries)
-        .selectAll("path")
-        .data(nextProps.countries);
-      world
-        .enter()
-        .insert("path")
-        .attr("class", "land")
-        .attr("id", c => c.properties.id)
-        .attr("d", this.defaultPath);
+    if (!this.props.countries && nextProps.countries) {
+      console.log("countries received");
+      this.countries = this.filterCountries(nextProps.countries);
+      this.renderD3World({ update: false });
       this.setState({ worldInitialized: true });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.worldInitialized && this.props.countries) {
-      /*
+      /*ren
        * Render the initial world with the default settings
        * 
        * Normally this would live in `componentWillMount` but the loading 
@@ -342,15 +372,8 @@ export class GeoMap extends React.Component {
        */
       console.log("initialize d3 world");
 
-      let world = select(this.refs.d3countries)
-        .selectAll("path")
-        .data(this.props.countries);
-      world
-        .enter()
-        .insert("path")
-        .attr("class", "land")
-        .attr("id", c => c.properties.id)
-        .attr("d", this.defaultPath);
+      this.countries = this.filterCountries(this.props.countries);
+      this.renderD3World({ update: true });
       this.setState({ worldInitialized: true });
     } else if (
       prevState.rotation[0] !== this.state.rotation[0] ||
@@ -762,11 +785,22 @@ export class GeoMap extends React.Component {
             />
           </g>
         )) || (
-          <rect
-            width={this.props.width}
-            height={this.props.height}
-            className={"noclicks"}
-            fill={"url(#ocean_fill)"}
+          // <rect
+          //   width={this.props.width}
+          //   height={this.props.height}
+          //   className={"noclicks"}
+          //   fill={"url(#ocean_fill)"}
+          //   // clipPath={`url(#clippath_${this.props.id})`}
+          // />
+          //)
+
+          // draws the outline of the map
+          <use
+            href={`#outline_${this.props.id}`}
+            className="noclicks outline"
+            //stroke="none"
+            //stroke-width="2pt"
+            fill="url('#ocean_fill')"
           />
         )}
       </svg>
@@ -799,6 +833,15 @@ export class GeoMap extends React.Component {
     );
   };
 
+  renderOutlineSphere = mapId => {
+    const dSphere = this.defaultPath({ type: "Sphere" });
+    //mapId = this.mapContainer.id;
+    return (
+      <defs>
+        <path d={dSphere} id={`outline_${mapId}`} />
+      </defs>
+    );
+  };
   /*
    * deperecated; click go directly to props.openSegment
   clickSegment(data) {
@@ -810,7 +853,7 @@ export class GeoMap extends React.Component {
 
   render() {
     if (process.env.NODE_ENV !== "production") {
-      console.log("rerender world");
+      console.log("react render triggered");
     }
 
     const strokeWidthStr = `${this.props.landStrokeWidth / this.state.zoom}pt`,
@@ -868,6 +911,7 @@ export class GeoMap extends React.Component {
         <StyledGeoMap
           viewMode={this.props.viewMode}
           key="mc"
+          id={this.props.id}
           className="mapContainer"
           //width={this.props.width}
           //height={this.props.height}
@@ -882,6 +926,9 @@ export class GeoMap extends React.Component {
           onMouseDown={this.mouseDown}
           onMouseUp={this.mouseUp}
           onMouseLeave={this.mouseUp}
+          innerRef={x => {
+            this.mapContainer = x;
+          }}
         >
           <g
             ref="d3world"
@@ -901,8 +948,9 @@ export class GeoMap extends React.Component {
               this.rotateToCountry({ e: e, countryId: e.target.id })
             }
           >
-            {this.renderGlobeEffects()}
-            {this.renderGraticules()}
+            {this.renderOutlineSphere(this.props.id)}
+            {this.renderGlobeEffects(this.props.id)}
+            {this.props.showGraticules && this.renderGraticules()}
             <g className="land" ref="d3countries" />
             {/* {this.state.selectedCountry && (
             <rect
@@ -1037,7 +1085,10 @@ export class GeoMap extends React.Component {
 }
 
 GeoMap.propTypes = {
+  id: PropTypes.string.isRequired,
   viewMode: PropTypes.string,
+  showGraticules: PropTypes.bool,
+  showAntarctica: PropTypes.bool,
   scale: PropTypes.number,
   width: PropTypes.number.isRequired,
   height: PropTypes.number,
@@ -1048,6 +1099,8 @@ GeoMap.propTypes = {
 
 GeoMap.defaultProps = {
   viewMode: "sheet",
+  showGraticules: true,
+  showAntarctica: true,
   landStrokeWidth: 0.1,
   animateMapTransition: true, // use d3 animations, or not.
   // These are d3 projection properties. Changing these calculates a new projection.
