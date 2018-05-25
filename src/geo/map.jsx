@@ -300,7 +300,6 @@ export class GeoMap extends React.Component {
     // The id should be set by the user of the GeoMap component
     // this.mapContainer is the innerRef set by the styled Component.
     console.log("rerender d3 world");
-    let mapID = this.mapContainer.id;
     let world = select(this.refs.d3countries)
       .selectAll("path")
       .data(this.countries);
@@ -731,8 +730,9 @@ export class GeoMap extends React.Component {
     }
   };
 
-  renderGlobeEffects = () => {
-    var ocean_fill = (
+  renderGlobeEffects = mapId => {
+    const dSphere = this.defaultPath({ type: "Sphere" }),
+      ocean_fill = (
         <defs>
           <radialGradient id="ocean_fill" cx="75%" cy="25%">
             <stop offset="5%" stopColor="#ddf" />
@@ -755,13 +755,19 @@ export class GeoMap extends React.Component {
             <stop offset="100%" stopColor="#3e6184" stopOpacity="0.3" />
           </radialGradient>
         </defs>
+      ),
+      sphere_outline = (
+        <defs>
+          <path d={dSphere} id={`outline_${mapId}`} />
+        </defs>
       );
 
     return (
       <svg>
+        {this.props.globeProjection && globe_highlight}
+        {this.props.globeProjection && globe_shading}
         {ocean_fill}
-        {globe_highlight}
-        {globe_shading}
+        {sphere_outline}
         {(this.props.globeProjection && (
           <g>
             <circle
@@ -785,6 +791,10 @@ export class GeoMap extends React.Component {
             />
           </g>
         )) || (
+          /* old behaivour where we would draw
+           a rect underneath the whole world
+           with an ocean highlight fill
+          */
           // <rect
           //   width={this.props.width}
           //   height={this.props.height}
@@ -798,8 +808,6 @@ export class GeoMap extends React.Component {
           <use
             href={`#outline_${this.props.id}`}
             className="noclicks outline"
-            //stroke="none"
-            //stroke-width="2pt"
             fill="url('#ocean_fill')"
           />
         )}
@@ -833,15 +841,6 @@ export class GeoMap extends React.Component {
     );
   };
 
-  renderOutlineSphere = mapId => {
-    const dSphere = this.defaultPath({ type: "Sphere" });
-    //mapId = this.mapContainer.id;
-    return (
-      <defs>
-        <path d={dSphere} id={`outline_${mapId}`} />
-      </defs>
-    );
-  };
   /*
    * deperecated; click go directly to props.openSegment
   clickSegment(data) {
@@ -948,8 +947,7 @@ export class GeoMap extends React.Component {
               this.rotateToCountry({ e: e, countryId: e.target.id })
             }
           >
-            {this.renderOutlineSphere(this.props.id)}
-            {this.renderGlobeEffects(this.props.id)}
+            {this.props.showBackground && this.renderGlobeEffects(this.props.id)}
             {this.props.showGraticules && this.renderGraticules()}
             <g className="land" ref="d3countries" />
             {/* {this.state.selectedCountry && (
@@ -1089,6 +1087,7 @@ GeoMap.propTypes = {
   viewMode: PropTypes.string,
   showGraticules: PropTypes.bool,
   showAntarctica: PropTypes.bool,
+  showBackground: PropTypes.bool,
   scale: PropTypes.number,
   width: PropTypes.number.isRequired,
   height: PropTypes.number,
@@ -1101,6 +1100,7 @@ GeoMap.defaultProps = {
   viewMode: "sheet",
   showGraticules: true,
   showAntarctica: true,
+  showBackground: true,
   landStrokeWidth: 0.1,
   animateMapTransition: true, // use d3 animations, or not.
   // These are d3 projection properties. Changing these calculates a new projection.
