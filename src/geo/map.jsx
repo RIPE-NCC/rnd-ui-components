@@ -237,6 +237,34 @@ const SheetMapControlsContainer = styled.svg`
   }
 `;
 
+export class Graticules extends React.Component {
+  render() {
+    return (
+      <g
+        strokeWidth={`${Math.min(
+          0.4,
+          this.props.landStrokeWidth / (this.props.zoom * 1)
+        )}pt`}
+        ref="graticules"
+      >
+        {geoGraticule()
+          .step([10, 10])
+          .lines()
+          .map((graticule, idx) => {
+            return (
+              <path
+                className={"graticule"}
+                key={"gr_" + idx}
+                id={"gr_" + idx}
+                d={this.props.defaultPath(graticule)}
+              />
+            );
+          })}
+      </g>
+    );
+  }
+}
+
 export class GeoMap extends React.Component {
   constructor(props) {
     super(props);
@@ -269,7 +297,8 @@ export class GeoMap extends React.Component {
       tracerouteSegmentsBBox: null,
       rotation: this.projection.rotate(),
       clickPoint: [null, null],
-      selectedCountry: null
+      selectedCountry: null,
+      d3Render: false
     };
 
     this.defaultPath = geoPath()
@@ -390,7 +419,8 @@ export class GeoMap extends React.Component {
         this.state.rotation
       );
 
-      console.log(`${prevState.rotation} -> ${this.state.rotation}`);
+      console.log(`rotation: ${prevState.rotation} -> ${this.state.rotation}`);
+      console.log(`zoom : ${prevState.zoom} -> ${this.state.zoom}`);
 
       if (this.props.animateMapTransition) {
         let duration =
@@ -406,12 +436,15 @@ export class GeoMap extends React.Component {
           .ease(easeLinear)
           .attrTween("d", d => {
             return t => {
-              let path = geoPath().projection(
+              const path = geoPath().projection(
                 this.projection.rotate(rotateInterpolate(t))
               );
-              return path(d);
+              // empty string is useful in case of globeProjection
+              // and countries do not have a path (there on the other side of the planet)
+              return path(d) || "";
             };
           });
+        console.log(this.state.zoom);
         console.log("d3 animations ON");
       } else {
         console.log("d3 animations OFF");
@@ -576,7 +609,11 @@ export class GeoMap extends React.Component {
 
   resetWorldView = () => {
     this.setState({
-      zoom: 1,
+      // haha, a trick!
+      // we zoom to 0.99 so the callback when ready after the
+      // transition (a call to zoomToCountry) will trigger
+      // a react GeoMap render() by changing state.zoom from 0.99 to 1
+      zoom: 0.99,
       move: [0, 0],
       selectedCountry: null,
       rotation: [0, 0]
@@ -594,7 +631,8 @@ export class GeoMap extends React.Component {
       })
       .on("end", e => {
         console.log("zoomTween ended");
-        this.setState({ d3Render: false });
+        console.log(this.state.zoom);
+        this.setState({ d3Render: false, zoom: zoom, move: translate });
       });
   };
 
@@ -650,15 +688,17 @@ export class GeoMap extends React.Component {
     if (!this.state.selectedCountry) {
       // This used for a resetWorldView.
       this.setState({
-        d3Render: false
+        d3Render: false,
+        zoom: 1
       });
       return;
     }
     let country = this.state.selectedCountry,
       countryBounds = this.defaultPath.bounds(country),
-      mapBounds = document
-        .querySelector(".atlasSurface.map")
-        .getBoundingClientRect();
+      // mapBounds = document
+      //   .querySelector(".atlasSurface.map")
+      //   .getBoundingClientRect();
+      mapBounds = this.mapContainer.getBoundingClientRect();
 
     let w = this.props.width,
       h = this.props.height,
@@ -685,8 +725,8 @@ export class GeoMap extends React.Component {
     console.log(`new scale\t: ${scale}`);
 
     this.setState({
-      move: translate,
-      zoom: scale,
+      //move: [0, 0],
+      //zoom: scale,
       d3Render: true,
       viewBox: viewBox,
       mapBounds: mapBounds,
@@ -697,8 +737,12 @@ export class GeoMap extends React.Component {
       selection: select(this.refs.d3world),
       duration: 750,
       zoom: scale,
-      translate: translate,
-      callBack: this.setState({ d3Render: false })
+      //translate: translate,
+      translate: [0, 0],
+      callBack: (d => {
+        console.log("called back");
+        this.setState({ d3Render: false });
+      })()
     });
   };
 
@@ -815,31 +859,31 @@ export class GeoMap extends React.Component {
     );
   };
 
-  renderGraticules = () => {
-    return (
-      <g
-        strokeWidth={`${Math.min(
-          0.4,
-          this.props.landStrokeWidth / (this.state.zoom * 1)
-        )}pt`}
-        ref="graticules"
-      >
-        {geoGraticule()
-          .step([10, 10])
-          .lines()
-          .map((graticule, idx) => {
-            return (
-              <path
-                className={"graticule"}
-                key={"gr_" + idx}
-                id={"gr_" + idx}
-                d={this.defaultPath(graticule)}
-              />
-            );
-          })}
-      </g>
-    );
-  };
+  // renderGraticules = () => {
+  //   return (
+  //     <g
+  //       strokeWidth={`${Math.min(
+  //         0.4,
+  //         this.props.landStrokeWidth / (this.state.zoom * 1)
+  //       )}pt`}
+  //       ref="graticules"
+  //     >
+  //       {geoGraticule()
+  //         .step([10, 10])
+  //         .lines()
+  //         .map((graticule, idx) => {
+  //           return (
+  //             <path
+  //               className={"graticule"}
+  //               key={"gr_" + idx}
+  //               id={"gr_" + idx}
+  //               d={this.defaultPath(graticule)}
+  //             />
+  //           );
+  //         })}
+  //     </g>
+  //   );
+  // };
 
   /*
    * deperecated; click go directly to props.openSegment
@@ -947,8 +991,15 @@ export class GeoMap extends React.Component {
               this.rotateToCountry({ e: e, countryId: e.target.id })
             }
           >
-            {this.props.showBackground && this.renderGlobeEffects(this.props.id)}
-            {this.props.showGraticules && this.renderGraticules()}
+            {this.props.showBackground &&
+              this.renderGlobeEffects(this.props.id)}
+            {this.props.showGraticules && (
+              <Graticules
+                landStrokeWidth={this.props.landStrokeWidth}
+                defaultPath={this.defaultPath}
+                zoom={this.state.zoom}
+              />
+            )}
             <g className="land" ref="d3countries" />
             {/* {this.state.selectedCountry && (
             <rect
