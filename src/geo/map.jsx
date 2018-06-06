@@ -8,7 +8,14 @@ import "d3-transition";
 import { interpolate } from "d3-interpolate";
 import { easeLinear } from "d3-ease";
 
-import { Globe, ZoomIn, ZoomOut, Map } from "react-feather";
+import {
+  Globe,
+  ZoomIn,
+  ZoomOut,
+  Map,
+  ArrowLeft,
+  ArrowRight
+} from "react-feather";
 
 import { centroid } from "@turf/turf";
 
@@ -26,7 +33,6 @@ import {
   lColor
 } from "../themes/colors";
 
-const MAXZOOM = 12;
 const DEFAULT_GEO_OBJECTS_KEY = "openipmapCountries-ne50m";
 const SMALL_COUNTRIES_ONLY_OBJECTS_KEY = "countries_110m";
 
@@ -47,8 +53,8 @@ export const loadCountryGeoInfo = async ({ ...props }) => {
   const fetchUrl =
     props.countryGeoInfoUrl ||
     `./geo/world${(places && "-geo") || ""}${(places && places) ||
-      "" ||
-      ""}_ne${detail}.topo.json`;
+    "" ||
+    ""}_ne${detail}.topo.json`;
   const geoKey =
     (detail === "50m" && DEFAULT_GEO_OBJECTS_KEY) ||
     SMALL_COUNTRIES_ONLY_OBJECTS_KEY;
@@ -197,7 +203,7 @@ path.hop-country {
 }
 
 .land {
-  fill: ${oimLand};
+  fill: ${props => props.landFillColor};
   fill-opacity: 1;
   stroke: black;
   //stroke-width: 0.1pt;
@@ -239,6 +245,7 @@ const SheetMapControlsContainer = styled.svg`
 
 export class Graticules extends React.Component {
   render() {
+    console.log("render graticules");
     return (
       <g
         strokeWidth={`${Math.min(
@@ -343,7 +350,7 @@ export class GeoMap extends React.Component {
 
   StyledMapControlsContainer = (this.props.viewMode === "sheet" &&
     SheetMapControlsContainer) ||
-  WindowMapControlsContainer;
+    WindowMapControlsContainer;
 
   /* This function looks for the end of all transitions on a d3.selectAll collection
    * d3 only has builtin support for the "end" event on each and every element in the selectAll collection.
@@ -426,7 +433,7 @@ export class GeoMap extends React.Component {
         let duration =
           Math.sqrt(
             Math.pow(prevState.rotation[0] - this.state.rotation[0], 2) +
-              Math.pow(prevState.rotation[1] - this.state.rotation[1], 2)
+            Math.pow(prevState.rotation[1] - this.state.rotation[1], 2)
           ) * 10;
         select(this.refs.d3countries)
           .selectAll("path")
@@ -440,7 +447,7 @@ export class GeoMap extends React.Component {
                 this.projection.rotate(rotateInterpolate(t))
               );
               // empty string is useful in case of globeProjection
-              // and countries do not have a path (there on the other side of the planet)
+              // and countries do not have a path (they're on the other side of the planet)
               return path(d) || "";
             };
           });
@@ -552,6 +559,12 @@ export class GeoMap extends React.Component {
         return true;
       }
     }
+
+    // If any of the children has a `paths` prop then rerender
+    // the `paths` field is used to pass in a bunch of paths to a D3 function sometimes.
+    // for example, in the HexbinMap to render aggregates probe bins.
+    if (React.Children.toArray(children => children.some(c => c.props.paths))) { return true; };
+
     return false;
   }
 
@@ -643,17 +656,17 @@ export class GeoMap extends React.Component {
     }
 
     const bboxLRTB = this.props.cities.map(c => c.locationCoords).reduce(
-        (acc, cur) => {
-          const curProj = this.projection(cur);
-          return {
-            left: Math.min(acc.left, curProj[0]),
-            right: Math.max(acc.right, curProj[0]),
-            top: Math.min(acc.top, curProj[1]),
-            bottom: Math.max(acc.bottom, curProj[1])
-          };
-        },
-        { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity }
-      ),
+      (acc, cur) => {
+        const curProj = this.projection(cur);
+        return {
+          left: Math.min(acc.left, curProj[0]),
+          right: Math.max(acc.right, curProj[0]),
+          top: Math.min(acc.top, curProj[1]),
+          bottom: Math.max(acc.bottom, curProj[1])
+        };
+      },
+      { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity }
+    ),
       bbox = {
         ...bboxLRTB,
         width: bboxLRTB.right - bboxLRTB.left,
@@ -665,7 +678,7 @@ export class GeoMap extends React.Component {
       zoomCenter = [(bbox.right - bbox.left) / 2, (bbox.bottom - bbox.top) / 2],
       zoomHor = windowAvailable.width / bbox.width,
       zoomVer = windowAvailable.height / bbox.height,
-      newZoom = Math.min(zoomHor, zoomVer, MAXZOOM) * 0.9; // overshoot a little bit to have some space around it.
+      newZoom = Math.min(zoomHor, zoomVer, this.props.maxZoomFactor) * 0.9; // overshoot a little bit to have some space around it.
     this.setState({
       zoom: newZoom,
       move: [
@@ -686,10 +699,11 @@ export class GeoMap extends React.Component {
 
   zoomToCountry = () => {
     if (!this.state.selectedCountry) {
+      console.log("reset world");
       // This used for a resetWorldView.
       this.setState({
         d3Render: false,
-        zoom: 1
+        zoom: this.state.zoom
       });
       return;
     }
@@ -746,13 +760,20 @@ export class GeoMap extends React.Component {
     });
   };
 
+  stepRotate = step => {
+    console.log("step right!");
+    this.setState({
+      rotation: [this.state.rotation[0] + step, this.state.rotation[1]]
+    });
+  };
+
   rotateToCountry = ({ e, countryId }) => {
     e.stopPropagation();
 
     let country =
-        (countryId &&
-          this.props.countries.find(c => c.properties.id === countryId)) ||
-        null,
+      (countryId &&
+        this.props.countries.find(c => c.properties.id === countryId)) ||
+      null,
       center = centroid(country).geometry.coordinates,
       newRotation = [-center[0], -center[1]];
 
@@ -835,26 +856,26 @@ export class GeoMap extends React.Component {
             />
           </g>
         )) || (
-          /* old behaivour where we would draw
-           a rect underneath the whole world
-           with an ocean highlight fill
-          */
-          // <rect
-          //   width={this.props.width}
-          //   height={this.props.height}
-          //   className={"noclicks"}
-          //   fill={"url(#ocean_fill)"}
-          //   // clipPath={`url(#clippath_${this.props.id})`}
-          // />
-          //)
+            /* old behaivour where we would draw
+             a rect underneath the whole world
+             with an ocean highlight fill
+            */
+            // <rect
+            //   width={this.props.width}
+            //   height={this.props.height}
+            //   className={"noclicks"}
+            //   fill={"url(#ocean_fill)"}
+            //   // clipPath={`url(#clippath_${this.props.id})`}
+            // />
+            //)
 
-          // draws the outline of the map
-          <use
-            href={`#outline_${this.props.id}`}
-            className="noclicks outline"
-            fill="url('#ocean_fill')"
-          />
-        )}
+            // draws the outline of the map
+            <use
+              href={`#outline_${this.props.id}`}
+              className="noclicks outline"
+              fill="url('#ocean_fill')"
+            />
+          )}
       </svg>
     );
   };
@@ -905,11 +926,11 @@ export class GeoMap extends React.Component {
         document.querySelector(".mapContainer").getBoundingClientRect().width;
 
     const tracerouteSegmentsBBox = (document.querySelector(
-        "#traceroute-segments"
-      ) &&
-        document
-          .querySelector("#traceroute-segments")
-          .getBoundingClientRect()) || {
+      "#traceroute-segments"
+    ) &&
+      document
+        .querySelector("#traceroute-segments")
+        .getBoundingClientRect()) || {
         left: 0,
         width: this.props.with,
         top: 0,
@@ -921,7 +942,7 @@ export class GeoMap extends React.Component {
     const childrenWithMapState = React.Children.map(
       this.props.children,
       child =>
-        React.cloneElement(child, {
+        child && React.cloneElement(child, {
           projection: this.projection,
           zoomFactor: this.state.zoom,
           inTransit: this.state.inTransit
@@ -965,6 +986,7 @@ export class GeoMap extends React.Component {
             strokeWidth: strokeWidthStr,
             cursor: this.state.inTransit && "all-scroll"
           }}
+          landFillColor={this.props.landFillColor}
           onMouseMoveCapture={this.mouseMove}
           onMouseDown={this.mouseDown}
           onMouseUp={this.mouseUp}
@@ -977,12 +999,12 @@ export class GeoMap extends React.Component {
             ref="d3world"
             transform={`scale(${this.state.zoom}) translate(${
               this.state.move[0]
-            },${this.state.move[1]})`}
+              },${this.state.move[1]})`}
             style={{
               strokeWidth: strokeWidthStr,
               transformOrigin: `${this.state.zoomCenter[0]}px ${
                 this.state.zoomCenter[1]
-              }px`
+                }px`
               //transformOrigin: `${this.props.width / 2}px ${this.props.height /2}px`
             }}
             onDoubleClick={e =>
@@ -998,6 +1020,7 @@ export class GeoMap extends React.Component {
                 landStrokeWidth={this.props.landStrokeWidth}
                 defaultPath={this.defaultPath}
                 zoom={this.state.zoom}
+                ref="graticulesContainer"
               />
             )}
             <g className="land" ref="d3countries" />
@@ -1039,11 +1062,43 @@ export class GeoMap extends React.Component {
           viewMode={this.props.viewMode}
           key="mcc"
           className="map-controls-container"
-          width="80"
-          height="240"
-          viewBox="-40 0 80 240"
-          //transform={`translate(${rightPosMapBox - 150},24)`}
+          width="150"
+          height="350"
+          viewBox="-60 0 90 350"
+        //transform={`translate(${rightPosMapBox - 150},24)`}
         >
+          <g className="map-controls" transform="translate(0,240)">
+            <circle
+              cx="12"
+              cy="12"
+              r="20"
+              fill="white"
+              stroke="none"
+              title="rotate right"
+              onClick={e => {
+                this.stepRotate(-10);
+              }}
+            >
+              <title>Rotate world to the right</title>
+            </circle>
+            <ArrowRight strokeWidth="0.5pt" />
+          </g>
+          <g className="map-controls" transform="translate(-50,240)">
+            <circle
+              cx="12"
+              cy="12"
+              r="20"
+              fill="white"
+              stroke="none"
+              title="rotate right"
+              onClick={e => {
+                this.stepRotate(+10);
+              }}
+            >
+              <title>Rotate world to the left</title>
+            </circle>
+            <ArrowLeft strokeWidth="0.5pt" />
+          </g>
           <g
             className="map-controls"
             // transform={`translate(${rightPosMapBox - 50},24)`}
@@ -1076,7 +1131,7 @@ export class GeoMap extends React.Component {
               e.stopPropagation();
               let newZoom = this.state.zoom + 1;
               newZoom >= 1 &&
-                newZoom <= MAXZOOM &&
+                newZoom <= this.props.maxZoomFactor &&
                 this.setState({ zoom: this.state.zoom + 1 });
             }}
           >
@@ -1093,7 +1148,7 @@ export class GeoMap extends React.Component {
               e.stopPropagation();
               let newZoom = this.state.zoom - 1;
               newZoom >= 1 &&
-                this.state.zoom <= MAXZOOM &&
+                this.state.zoom <= this.props.maxZoomFactor &&
                 this.setState({ zoom: newZoom });
             }}
           >
@@ -1144,7 +1199,9 @@ GeoMap.propTypes = {
   height: PropTypes.number,
   rotate: PropTypes.arrayOf(PropTypes.number),
   translate: PropTypes.arrayOf(PropTypes.number),
-  projection: PropTypes.func.isRequired
+  projection: PropTypes.func.isRequired,
+  landFillColor: PropTypes.string,
+  maxZoomFactor: PropTypes.number
 };
 
 GeoMap.defaultProps = {
@@ -1153,6 +1210,7 @@ GeoMap.defaultProps = {
   showAntarctica: true,
   showBackground: true,
   landStrokeWidth: 0.1,
+  landFillColor: oimLand,
   animateMapTransition: true, // use d3 animations, or not.
   // These are d3 projection properties. Changing these calculates a new projection.
   scale: 320, // initial map-scale. differs per projection type. Used immutably
@@ -1162,7 +1220,8 @@ GeoMap.defaultProps = {
   // They are used both by d3 (zoomTween) and react
   // Changing these (in the element state) does NOT re-project. Instead tweens or sets directly the html attribute `transform`
   zoom: 1, // this is the html transform attribute `scale`, used to zoom maps without re-project.
-  move: [0, 0] // this is the html transform attribute `translate`, used to zoom without re-project.
+  move: [0, 0], // this is the html transform attribute `translate`, used to zoom without re-project.
+  maxZoomFactor: 12 // maximum zoom level the user of the map is allowed to set (ignores anything higher than that).
 };
 
 export default GeoMap;
