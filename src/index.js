@@ -1,5 +1,8 @@
 export { TestComponent } from './test.jsx';
 
+// colors
+export * from "./themes/colors";
+
 // dialogs
 export { default as Dialog } from "./dialogs/Dialog.jsx";
 export { default as EditCountryDialog } from "./dialogs/EditCountryDialog.jsx";
