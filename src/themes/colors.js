@@ -15,3 +15,5 @@ export const oimLand="#eff1d7";
 export const atlasGreen="#85a056";
 export const atlasRed="#f84417";
 export const atlasDarkBlue="#080037";
+
+export const jediAntracite = "#363738";
