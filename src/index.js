@@ -17,3 +17,6 @@ export { default as CountryAutoCompleteInput } from "./inputs/CountryAutoComplet
 
 // geo
 export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
+
+// specials
+export { ThumbBar } from "./specials/thumbbars.jsx";

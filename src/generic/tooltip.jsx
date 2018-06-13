@@ -48,20 +48,20 @@ export class SvgToolTip extends React.Component {
       this.props.minwidth,
       this.props.header.length * this.props.fontsize * 0.7
     );
-    this.numTextLines = this.props.textlines.reduce((acc, t) => {
-      width = Math.max(
-        width,
-        ((typeof t === "string" && t.length) ||
-          ((t.content && t.content.length) || 0)) *
-          (this.props.fontsize * 0.7)
-      );
-      return acc + ((typeof t === "object" && 3) || 1);
-    }, 1);
+    // this.numTextLines = this.props.textlines.reduce((acc, t) => {
+    //   width = Math.max(
+    //     width,
+    //     ((typeof t === "string" && t.length) ||
+    //       ((t.content && t.content.length) || 0)) *
+    //       (this.props.fontsize * 0.7)
+    //   );
+    //   return acc + ((typeof t === "object" && 3) || 1);
+    // }, 1);
     this.margin = 1.2 * this.props.fontsize;
-    this.lineHeight = this.props.fontsize + 2;
-    this.height = this.numTextLines * this.lineHeight + 2 * this.margin;
-    this.y = this.props.y - this.height;
-    this.x = this.props.x;
+    // this.lineHeight = this.props.fontsize + 2;
+    // this.height = this.numTextLines * this.lineHeight + 2 * this.margin;
+    // this.y = this.props.y - this.height;
+    // this.x = this.props.x;
 
     this.state = {
       width: width
@@ -69,16 +69,33 @@ export class SvgToolTip extends React.Component {
   }
 
   render() {
-    let curLine = this.numTextLines;
+    let width = Math.max(
+      this.props.minwidth,
+      this.props.header.length * this.props.fontsize * 0.7
+    );
+    const numTextLines = this.props.textlines.reduce((acc, t) => {
+        width = Math.max(
+          width,
+          ((typeof t === "string" && t.length) ||
+            ((t.content && t.content.length) || 0)) *
+            (this.props.fontsize * 0.7)
+        );
+        return acc + ((typeof t === "object" && 3) || 1);
+      }, 1),
+      lineHeight = this.props.fontsize + 2,
+      height = numTextLines * lineHeight + 2 * this.margin;
+    //this.y = this.props.y - height;
+    //x = this.props.x;
+    let curLine = numTextLines;
     return (
       <StyledSvgToolTip
         className="tooltip"
         // a b dx = 1 0 dx
         // c d dy = 0 1 dy
         transform={`matrix(${1 / this.props.zoomFactor} 0 0 ${1 /
-          this.props.zoomFactor} ${this.x +
+          this.props.zoomFactor} ${this.props.x +
           this.props.dx / this.props.zoomFactor} ${this.props.y -
-          this.height / (2 * this.props.zoomFactor)})`}
+          height / (2 * this.props.zoomFactor)})`}
       >
         <rect
           className="tooltip-bg"
@@ -86,7 +103,7 @@ export class SvgToolTip extends React.Component {
             2 * this.margin + this.state.width,
             this.props.minwidth
           )}
-          height={this.height}
+          height={height + this.props.extraHeight}
           y="0"
           x="0"
           rx="4"
@@ -95,7 +112,7 @@ export class SvgToolTip extends React.Component {
         <text
           className="tooltip-header"
           x={this.margin}
-          y={this.height - curLine * this.lineHeight - 6}
+          y={height - numTextLines * lineHeight - 6}
         >
           {this.props.header}
         </text>
@@ -106,7 +123,7 @@ export class SvgToolTip extends React.Component {
             return (
               <text
                 x={this.margin}
-                y={this.height - curLine * this.lineHeight}
+                y={height - curLine * lineHeight}
                 key={`tt_s${child.id} _${i} `}
               >
                 {child}
@@ -118,14 +135,14 @@ export class SvgToolTip extends React.Component {
             <StyledSvgText
               className="tooltip-subheader"
               x={this.margin}
-              y={this.height - (curLine + 1) * this.lineHeight}
+              y={height - (curLine + 1) * lineHeight}
               key={`tt_h${child.id} _${i} `}
             >
               {child.header}
             </StyledSvgText>,
             <StyledSvgText
               x={this.margin}
-              y={this.height - curLine * this.lineHeight}
+              y={height - curLine * lineHeight}
               textAnchor="start"
               key={`tt_c${child.id} _${i} `}
             >
@@ -135,13 +152,14 @@ export class SvgToolTip extends React.Component {
         })}
         <polyline
           points={`0, ${-this.props.dy +
-            this.height / 2 -
+            height / 2 -
             this.margin / Math.sqrt(2)} ${-this.margin}, ${0 +
-            this.height / 2 -
+            height / 2 -
             this.props.dy} 0, ${-this.props.dy +
-            this.height / 2 +
+            height / 2 +
             this.margin / Math.sqrt(2)} `}
         />
+        {this.props.children}
       </StyledSvgToolTip>
     );
   }
@@ -152,6 +170,7 @@ SvgToolTip.propTypes = {
   dy: PropTypes.number,
   x: PropTypes.number,
   y: PropTypes.number,
+  extraHeight: PropTypes.number, // include extra space for embedded elements (e.g. svg)
   header: PropTypes.string,
   textlines: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.object, PropTypes.string])
@@ -165,5 +184,6 @@ SvgToolTip.defaultProps = {
   zoomFactor: 1,
   fontsize: 10,
   dx: 0,
-  dy: 0
+  dy: 0,
+  extraHeight: 0
 };
