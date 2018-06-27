@@ -245,7 +245,6 @@ const SheetMapControlsContainer = styled.svg`
 
 export class Graticules extends React.Component {
   render() {
-    console.log("render graticules");
     return (
       <g
         strokeWidth={`${Math.min(

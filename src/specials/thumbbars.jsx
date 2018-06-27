@@ -33,7 +33,7 @@ export class ThumbBar extends React.Component {
                   style={{ fill: attr.color }}
                   height={
                     (b.count[attr.attr] &&
-                      Math.max(unitHeight * b.count[attr.attr], 1)) ||
+                      Math.max(unitHeight * b.count[attr.attr], this.props.barMinHeight)) ||
                     0
                   }
                   width={barWidth}
@@ -63,6 +63,7 @@ ThumbBar.propTypes = {
   margin: PropTypes.number,
   bars: PropTypes.array.isRequired,
   barTextMargin: PropTypes.number,
+  barMinHeight: PropTypes.number,
   largestBarValue: PropTypes.number.isRequired,
   countAttributes: PropTypes.array.isRequired
 };
@@ -71,6 +72,7 @@ ThumbBar.defaultProps = {
   width: 200,
   height: 100,
   margin: 0,
+  barMinHeight: 1,
   dy: 0,
   barTextMargin: 60
 };

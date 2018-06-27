@@ -48,21 +48,7 @@ export class SvgToolTip extends React.Component {
       this.props.minwidth,
       this.props.header.length * this.props.fontsize * 0.7
     );
-    // this.numTextLines = this.props.textlines.reduce((acc, t) => {
-    //   width = Math.max(
-    //     width,
-    //     ((typeof t === "string" && t.length) ||
-    //       ((t.content && t.content.length) || 0)) *
-    //       (this.props.fontsize * 0.7)
-    //   );
-    //   return acc + ((typeof t === "object" && 3) || 1);
-    // }, 1);
     this.margin = 1.2 * this.props.fontsize;
-    // this.lineHeight = this.props.fontsize + 2;
-    // this.height = this.numTextLines * this.lineHeight + 2 * this.margin;
-    // this.y = this.props.y - this.height;
-    // this.x = this.props.x;
-
     this.state = {
       width: width
     };

@@ -17,8 +17,15 @@ const StyledDialogDiv = styled.div`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   min-width: 250px;
-  max-width: 95%;
-  margin-bottom: 10px;
+  max-width: 100%;
+  margin-bottom: ${props => props.expanded === true && "20px" || "-10px"};
+  font-family: "Open Sans", Helvetica, Arial, "sans-serif";
+  font-size: 14px;
+
+  &.expanded {
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
 
   &:hover {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -84,12 +91,12 @@ const StyledDialogDiv = styled.div`
   }
 
   h4 {
-    font-size: 13px;
+    font-size: 14px;
     color: ${oimSilver};
   }
 
   h5 {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     margin: 0;
     padding: 0;
@@ -97,8 +104,9 @@ const StyledDialogDiv = styled.div`
 
     .context-menu-icon {
       position: absolute;
-      top: 12px;
+      //top: 12px;
       right: 18px;
+      margin-top: -11px;
     }
 
     .icon-hover-only {
@@ -108,9 +116,13 @@ const StyledDialogDiv = styled.div`
 
 const DialogHeader = styled.div`
   padding: 12px 24px;
-  //margin: 5px 0 10px;
-  font-size: 13px;
+  margin: 5px 0 10px;
+  font-size: 14px;
   color: #bdc3c7;
+`;
+
+const StyledDialogBody = styled.div`
+  font-size: 14px;
 `;
 
 class Dialog extends React.Component {
@@ -123,11 +135,13 @@ class Dialog extends React.Component {
   }
 
   render() {
+    console.log(this.props.title);
+    console.log(this.props.expanded);
     let classes = this.props.className || "";
     return (
       <StyledDialogDiv
         type={this.props.type}
-        className={`${classes} context-dialog ${(this.props.center &&
+        className={`${classes} ${this.props.expanded && "expanded" || ""} context-dialog ${(this.props.center &&
           "center") ||
           ""}`}
         key={"sub-item-" + this.props.id}
@@ -138,7 +152,7 @@ class Dialog extends React.Component {
           </h5>
         </DialogHeader>
         {this.props.children && (
-          <div className="context-dialog-body">{this.props.children}</div>
+          <StyledDialogBody className="context-dialog-body">{this.props.children}</StyledDialogBody>
         )}
         {this.props.footer}
         {this.props.progress}
@@ -152,6 +166,7 @@ Dialog.propTypes = {
   progress: PropTypes.object,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   annotations: PropTypes.string,
+  expanded: PropTypes.bool,
   id: PropTypes.string,
   className: PropTypes.string,
   onToggle: PropTypes.func

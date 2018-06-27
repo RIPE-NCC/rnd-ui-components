@@ -11,6 +11,7 @@ export { default as EditCountryDialog } from "./dialogs/EditCountryDialog.jsx";
 export { TextInput } from "./generic/inputs.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
 export { SvgToolTip } from "./generic/tooltip.jsx";
+export { ExpansionPanelItem } from "./generic/ExpansionPanel.jsx";
 
 // geo input specials
 export { default as CountryAutoCompleteInput } from "./inputs/CountryAutoCompleteInput.jsx";
