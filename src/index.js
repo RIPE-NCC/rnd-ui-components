@@ -6,6 +6,10 @@ export * from "./themes/colors";
 // dialogs
 export { default as Dialog } from "./dialogs/Dialog.jsx";
 export { default as EditCountryDialog } from "./dialogs/EditCountryDialog.jsx";
+export { default as ProgressIndeterminateDialog } from "./dialogs/progressIndeterminateDialog";
+
+// boxes
+export { SinglePropertyBox } from "./generic/simpleBoxes.jsx";
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";

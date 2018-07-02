@@ -1,7 +1,46 @@
 import React from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+import { keyframes } from "styled-components";
 
 import Dialog from "./Dialog.jsx";
+import { oimSilver } from "../themes/colors";
+
+const indeterminateAnimation = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(300%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`,
+  StyledAnimatedStatusBar = styled.div`
+    width: 100%;
+    height: 3px;
+    background-color: ${props => {
+      if (props.isLoading) {
+        return oimSilver;
+      }
+      switch (props.status) {
+        case "success":
+          return "green";
+          break;
+          break;
+        case "error":
+          return "red";
+          break;
+      }
+    }}
+    background-image: none;
+    animation: ${props =>
+      (props.isLoading && `${indeterminateAnimation} 2s linear infinite`) ||
+      `none`};
+    height: 3px;
+    width: 25%;
+`;
 
 function progressIndeterminateWithDismissButton(DialogComponent) {
   return class extends React.Component {
@@ -58,7 +97,10 @@ function progressIndeterminateWithDismissButton(DialogComponent) {
               ""
             }
           >
-            <div className="bar" />
+            <StyledAnimatedStatusBar
+              status={this.props.status}
+              isLoading={this.props.isLoading}
+            />
           </div>
         );
 
@@ -81,7 +123,8 @@ Dialog.propTypes = {
   status: PropTypes.string,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  messages: PropTypes.object
+  messages: PropTypes.object,
+  isLoading: PropTypes.bool
 };
 
 export default progressIndeterminateWithDismissButton(Dialog);

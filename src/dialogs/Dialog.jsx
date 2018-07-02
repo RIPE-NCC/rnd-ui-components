@@ -18,13 +18,13 @@ const StyledDialogDiv = styled.div`
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   min-width: 250px;
   max-width: 100%;
-  margin-bottom: ${props => props.expanded === true && "20px" || "-10px"};
+  margin-bottom: -10px;
   font-family: "Open Sans", Helvetica, Arial, "sans-serif";
   font-size: 14px;
 
   &.expanded {
-    margin-bottom: 20px;
-    margin-top: 10px;
+    margin-bottom: 10px;
+    //margin-top: 10px;
   }
 
   &:hover {
@@ -135,8 +135,6 @@ class Dialog extends React.Component {
   }
 
   render() {
-    console.log(this.props.title);
-    console.log(this.props.expanded);
     let classes = this.props.className || "";
     return (
       <StyledDialogDiv
