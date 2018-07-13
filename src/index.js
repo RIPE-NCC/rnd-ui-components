@@ -32,4 +32,4 @@ export { ThumbBar } from "./specials/thumbbars.jsx";
 export { ProbeCircle } from "./specials/probes";
 
 // utils
-export { aggregationReducer } from "./utils/probesReducers";
+export { aggregationReducer, aggregationReversor } from "./utils/probesReducers";

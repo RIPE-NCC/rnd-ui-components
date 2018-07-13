@@ -32,6 +32,40 @@ export const aggregationReducer = ({ probeAggregatorFields, context }) => {
   return fieldReducer(0);
 };
 
+export const aggregationReversor = ({ aggregatedProbes, aggregatorFields }) => {
+  const reverseTree = ([subTree, dk], [k, v]) => {
+    if (Object.values(v) && Object.values(v)[0] instanceof Object) {
+      // This is a subtree, so go one level deeper.
+      return Object.entries(v).reduce(reverseTree, [
+        subTree,
+        [k, ...dk].slice(0, maxDepth - 1)
+      ]);
+    } else {
+      // This is a value (array) (leaf) so add it in the current level and continue.
+      return [
+        {
+          ...subTree,
+          [k]: {
+            ...(subTree[k] || []),
+            ...dk.reduce(
+              ([tree, obj, depth], k, i) => {
+                tree = (i === 0 && obj) || tree;
+                obj[k] = (i === maxDepth - 2 && v) || {};
+                return [tree, obj[k], depth];
+              },
+              [{}, {}, 0]
+            )[0]
+          }
+        },
+        dk
+      ];
+    }
+  };
+
+  const maxDepth = aggregatorFields.length;
+  return Object.entries(aggregatedProbes).reduce(reverseTree, [{}, []])[0];
+};
+
 // These are actually sort function factories
 // They take some context for the sorting as an argument
 // and return the sort function.
