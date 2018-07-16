@@ -6,7 +6,8 @@ import {
   oimCarrot,
   oimSilver,
   oimEmerald,
-  lColor
+  lColor,
+  atlasRed
 } from "../themes/colors";
 
 const StyledDialogDiv = styled.div`
@@ -21,6 +22,10 @@ const StyledDialogDiv = styled.div`
   margin-bottom: -10px;
   font-family: "Open Sans", Helvetica, Arial, "sans-serif";
   font-size: 14px;
+
+  .error-text {
+    color: ${atlasRed};
+  }
 
   &.expanded {
     margin-bottom: 10px;
@@ -139,9 +144,8 @@ class Dialog extends React.Component {
     return (
       <StyledDialogDiv
         type={this.props.type}
-        className={`${classes} ${this.props.expanded && "expanded" || ""} context-dialog ${(this.props.center &&
-          "center") ||
-          ""}`}
+        className={`${classes} ${(this.props.expanded && "expanded") ||
+          ""} context-dialog ${(this.props.center && "center") || ""}`}
         key={"sub-item-" + this.props.id}
       >
         <DialogHeader>
@@ -150,7 +154,9 @@ class Dialog extends React.Component {
           </h5>
         </DialogHeader>
         {this.props.children && (
-          <StyledDialogBody className="context-dialog-body">{this.props.children}</StyledDialogBody>
+          <StyledDialogBody className="context-dialog-body">
+            {this.props.children}
+          </StyledDialogBody>
         )}
         {this.props.footer}
         {this.props.progress}
