@@ -17,7 +17,10 @@ export { SinglePropertyBox } from "./generic/simpleBoxes.jsx";
 export { TextInput } from "./generic/inputs.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
 export { SvgToolTip } from "./generic/tooltip.jsx";
-export { ExpansionPanelItem } from "./generic/ExpansionPanel.jsx";
+export {
+  ExpansionPanelItem,
+  ExpansionPanelItemWithStatus
+} from "./generic/ExpansionPanel.jsx";
 
 // geo input specials
 export {
@@ -32,4 +35,7 @@ export { ThumbBar } from "./specials/thumbbars.jsx";
 export { ProbeCircle } from "./specials/probes";
 
 // utils
-export { aggregationReducer, aggregationReversor } from "./utils/probesReducers";
+export {
+  aggregationReducer,
+  aggregationReversor
+} from "./utils/probesReducers";

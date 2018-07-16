@@ -6,7 +6,11 @@ import { UpArrow, DownArrow, MenuButton } from "../generic/md.jsx";
 import Dialog from "../dialogs/Dialog.jsx";
 import { MenuItem } from "../menus/MenuItem.jsx";
 
-//const StyledExpansionPanelItem = styled.div``;
+import {
+  indeterminateAnimation,
+  StyledAnimatedStatusBar
+} from "../dialogs/progressIndeterminateDialog";
+import { create } from "domain";
 
 export class ExpansionPanelItem extends React.Component {
   constructor(props) {
@@ -68,16 +72,14 @@ export class ExpansionPanelItem extends React.Component {
       );
     return (
       <div>
-        <Dialog
-          className={className}
-          title={this.makeTitle()}
-        />
+        <Dialog className={className} title={this.makeTitle()} />
         {this.state.showDetail && (
           <Dialog
             //className={`generic-card col-md-12`}
             title={expandedTitle}
             footer={this.props.footer}
             expanded={this.state.showDetail}
+            progress={this.props.progress}
           >
             {this.props.children}
           </Dialog>
@@ -86,3 +88,34 @@ export class ExpansionPanelItem extends React.Component {
     );
   }
 }
+
+function createExpansionPanelItemWithStatus(ExpansionPanelItemComponent) {
+  return class extends React.Component {
+    render() {
+      return (
+        <ExpansionPanelItemComponent
+          {...this.props}
+          progress={
+            <div
+              className={
+                (this.props.isLoading && "progress-indeterminate") ||
+                (this.props.status === "error" && "progress-error") ||
+                (this.props.status === "success" && "progress-success") ||
+                ""
+              }
+            >
+              <StyledAnimatedStatusBar
+                status={this.props.status}
+                isLoading={this.props.isLoading}
+              />
+            </div>
+          }
+        />
+      );
+    }
+  };
+}
+
+export const ExpansionPanelItemWithStatus = createExpansionPanelItemWithStatus(
+  ExpansionPanelItem
+);
