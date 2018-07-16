@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { keyframes } from "styled-components";
 
 import Dialog from "./Dialog.jsx";
-import { oimSilver } from "../themes/colors";
+import { oimSilver, atlasRed } from "../themes/colors";
 
-const indeterminateAnimation = keyframes`
+export const indeterminateAnimation = keyframes`
   0% {
     transform: translateX(0);
   }
@@ -16,9 +16,10 @@ const indeterminateAnimation = keyframes`
   100% {
     transform: translateX(0);
   }
-`,
-  StyledAnimatedStatusBar = styled.div`
-    width: 100%;
+`;
+
+export const StyledAnimatedStatusBar = styled.div`
+    width: ${props => (props.isLoading && "25%") || "100%"};
     height: 3px;
     background-color: ${props => {
       if (props.isLoading) {
@@ -26,11 +27,10 @@ const indeterminateAnimation = keyframes`
       }
       switch (props.status) {
         case "success":
-          return "green";
-          break;
+          return (props.showSuccess && "green") || "none";
           break;
         case "error":
-          return "red";
+          return atlasRed;
           break;
       }
     }}
@@ -39,7 +39,6 @@ const indeterminateAnimation = keyframes`
       (props.isLoading && `${indeterminateAnimation} 2s linear infinite`) ||
       `none`};
     height: 3px;
-    width: 25%;
 `;
 
 function progressIndeterminateWithDismissButton(DialogComponent) {
