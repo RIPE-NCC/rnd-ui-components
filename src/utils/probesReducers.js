@@ -13,21 +13,21 @@ export const aggregationReducer = ({ probeAggregatorFields, context }) => {
   const fieldReducer = fieldIdx => (acc, prb, _, allProbes) => {
     const field = probeAggregatorFields[fieldIdx],
       maxReached = fieldIdx === probeAggregatorFields.length - 1,
-      fieldValue = prb[field.fieldName],
-      titleFieldName = field.titleFieldName;
+      fieldValue = prb[field.fieldName];
+    //titleFieldName = field.titleFieldName;
     //prb.countryNameLong = context.countryNames[prb.countryCode];
-    return {
-      ...acc,
-      [prb[field.fieldName]]:
-        (maxReached && [
-          ...((acc[prb[field.fieldName]] && acc[prb[field.fieldName]]) || []),
-          prb.id
-        ]) ||
-        allProbes
-          .filter(prb => prb[field.fieldName] === fieldValue)
-          .reduce(fieldReducer(fieldIdx + 1), {}) ||
-        {}
-    };
+    // avoid allocating a new object to return as acc,
+    // GC will kill performance otherwise.
+    acc[prb[field.fieldName]] =
+      (maxReached && [
+        ...((acc[prb[field.fieldName]] && acc[prb[field.fieldName]]) || []),
+        prb.id
+      ]) ||
+      allProbes
+        .filter(prb => prb[field.fieldName] === fieldValue)
+        .reduce(fieldReducer(fieldIdx + 1), {}) ||
+      {};
+    return acc;
   };
   return fieldReducer(0);
 };
