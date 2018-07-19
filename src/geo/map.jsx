@@ -52,7 +52,7 @@ export const loadCountryGeoInfo = async ({ ...props }) => {
 
   const fetchUrl =
     props.countryGeoInfoUrl ||
-    `./geo/world${(places && "-geo") || ""}${(places && places) ||
+    `/geo/world${(places && "-geo") || ""}${(places && places) ||
     "" ||
     ""}_ne${detail}.topo.json`;
   const geoKey =
