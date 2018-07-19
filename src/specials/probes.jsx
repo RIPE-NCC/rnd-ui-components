@@ -15,7 +15,7 @@ export const StyledProbeSetCircle = styled.g`
   stroke: ${ oimSilver};
     stroke-width: 1px;
     stroke-opacity: ${props => (props.colorize && 1.0) || 0.3};
-    fill-opacity: ${props => (props.colorize && 0.3) || 1.0};
+    fill-opacity: ${props => (props.colorize && 0.5) || 1.0};
 
     text {
       font-size: 0.8em;
@@ -63,7 +63,13 @@ export class ProbeCircle extends React.Component {
         microM;
 
     return (
-      <StyledProbeSetCircle {...this.props}>
+      <StyledProbeSetCircle {...this.props}
+        onMouseEnter={e => {
+          this.props.showToolTip({ primaryKey: this.props.primaryKey, x: e.clientX, y: e.clientY });
+        }}
+
+        onMouseLeave={e => this.props.hideToolTip()}>
+        >
         <path
           id={`path${this.props.i} `}
           d={`M${margin + x}, ${y - r} A ${0.5 * r} ${0.5 * r} 0 0 0 ${
