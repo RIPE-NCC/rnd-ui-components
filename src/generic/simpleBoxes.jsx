@@ -17,9 +17,9 @@ const StyledProperyBox = styled.ul`
   }
 `;
 
-const booleanOrNonExistingValueToString = value => {
-  let stringValue = value;
-  switch (value) {
+const booleanOrNonExistingValueToString = props => {
+  let stringValue = props.value;
+  switch (props.value) {
     case false:
       stringValue = "FALSE";
       break;
@@ -46,9 +46,10 @@ export class SinglePropertyBox extends React.Component {
         <li className="name">{`${(negateValue && "NOT ") || ""} ${
           this.props.name
         }`}</li>
+        <li>{this.props.description}</li>
         <li>
           {this.props.type !== "assertion" &&
-            booleanOrNonExistingValueToString(this.props.value)}
+            booleanOrNonExistingValueToString(this.props)}
           {(this.props.isDefault && " [default]") || ""}
         </li>
       </StyledProperyBox>
