@@ -39,13 +39,14 @@ const booleanOrNonExistingValueToString = props => {
 export class SinglePropertyBox extends React.Component {
   render() {
     const negateValue = !(this.props.type === "assertion"
-      ? this.props.value === true
-      : true);
+        ? this.props.value === true
+        : true),
+      negateName = this.props.negateName || `NOT ${this.props.name}`;
     return (
       <StyledProperyBox readOnly={this.props.readOnly}>
-        <li className="name">{`${(negateValue && "NOT ") || ""} ${
-          this.props.name
-        }`}</li>
+        {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
+        <li className="name">{`${(negateValue && negateName) ||
+          this.props.name}`}</li>
         <li>{this.props.description}</li>
         <li>
           {this.props.type !== "assertion" &&
