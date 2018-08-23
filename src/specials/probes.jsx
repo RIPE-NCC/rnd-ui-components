@@ -71,6 +71,7 @@ export class ProbeCircle extends React.Component {
         onMouseLeave={e => this.props.hideToolTip()}>
         >
         <path
+          key="p_0"
           id={`path${this.props.i} `}
           d={`M${margin + x}, ${y - r} A ${0.5 * r} ${0.5 * r} 0 0 0 ${
             margin +
@@ -79,6 +80,7 @@ export class ProbeCircle extends React.Component {
           style={{ fill: nextColor(this.props.divsInUnits[0][1]) }}
         />
         <path
+          key="p_1"
           d={`M${xEnd}, ${yEnd - r} A ${0.5 * r} ${
             0.5 *
             r
@@ -128,15 +130,17 @@ export class ProbeCircle extends React.Component {
                 }
                 divX += xWidth;
 
-                return <ColoredClosedPath color={nextColor(d[1])} d={`M ${divXf} ${y - r + i * this.props.unitSize[1]} H ${xLast} V ${y + r + i * this.props.unitSize[1]} H ${divXf} Z`} />
+                return <ColoredClosedPath key={`pp_${ii}`} color={nextColor(d[1])} d={`M ${divXf} ${y - r + i * this.props.unitSize[1]} H ${xLast} V ${y + r + i * this.props.unitSize[1]} H ${divXf} Z`} />
               }),
               <line
+                key={`l_${i}`}
                 x1={(itsAWrap && xMax) || xEnd}
                 y1={y + r + i * this.props.unitSize[1]}
                 x2={x2}
                 y2={y + r + i * this.props.unitSize[1]}
               />,
               <line
+                key={`ll_${i}`}
                 x1={(itsAWrap && xMax) || xEnd}
                 y1={y - r + i * this.props.unitSize[1]}
                 x2={x2}
@@ -145,7 +149,7 @@ export class ProbeCircle extends React.Component {
             ];
           })}
         {(this.props.lengthInUnits > 1 || this.props.text.length < 3) && (
-          <text x={0.5 * margin + x + 2 * microM} y={y + 2 * microM}>
+          <text x={0.5 * margin + x + 2 * microM} y={y + 2 * microM} key="t_0">
             {this.props.text}
           </text>
         )}
