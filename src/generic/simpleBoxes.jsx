@@ -30,7 +30,7 @@ const booleanOrNonExistingValueToString = props => {
       stringValue = "-";
       break;
     case undefined:
-      stringValue = "error displaying value";
+      stringValue = "No value set and no default defined";
       break;
   }
   return stringValue;
@@ -51,7 +51,7 @@ export class SinglePropertyBox extends React.Component {
         <li>
           {this.props.type !== "assertion" &&
             booleanOrNonExistingValueToString(this.props)}
-          {(this.props.isDefault && " [default]") || ""}
+          {(this.props.isDefault && this.props.value !== undefined && " [default]") || ""}
         </li>
       </StyledProperyBox>
     );
