@@ -3,6 +3,52 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { jediAntracite, lColor } from "../themes/colors";
 
+const StyledToolTip = styled.div`
+  font-size: 12px;
+  font-weight: 100;
+  font-family: "Open Sans", Helvetica, Arial, "sans-serif";
+  font-style: normal;
+  //transform: translate(3 0 0);
+  fill: white;
+  stroke: none;
+  cursor: default;
+  display: none;
+  position: absolute;
+  max-width: ${props => (props.width && `${props.width}px`) || "100px"};
+  overflow: hidden;
+  white-space: normal;
+  color: white;
+  //transform: translateX(100px);
+  transform: ${props => `translateX(${-props.width / 4}px)`};
+  transform: ${props => `translateY(${-props.height}px)`};
+
+  padding: 9px;
+
+  background-color: ${jediAntracite};
+  border-radius: 4px;
+
+  opacity: 1;
+
+  .tooltip-header {
+    font-weight: regular;
+    color: white;
+  }
+
+  .tooltip-subheader {
+    color: ${lColor};
+  }
+`;
+
+export class ToolTip extends React.Component {
+  render() {
+    return (
+      <StyledToolTip className="tooltip" width={this.props.width} height={this.props.height}>
+        {this.props.children}
+      </StyledToolTip>
+    );
+  }
+}
+
 const StyledSvgToolTip = styled.g`
   text {
     font-size: 0.7em;

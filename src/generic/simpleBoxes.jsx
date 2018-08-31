@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import { lColor, oimAntracite } from "../themes/colors";
-import { stringify } from "querystring";
+import { ToolTip } from "@ripe-rnd/ui-components";
 
 const StyledProperyBox = styled.ul`
   list-style-type: none;
@@ -51,7 +51,10 @@ export class SinglePropertyBox extends React.Component {
         <li>
           {this.props.type !== "assertion" &&
             booleanOrNonExistingValueToString(this.props)}
-          {(this.props.isDefault && this.props.value !== undefined && " [default]") || ""}
+          {(this.props.isDefault &&
+            this.props.value !== undefined &&
+            " [default]") ||
+            ""}
         </li>
       </StyledProperyBox>
     );
@@ -72,3 +75,60 @@ SinglePropertyBox.propTypes = {
 SinglePropertyBox.defaultProps = {
   type: "string"
 };
+
+const StyledTimeStampBox = styled.div`
+  display: ${props => (props.inline && "inline-grid") || "inline-block"};
+  margin: 0;
+  padding: 0;
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    max-width: 210px;
+    overflow: hidden;
+    white-space: normal;
+    background-color: black;
+    color: white;
+    padding: 18px;
+  }
+
+  .date-primary {
+    padding-right: 0;
+    cursor: pointer;
+  }
+
+  .date-primary:hover .tooltip {
+    display: block;
+  }
+`;
+
+export class TimeStampBox extends React.Component {
+  representTimeStamp(ts) {
+    if (!ts) {
+      return null;
+      Ì;
+    }
+    return {
+      utc: new Date(parseInt(ts) * 1000).toISOString(),
+      local: new Date(parseInt(ts) * 1000).toString()
+    };
+  }
+
+  render() {
+    const dateFmt = this.representTimeStamp(this.props.timeStamp);
+    return (
+      (!dateFmt && (
+        <StyledTimeStampBox inline={this.props.inline}>-</StyledTimeStampBox>
+      )) || (
+        <StyledTimeStampBox inline={this.props.inline}>
+          <div className="date-primary">
+            {dateFmt.utc}
+            <ToolTip className="tooltip" width={210} height={100}>
+              {dateFmt.local}
+            </ToolTip>
+          </div>
+        </StyledTimeStampBox>
+      )
+    );
+  }
+}

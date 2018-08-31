@@ -11,12 +11,12 @@ export {
 } from "./dialogs/progressIndeterminateDialog";
 
 // boxes
-export { SinglePropertyBox } from "./generic/simpleBoxes.jsx";
+export { SinglePropertyBox, TimeStampBox } from "./generic/simpleBoxes.jsx";
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
-export { SvgToolTip } from "./generic/tooltip.jsx";
+export { ToolTip, SvgToolTip } from "./generic/tooltip.jsx";
 export {
   ExpansionPanelItem,
   ExpansionPanelItemWithStatus
