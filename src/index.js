@@ -33,6 +33,7 @@ export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
 // specials
 export { ThumbBar } from "./specials/thumbbars.jsx";
 export { ProbeCircle } from "./specials/probes";
+export { MeasurementDetail, SubGroup } from "./specials/measurementdetail";
 
 // utils
 export {

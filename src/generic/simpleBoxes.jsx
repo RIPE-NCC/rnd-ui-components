@@ -2,17 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { lColor, oimAntracite } from "../themes/colors";
+import { lColor, oimAntracite, oimSilver, ripeMagenta } from "../themes/colors";
 import { ToolTip } from "@ripe-rnd/ui-components";
 
 const StyledProperyBox = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: 12px 0;
+  padding: ${props => (props.readOnly && "0 12px 0") || "12px 0"};
+  margin: ${props => (props.readOnly && "12px 0 0 12px") || "0"};
   color: ${oimAntracite};
 
+  border-left: ${props =>
+    (props.readOnly && `1px solid ${ripeMagenta}`) || "inherit"};
+
   .name {
-    color: ${props => (props.readOnly && lColor) || "black"};
+    color: ${props => (props.readOnly && lColor) || oimSilver};
     font-size: 14px;
   }
 `;
@@ -43,11 +47,11 @@ export class SinglePropertyBox extends React.Component {
         : true),
       negateName = this.props.negateName || `NOT ${this.props.name}`;
     return (
-      <StyledProperyBox readOnly={this.props.readOnly}>
+      <StyledProperyBox readOnly={this.props.readOnly} className={this.props.extraClasses}>
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">{`${(negateValue && negateName) ||
           this.props.name}`}</li>
-        <li>{this.props.description}</li>
+        {/* <li className='desc'>{this.props.description}</li> */}
         <li>
           {this.props.type !== "assertion" &&
             booleanOrNonExistingValueToString(this.props)}
@@ -67,7 +71,8 @@ SinglePropertyBox.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.bool
+    PropTypes.bool,
+    PropTypes.element
   ]),
   isDefault: PropTypes.bool
 };
