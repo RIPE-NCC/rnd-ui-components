@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { lColor, oimAntracite, oimSilver, ripeMagenta } from "../themes/colors";
+import { lColor, oimAntracite, oimSilver, atlasGreen } from "../themes/colors";
 import { ToolTip } from "@ripe-rnd/ui-components";
 
 const StyledProperyBox = styled.ul`
@@ -13,11 +13,22 @@ const StyledProperyBox = styled.ul`
   color: ${oimAntracite};
 
   border-left: ${props =>
-    (props.readOnly && `1px solid ${ripeMagenta}`) || "inherit"};
+    (props.readOnly && `1px solid ${oimSilver}`) || "inherit"};
 
   .name {
-    color: ${props => (props.readOnly && lColor) || oimSilver};
+    color: ${props => (props.readOnly && oimSilver) || lColor};
     font-size: 14px;
+  }
+
+  .desc {
+    color: "#dfdfdf";
+    text-rendering: geometricPrecision;
+    font-style: italic;
+    font-weight: 100;
+  }
+
+  .is-default {
+    color: ${atlasGreen};
   }
 `;
 
@@ -46,20 +57,34 @@ export class SinglePropertyBox extends React.Component {
         ? this.props.value === true
         : true),
       negateName = this.props.negateName || `NOT ${this.props.name}`;
+    let propArray = [].concat(this.props.value);
     return (
-      <StyledProperyBox readOnly={this.props.readOnly} className={this.props.extraClasses}>
+      <StyledProperyBox
+        readOnly={this.props.readOnly}
+        className={this.props.extraclasses}
+      >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">{`${(negateValue && negateName) ||
           this.props.name}`}</li>
-        {/* <li className='desc'>{this.props.description}</li> */}
-        <li>
-          {this.props.type !== "assertion" &&
-            booleanOrNonExistingValueToString(this.props)}
-          {(this.props.isDefault &&
-            this.props.value !== undefined &&
-            " [default]") ||
-            ""}
-        </li>
+        <li className="desc">{this.props.description}</li>
+        {this.props.type !== "assertion" &&
+          propArray.map((p, i) => (
+            <li
+              key={`prop_${i}`}
+              className={
+                (this.props.isDefault &&
+                  this.props.value !== undefined &&
+                  "is-default") ||
+                ""
+              }
+            >
+              {booleanOrNonExistingValueToString({ ...this.props, value: p })}
+              {(this.props.isDefault &&
+                this.props.value !== undefined &&
+                " [default]") ||
+                ""}
+            </li>
+          ))}
       </StyledProperyBox>
     );
   }
@@ -72,6 +97,7 @@ SinglePropertyBox.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.bool,
+    PropTypes.array,
     PropTypes.element
   ]),
   isDefault: PropTypes.bool
