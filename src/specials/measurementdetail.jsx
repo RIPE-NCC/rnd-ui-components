@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from "react";
+import { SinglePropertyBox } from "@ripe-rnd/ui-components";
 
 export const MeasurementDetail = styled.div`
   max-width: 915px;
@@ -37,10 +38,10 @@ export class SubGroup extends React.Component {
               return c;
             }
             return React.cloneElement(c, {
-              extraClasses:
+              extraclasses:
                 (c.props.readOnly && "property-box right") ||
                 "property-box left"
-            });
+            }) || <SinglePropertyBox name="NOT AVAILABLE" value="-"/>;
           })}
         </StyledSubGroup>
       </div>
