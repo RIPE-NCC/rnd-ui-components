@@ -61,11 +61,12 @@ export class SinglePropertyBox extends React.Component {
     return (
       <StyledProperyBox
         readOnly={this.props.readOnly}
-        className={this.props.extraclasses}
+        className={`${this.props.className} ${this.props.extraclasses}`}
       >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
-        <li className="name">{`${(negateValue && negateName) ||
-          this.props.name}`}</li>
+        <li className="name">
+          {(negateValue && negateName) || this.props.name}
+        </li>
         <li className="desc">{this.props.description}</li>
         {this.props.type !== "assertion" &&
           propArray.map((p, i) => (
@@ -92,7 +93,7 @@ export class SinglePropertyBox extends React.Component {
 
 SinglePropertyBox.propTypes = {
   type: PropTypes.string,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
