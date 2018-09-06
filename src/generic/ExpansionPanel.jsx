@@ -10,7 +10,6 @@ import {
   indeterminateAnimation,
   StyledAnimatedStatusBar
 } from "../dialogs/progressIndeterminateDialog";
-import { create } from "domain";
 
 export class ExpansionPanelItem extends React.Component {
   constructor(props) {
