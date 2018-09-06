@@ -72,17 +72,19 @@ export class ExpansionPanelItem extends React.Component {
     return (
       <div>
         <Dialog className={className} title={this.makeTitle()} />
-        {this.state.showDetail && (
-          <Dialog
-            //className={`generic-card col-md-12`}
-            title={expandedTitle}
-            footer={this.props.footer}
-            expanded={this.state.showDetail}
-            progress={this.props.progress}
-          >
-            {this.props.children}
-          </Dialog>
-        )}
+        {this.state.showDetail &&
+          ((!this.props.doNotInlineChildren && (
+            <Dialog
+              //className={`generic-card col-md-12`}
+              title={expandedTitle}
+              footer={this.props.footer}
+              expanded={this.state.showDetail}
+              progress={this.props.progress}
+            >
+              {this.props.children}
+            </Dialog>
+          )) ||
+            this.props.children)}
       </div>
     );
   }
