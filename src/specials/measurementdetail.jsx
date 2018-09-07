@@ -9,7 +9,11 @@ export const MeasurementDetail = styled.div`
   margin-bottom: 24px;
 `;
 
-export const StyledSubGroup = styled.div`
+const StyledSubGroup = styled.div`
+  margin: 24px 0;
+`;
+
+export const StyledPropertiesGrid = styled.div`
   display: grid;
   grid-template-columns: ${props =>
     (props.forceRows &&
@@ -31,21 +35,23 @@ export const StyledSubGroup = styled.div`
 export class SubGroup extends React.Component {
   render() {
     return (
-      <div>
+      <StyledSubGroup>
         {!this.props.hidden && <h5 className="title">{this.props.title}</h5>}
-        <StyledSubGroup {...this.props}>
+        <StyledPropertiesGrid {...this.props}>
           {React.Children.map(this.props.children, c => {
             if (this.props.forceRows) {
               return c;
             }
-            return React.cloneElement(c, {
-              extraclasses:
-                (c.props.readOnly && "property-box right") ||
-                "property-box left"
-            }) || <SinglePropertyBox name="NOT AVAILABLE" value="-"/>;
+            return (
+              React.cloneElement(c, {
+                extraclasses:
+                  (c.props.readOnly && "property-box right") ||
+                  "property-box left"
+              }) || <SinglePropertyBox name="NOT AVAILABLE" value="-" />
+            );
           })}
-        </StyledSubGroup>
-      </div>
+        </StyledPropertiesGrid>
+      </StyledSubGroup>
     );
   }
 }
