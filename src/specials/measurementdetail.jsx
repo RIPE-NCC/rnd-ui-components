@@ -10,7 +10,7 @@ export const MeasurementDetail = styled.div`
 `;
 
 const StyledSubGroup = styled.div`
-  margin: 24px 0;
+  margin-bottom: 12px;
 `;
 
 export const StyledPropertiesGrid = styled.div`
@@ -30,6 +30,10 @@ export const StyledPropertiesGrid = styled.div`
     order: 1;
     grid-column: 2 / 2;
   }
+  
+  .title {
+    margin: 12px 0;
+  }
 `;
 
 export class SubGroup extends React.Component {
@@ -45,7 +49,7 @@ export class SubGroup extends React.Component {
             return (
               React.cloneElement(c, {
                 extraclasses:
-                  (c.props.readOnly && "property-box right") ||
+                  (c.props && c.props.readOnly && "property-box right") ||
                   "property-box left"
               }) || <SinglePropertyBox name="NOT AVAILABLE" value="-" />
             );
