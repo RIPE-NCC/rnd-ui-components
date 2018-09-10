@@ -152,6 +152,8 @@ const StyledTimeStampBox = styled.div`
   .date-primary {
     padding-right: 0;
     cursor: pointer;
+    font-family: ${props =>
+      (!props.inline && '"Roboto Mono", "monospace"') || "inherit"};
   }
 
   .date-primary:hover .tooltip {
@@ -179,6 +181,15 @@ export class TimeStampBox extends React.Component {
       )) || (
         <StyledTimeStampBox inline={this.props.inline}>
           <div className="date-primary">
+            {!this.props.inline && [
+              <Clock
+                size={21}
+                key="c"
+                strokeWidth={1}
+                transform="translate(0,5)"
+              />,
+              " "
+            ]}
             {dateFmt.utc}
             <ToolTip className="tooltip" width={210} height={100}>
               {dateFmt.local}
