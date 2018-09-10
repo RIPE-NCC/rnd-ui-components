@@ -41,7 +41,7 @@ const StyledProperyBox = styled.ul`
 
 const StyledValue = styled.li`
   font-family: ${props =>
-    ((typeof props.value === "string" || typeof props.value === "number") &&
+    ((typeof props.value === "string" || typeof props.value === "number" || typeof props.value === "boolean") &&
       '"Roboto mono","monospace"') ||
     "inherit"};
   color: ${props => (props.isDefault && atlasGreen) || "inherit"};
