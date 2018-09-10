@@ -102,7 +102,7 @@ export class SinglePropertyBox extends React.Component {
                 {valueOrAnnotation[0]}
                 {(this.props.isDefault &&
                   this.props.value !== undefined &&
-                  " [default]") ||
+                  " (default)") ||
                   ""}
               </StyledValue>
             );
