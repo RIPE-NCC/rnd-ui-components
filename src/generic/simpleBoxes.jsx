@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 import { lColor, oimAntracite, oimSilver, atlasGreen } from "../themes/colors";
 import { ToolTip } from "@ripe-rnd/ui-components";
+import { Clock } from "react-feather";
 
 const StyledProperyBox = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: ${props => (props.readOnly && "0 12px 0") || "12px 0"};
-  margin: ${props => (props.readOnly && "12px 0 0 12px") || "0"};
+  padding: ${props => (props.readOnly && "0 24px 0 12px") || "12px 32px 6px 0"};
+  margin: ${props => (props.readOnly && "12px 0 12px 12px") || "0"};
   color: ${oimAntracite};
 
   border-left: ${props =>
@@ -27,13 +28,28 @@ const StyledProperyBox = styled.ul`
     font-weight: 100;
   }
 
+  /* li.value {
+    font-family: ${props =>
+      (props.type === "integer" && '"Roboto mono","monospace"') || "inherit"};
+    color: ${props => (props.isDefault && atlasGreen) || "inherit"};
+  }
+
   .is-default {
     color: ${atlasGreen};
-  }
+  } */
+`;
+
+const StyledValue = styled.li`
+  font-family: ${props =>
+    ((typeof props.value === "string" || typeof props.value === "number") &&
+      '"Roboto mono","monospace"') ||
+    "inherit"};
+  color: ${props => (props.isDefault && atlasGreen) || "inherit"};
 `;
 
 const booleanOrNonExistingValueToString = props => {
-  let stringValue = props.value;
+  let stringValue = props.value,
+    annotation = null;
   switch (props.value) {
     case false:
       stringValue = "FALSE";
@@ -45,10 +61,10 @@ const booleanOrNonExistingValueToString = props => {
       stringValue = "-";
       break;
     case undefined:
-      stringValue = "No value set and no default defined";
+      annotation = "No value set and no default defined";
       break;
   }
-  return stringValue;
+  return [stringValue, annotation];
 };
 
 export class SinglePropertyBox extends React.Component {
@@ -57,7 +73,8 @@ export class SinglePropertyBox extends React.Component {
         ? this.props.value === true
         : true),
       negateName = this.props.negateName || `NOT ${this.props.name}`;
-    let propArray = [].concat(this.props.value);
+    let propArray = [].concat(this.props.value),
+      valueOrAnnotation = [this.props.value, this.props.annotation];
     return (
       <StyledProperyBox
         readOnly={this.props.readOnly}
@@ -69,23 +86,30 @@ export class SinglePropertyBox extends React.Component {
         </li>
         <li className="desc">{this.props.description}</li>
         {this.props.type !== "assertion" &&
-          propArray.map((p, i) => (
-            <li
-              key={`prop_${i}`}
-              className={
-                (this.props.isDefault &&
+          propArray.map((p, i) => {
+            valueOrAnnotation = booleanOrNonExistingValueToString({
+              ...this.props,
+              value: p
+            });
+            return (
+              <StyledValue
+                className="value"
+                isDefault={this.props.isDefault}
+                type={this.props.type}
+                value={p}
+                key={`prop_${i}`}
+              >
+                {valueOrAnnotation[0]}
+                {(this.props.isDefault &&
                   this.props.value !== undefined &&
-                  "is-default") ||
-                ""
-              }
-            >
-              {booleanOrNonExistingValueToString({ ...this.props, value: p })}
-              {(this.props.isDefault &&
-                this.props.value !== undefined &&
-                " [default]") ||
-                ""}
-            </li>
-          ))}
+                  " [default]") ||
+                  ""}
+              </StyledValue>
+            );
+          })}
+        {(this.props.annotation || valueOrAnnotation[1]) && (
+          <li>({this.props.annotation || valueOrAnnotation[1]})</li>
+        )}
       </StyledProperyBox>
     );
   }
@@ -101,6 +125,7 @@ SinglePropertyBox.propTypes = {
     PropTypes.array,
     PropTypes.element
   ]),
+  annotation: PropTypes.string,
   isDefault: PropTypes.bool
 };
 
