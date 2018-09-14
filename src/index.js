@@ -15,6 +15,7 @@ export { SinglePropertyBox, TimeStampBox } from "./generic/simpleBoxes.jsx";
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";
+export { MinimalButton } from "./generic/buttons.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
 export { ToolTip, SvgToolTip } from "./generic/tooltip.jsx";
 export {

@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { lColor, oimAntracite, oimSilver, atlasGreen } from "../themes/colors";
+import {
+  lColor,
+  fColor,
+  oimAntracite,
+  oimSilver,
+  atlasGreen,
+  atlasDarkBlue
+} from "../themes/colors";
 import { ToolTip } from "@ripe-rnd/ui-components";
 import { Clock } from "react-feather";
 
@@ -16,13 +23,21 @@ const StyledProperyBox = styled.ul`
   border-left: ${props =>
     (props.readOnly && `1px solid ${oimSilver}`) || "inherit"};
 
+    li {
+      margin-left: 0;
+    }
+
   .name {
-    color: ${props => (props.readOnly && oimSilver) || lColor};
+    color: ${props =>
+      (props.isEditable && atlasGreen) ||
+      (props.readOnly && oimSilver) ||
+      lColor};
     font-size: 14px;
   }
 
   .desc {
-    color: "#dfdfdf";
+    /* color: "#dfdfdf"; */
+    color: black;
     text-rendering: geometricPrecision;
     font-style: italic;
     font-weight: 100;
@@ -41,10 +56,18 @@ const StyledProperyBox = styled.ul`
 
 const StyledValue = styled.li`
   font-family: ${props =>
-    ((typeof props.value === "string" || typeof props.value === "number" || typeof props.value === "boolean") &&
-      '"Roboto mono","monospace"') ||
+    (props.type !== "text" &&
+      ((typeof props.value === "string" ||
+        typeof props.value === "number" ||
+        typeof props.value === "boolean") &&
+        '"Roboto mono","monospace"')) ||
     "inherit"};
-  color: ${props => (props.isDefault && atlasGreen) || "inherit"};
+  font-weight: ${props => (props.isDefault && "300") || "400"};
+
+  /* div {
+    font-family: ${props =>
+      (props.type === "array" && '"Roboto mono","monospace"') || "inherit"};
+  } */
 `;
 
 const booleanOrNonExistingValueToString = props => {
@@ -78,7 +101,8 @@ export class SinglePropertyBox extends React.Component {
     return (
       <StyledProperyBox
         readOnly={this.props.readOnly}
-        className={`${this.props.className} ${this.props.extraclasses}`}
+        isEditable={this.props.isEditable}
+        className={`${this.props.className} ${this.props.extraclasses || ""}`}
       >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">
