@@ -43,6 +43,10 @@ export class SubGroup extends React.Component {
         {!this.props.hidden && <h5 className="title">{this.props.title}</h5>}
         <StyledPropertiesGrid {...this.props}>
           {React.Children.map(this.props.children, c => {
+            if (!c) {
+              return;
+            }
+            
             if (this.props.forceRows) {
               return c;
             }
