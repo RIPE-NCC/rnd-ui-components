@@ -1,35 +1,55 @@
 import React from "react";
 import styled from "styled-components";
-import { oimAntracite, oimClouds, oimSilver } from "../themes/colors";
+import { atlasGreen, oimClouds, oimSilver, atlasRed } from "../themes/colors";
 
 let nextColor = id => {
   if (typeof id === "string") {
     id = parseInt(`${id.charCodeAt(0)}${id.charCodeAt(1)}`);
   }
-  return ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494"][
-    id % 7
-  ];
-}
+  return [
+    "#66c2a5",
+    "#fc8d62",
+    "#8da0cb",
+    "#e78ac3",
+    "#a6d854",
+    "#ffd92f",
+    "#e5c494"
+  ][id % 7];
+};
 
 export const StyledProbeSetCircle = styled.g`
-  stroke: ${ oimSilver};
-    stroke-width: 1px;
-    stroke-opacity: ${props => (props.colorize && 1.0) || 0.3};
-    fill-opacity: ${props => (props.colorize && 0.5) || 1.0};
+  stroke: ${props =>
+    (props.connectionStatus === 2 && atlasRed) ||
+    (props.connectionStatus === 1 && atlasGreen) ||
+    oimSilver};
+  stroke-width: ${props =>
+    (props.borderWidth && `${props.borderWidth}px`) || "1px"};
+  stroke-opacity: ${props => (props.colorize && 1.0) || 0.3};
+  fill-opacity: ${props => (props.colorize && 0.5) || 1.0};
+`;
 
-    text {
-      font-size: 0.8em;
-      stroke: none;
-      fill: black;
-      fill-opacity: 1;
-    }
-  } `
+const FlexText = styled.text`
+  font-size: 0.8em;
+  stroke: none;
+  fill: black;
+  fill-opacity: 1;
+`;
+
+const FirstPath = styled.path`
+  fill: ${props =>
+    (props.isAssigned && atlasGreen) || nextColor(props.divsInUnits[0][1])};
+`;
+
+const SecondPath = styled.path`
+  fill: ${props =>
+    (props.isAssigned && atlasGreen) ||
+    nextColor(props.divsInUnits[props.divsInUnits.length - 1][1])};
+`;
 
 const ColoredClosedPath = styled.path`
-  fill: ${ props => props.color || oimClouds};
+  fill: ${props =>
+    (props.isAssigned && atlasGreen) || props.color || oimClouds};
   stroke: none;
-  /* stroke-width: 1px; */
-}
 `;
 
 export class ProbeCircle extends React.Component {
@@ -39,7 +59,7 @@ export class ProbeCircle extends React.Component {
       this.props.widthInUnits;
     let wrapAround = Math.floor(
       (this.props.unitStart[0] + this.props.lengthInUnits) /
-      this.props.widthInUnits
+        this.props.widthInUnits
     );
 
     if (xUnitsEnd === 0 && wrapAround > 0) {
@@ -48,8 +68,8 @@ export class ProbeCircle extends React.Component {
     }
 
     const x =
-      (this.props.unitStart[0] % this.props.widthInUnits) *
-      this.props.unitSize[0],
+        (this.props.unitStart[0] % this.props.widthInUnits) *
+        this.props.unitSize[0],
       y = this.props.unitStart[1] * this.props.unitSize[1] + this.props.r + 2,
       r = this.props.r,
       margin = r + 4,
@@ -63,29 +83,29 @@ export class ProbeCircle extends React.Component {
         microM;
 
     return (
-      <StyledProbeSetCircle {...this.props}
+      <StyledProbeSetCircle
+        {...this.props}
         onMouseEnter={e => {
-          this.props.showToolTip({ primaryKey: this.props.primaryKey, x: e.clientX, y: e.clientY });
+          this.props.showToolTip({
+            primaryKey: this.props.primaryKey,
+            x: e.clientX,
+            y: e.clientY
+          });
         }}
-
-        onMouseLeave={e => this.props.hideToolTip()}>
-        >
-        <path
+        onMouseLeave={e => this.props.hideToolTip()}
+      >
+        <FirstPath
+          {...this.props}
           key="p_0"
           id={`path${this.props.i} `}
-          d={`M${margin + x}, ${y - r} A ${0.5 * r} ${0.5 * r} 0 0 0 ${
-            margin +
-            x
-            } ${y + r} `}
-          style={{ fill: nextColor(this.props.divsInUnits[0][1]) }}
+          d={`M${margin + x}, ${y - r} A ${0.5 * r} ${0.5 * r} 0 0 0 ${margin +
+            x} ${y + r} `}
         />
-        <path
+        <SecondPath
+          {...this.props}
           key="p_1"
-          d={`M${xEnd}, ${yEnd - r} A ${0.5 * r} ${
-            0.5 *
-            r
-            } 0 0 1 ${xEnd} ${yEnd + r} `}
-          style={{ fill: nextColor(this.props.divsInUnits[this.props.divsInUnits.length - 1][1]) }}
+          d={`M${xEnd}, ${yEnd - r} A ${0.5 * r} ${0.5 *
+            r} 0 0 1 ${xEnd} ${yEnd + r} `}
         />
         {Array(wrapAround + 1)
           .fill(true)
@@ -97,41 +117,71 @@ export class ProbeCircle extends React.Component {
 
             let divX = x2;
             return [
-              this.props.divsInUnits.reduce(([divs, divSum], d) => {
-                const newDiv = this.props.unitStart[0] + divSum;
-                if (
-                  // aggregate starts & ends in this row.
-                  (this.props.widthInUnits * i <= newDiv && newDiv < this.props.widthInUnits * (i + 1))) {
-                  divs = [...divs, [d[0], d[1]]];
-                }
-                else if
-                // starts on an row up & ends at a row down this one
-                ((this.props.widthInUnits * i >= newDiv && (newDiv + d[0]) >= this.props.widthInUnits * (i + 1))) {
-                  divs = [...divs, [d[0], d[1]]];
-                }
-                else if
-                // starts on a row up & ends in this row
-                ((this.props.widthInUnits * i >= newDiv && (newDiv + d[0]) < this.props.widthInUnits * (i + 1) && (newDiv + d[0]) > this.props.widthInUnits * i)
-                ) {
-                  divs = [...divs, [((newDiv + d[0]) % this.props.widthInUnits), d[1]]];
-                }
-                return [divs, divSum + d[0]]
-              }, [[], 0])[0].map((d, ii, arr) => {
-                const divXf = divX;
-                let xWidth, xLast;
+              this.props.divsInUnits
+                .reduce(
+                  ([divs, divSum], d) => {
+                    const newDiv = this.props.unitStart[0] + divSum;
+                    if (
+                      // aggregate starts & ends in this row.
+                      this.props.widthInUnits * i <= newDiv &&
+                      newDiv < this.props.widthInUnits * (i + 1)
+                    ) {
+                      divs = [...divs, [d[0], d[1]]];
+                    } else if (
+                      // starts on an row up & ends at a row down this one
+                      this.props.widthInUnits * i >= newDiv &&
+                      newDiv + d[0] >= this.props.widthInUnits * (i + 1)
+                    ) {
+                      divs = [...divs, [d[0], d[1]]];
+                    } else if (
+                      // starts on a row up & ends in this row
+                      this.props.widthInUnits * i >= newDiv &&
+                      newDiv + d[0] < this.props.widthInUnits * (i + 1) &&
+                      newDiv + d[0] > this.props.widthInUnits * i
+                    ) {
+                      divs = [
+                        ...divs,
+                        [(newDiv + d[0]) % this.props.widthInUnits, d[1]]
+                      ];
+                    }
+                    return [divs, divSum + d[0]];
+                  },
+                  [[], 0]
+                )[0]
+                .map((d, ii, arr) => {
+                  const divXf = divX;
+                  let xWidth, xLast;
 
-                xWidth = d[0] * (((this.props.lengthInUnits) * this.props.unitSize[0] - 2 * r - 2 * microM) / this.props.lengthInUnits);
+                  xWidth =
+                    d[0] *
+                    ((this.props.lengthInUnits * this.props.unitSize[0] -
+                      2 * r -
+                      2 * microM) /
+                      this.props.lengthInUnits);
 
-                // Sort of ugly, would like to refactor this.
-                // If this is the last sub-aggregation in a aggegrate then forcibly draw it al the way
-                // to the beginning of the arc path that closes the aggregate component.
-                if (!((arr.length - 1) === ii)) { xLast = xWidth + divX; } else {
-                  xLast = (itsAWrap && xMax) || xEnd;
-                }
-                divX += xWidth;
+                  // Sort of ugly, would like to refactor this.
+                  // If this is the last sub-aggregation in a aggegrate then forcibly draw it al the way
+                  // to the beginning of the arc path that closes the aggregate component.
+                  if (!(arr.length - 1 === ii)) {
+                    xLast = xWidth + divX;
+                  } else {
+                    xLast = (itsAWrap && xMax) || xEnd;
+                  }
+                  divX += xWidth;
 
-                return <ColoredClosedPath key={`pp_${ii}`} color={nextColor(d[1])} d={`M ${divXf} ${y - r + i * this.props.unitSize[1]} H ${xLast} V ${y + r + i * this.props.unitSize[1]} H ${divXf} Z`} />
-              }),
+                  return (
+                    <ColoredClosedPath
+                      {...this.props}
+                      key={`pp_${ii}`}
+                      color={nextColor(d[1])}
+                      d={`M ${divXf} ${y -
+                        r +
+                        i * this.props.unitSize[1]} H ${xLast} V ${y +
+                        r +
+                        i * this.props.unitSize[1]} H ${divXf} Z`}
+                    />
+                  );
+                }),
               <line
                 key={`l_${i}`}
                 x1={(itsAWrap && xMax) || xEnd}
@@ -145,13 +195,31 @@ export class ProbeCircle extends React.Component {
                 y1={y - r + i * this.props.unitSize[1]}
                 x2={x2}
                 y2={y - r + i * this.props.unitSize[1]}
-              />
+              />,
+              this.props.connectionStatus === 3 && (
+                <line
+                  key={`cross_${i}`}
+                  x1={(itsAWrap && xMax) || xEnd}
+                  y1={y - r + i * this.props.unitSize[1]}
+                  x2={x2}
+                  y2={y + r + i * this.props.unitSize[1]}
+                  style={{
+                    transformOrigin: `${x2}px ${y}px`,
+                    transform: "rotate(45deg)"
+                  }}
+                />
+              )
             ];
           })}
         {(this.props.lengthInUnits > 1 || this.props.text.length < 3) && (
-          <text x={0.5 * margin + x + 2 * microM} y={y + 2 * microM} key="t_0">
+          <FlexText
+            {...this.props}
+            x={0.5 * margin + x + 2 * microM}
+            y={y + 2 * microM}
+            key="t_0"
+          >
             {this.props.text}
-          </text>
+          </FlexText>
         )}
       </StyledProbeSetCircle>
     );
