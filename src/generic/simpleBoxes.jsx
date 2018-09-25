@@ -60,7 +60,7 @@ const StyledValue = styled.li`
       ((typeof props.value === "string" ||
         typeof props.value === "number" ||
         typeof props.value === "boolean") &&
-        '"Roboto mono","monospace"')) ||
+        '"Menlo","monospace"')) ||
     "inherit"};
   font-weight: ${props => (props.isDefault && "300") || "400"};
 
@@ -177,7 +177,7 @@ const StyledTimeStampBox = styled.div`
     padding-right: 0;
     cursor: pointer;
     font-family: ${props =>
-      (!props.inline && '"Roboto Mono", "monospace"') || "inherit"};
+      (!props.inline && '"Menlo", "monospace"') || "inherit"};
   }
 
   .date-primary:hover .tooltip {
