@@ -29,27 +29,54 @@ export const StyledProbeSetCircle = styled.g`
 `;
 
 const FlexText = styled.text`
-  font-size: 0.8em;
+  font-size: ${props =>
+    ((props.lengthInUnits > 1 || (props.text && props.text.length < 3)) &&
+      "0.8em") ||
+    "0.6em"};
+  transform: ${props =>
+    (props.lengthInUnits === 1 &&
+      props.text &&
+      props.text &&
+      props.text.length > 2 &&
+      `translate(${-2.5 * (props.text.length - 3)}px,-1px)`) ||
+    ""};
   stroke: none;
-  fill: black;
   fill-opacity: 1;
+  /* fill: ${oimClouds}; */
+    fill: black;
+  /* fill: ${props => (props.lengthInUnits === 1 && "white") || "black"}; */
 `;
 
 const FirstPath = styled.path`
   fill: ${props =>
-    (props.isAssigned && atlasGreen) || nextColor(props.divsInUnits[0][1])};
+    // (props.isAssigned && atlasGreen) ||
+    // (props.isAssigned === false && "white") ||
+    (typeof props.isAssigned === "boolean" && "none") ||
+    nextColor(props.divsInUnits[0][1])};
 `;
 
 const SecondPath = styled.path`
   fill: ${props =>
-    (props.isAssigned && atlasGreen) ||
+    // (props.isAssigned && atlasGreen) ||
+    // (props.isAssigned === false && "white") ||
+    (typeof props.isAssigned === "boolean" && "none") ||
     nextColor(props.divsInUnits[props.divsInUnits.length - 1][1])};
 `;
 
 const ColoredClosedPath = styled.path`
   fill: ${props =>
-    (props.isAssigned && atlasGreen) || props.color || oimClouds};
+    // (props.isAssigned && atlasGreen) ||
+    // (props.isAssigned === false && "white") ||
+    (typeof props.isAssigned === "boolean" && "none") ||
+    props.color ||
+    oimClouds};
   stroke: none;
+`;
+
+const AssignedCircle = styled.circle`
+  fill: ${props => (props.isAssigned && atlasGreen) || atlasRed};
+  stroke: none;
+  border: none;
 `;
 
 export class ProbeCircle extends React.Component {
@@ -208,10 +235,18 @@ export class ProbeCircle extends React.Component {
                     transform: "rotate(45deg)"
                   }}
                 />
+              ),
+              typeof this.props.isAssigned === "boolean" && (
+                <AssignedCircle
+                  isAssigned={this.props.isAssigned}
+                  cx={(itsAWrap && xMax) || xEnd}
+                  cy={y + i * this.props.unitSize[1]}
+                  r={r - 3}
+                />
               )
             ];
           })}
-        {(this.props.lengthInUnits > 1 || this.props.text.length < 3) && (
+        {(this.props.lengthInUnits > 0 || this.props.text.length < 3) && (
           <FlexText
             {...this.props}
             x={0.5 * margin + x + 2 * microM}
