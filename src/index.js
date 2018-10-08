@@ -31,6 +31,9 @@ export {
 // geo
 export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
 
+// legends
+export { ParticpantLogLegend } from "./legends/participantlog.jsx";
+
 // specials
 export { ThumbBar } from "./specials/thumbbars.jsx";
 export { ProbeCircle } from "./specials/probes";

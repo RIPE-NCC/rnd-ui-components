@@ -19,8 +19,9 @@ let nextColor = id => {
 
 export const StyledProbeSetCircle = styled.g`
   stroke: ${props =>
-    (props.connectionStatus === 2 && atlasRed) ||
+    (props.connectionStatus === 3 && atlasRed) ||
     (props.connectionStatus === 1 && atlasGreen) ||
+    (props.connectionStatus === 2 && atlasRed) ||
     oimSilver};
   stroke-width: ${props =>
     (props.borderWidth && `${props.borderWidth}px`) || "1px"};
@@ -40,6 +41,7 @@ const FlexText = styled.text`
       props.text.length > 2 &&
       `translate(${-2.5 * (props.text.length - 3)}px,-1px)`) ||
     ""};
+  cursor: default;
   stroke: none;
   fill-opacity: 1;
   /* fill: ${oimClouds}; */
@@ -51,7 +53,7 @@ const FirstPath = styled.path`
   fill: ${props =>
     // (props.isAssigned && atlasGreen) ||
     // (props.isAssigned === false && "white") ||
-    (typeof props.isAssigned === "boolean" && "none") ||
+    (typeof props.isAssigned === "boolean" && "white") ||
     nextColor(props.divsInUnits[0][1])};
 `;
 
@@ -59,7 +61,7 @@ const SecondPath = styled.path`
   fill: ${props =>
     // (props.isAssigned && atlasGreen) ||
     // (props.isAssigned === false && "white") ||
-    (typeof props.isAssigned === "boolean" && "none") ||
+    (typeof props.isAssigned === "boolean" && "white") ||
     nextColor(props.divsInUnits[props.divsInUnits.length - 1][1])};
 `;
 
@@ -73,11 +75,60 @@ const ColoredClosedPath = styled.path`
   stroke: none;
 `;
 
-const AssignedCircle = styled.circle`
-  fill: ${props => (props.isAssigned && atlasGreen) || atlasRed};
-  stroke: none;
-  border: none;
+const StyledCurrentStatusCircle = styled.g`
+  stroke-opacity: 0.7;
+
+  circle {
+    stroke: ${props => (props.isAssigned && atlasGreen) || atlasRed};
+    stroke-width: ${props =>
+      (props.isAssigned && `${props.borderWidth * 3}px`) || "0.5px"};
+    fill: none;
+    border: none;
+  }
+
+  line {
+    stroke: ${props =>
+      (props.connectionStatus === 1 && atlasGreen) || atlasRed};
+  }
 `;
+
+export class CurrentStatusCircle extends React.Component {
+  render() {
+    const r = this.props.r - 4 * (this.props.borderWidth || 3);
+    return (
+      <StyledCurrentStatusCircle {...this.props}>
+        {(this.props.connectionStatus === 3 ||
+          this.props.connectionStatus === 2) && (
+          <line
+            // key={`cross_${i}_0`}
+            x1={this.props.cx}
+            y1={this.props.cy - this.props.r}
+            x2={this.props.cx}
+            y2={this.props.cy + this.props.r}
+            style={{
+              transformOrigin: `${this.props.cx}px ${this.props.cy}px`,
+              transform: "rotate(45deg)"
+            }}
+          />
+        )}
+        {this.props.connectionStatus === 3 && (
+          <line
+            x1={this.props.cx}
+            y1={this.props.cy - this.props.r}
+            x2={this.props.cx}
+            y2={this.props.cy + this.props.r}
+            style={{
+              transformOrigin: `${this.props.cx}px ${this.props.cy}px`,
+              transform: "rotate(-45deg)"
+            }}
+          />
+        )}
+        <circle {...this.props} r={r + ((!this.props.isAssigned && 1) || 0)} />
+        {!this.props.isAssigned && <circle {...this.props} r={r - 2} />}
+      </StyledCurrentStatusCircle>
+    );
+  }
+}
 
 export class ProbeCircle extends React.Component {
   render() {
@@ -209,6 +260,7 @@ export class ProbeCircle extends React.Component {
                     />
                   );
                 }),
+              // dividers in aggregation bars
               <line
                 key={`l_${i}`}
                 x1={(itsAWrap && xMax) || xEnd}
@@ -223,25 +275,22 @@ export class ProbeCircle extends React.Component {
                 x2={x2}
                 y2={y - r + i * this.props.unitSize[1]}
               />,
-              this.props.connectionStatus === 3 && (
-                <line
-                  key={`cross_${i}`}
-                  x1={(itsAWrap && xMax) || xEnd}
-                  y1={y - r + i * this.props.unitSize[1]}
-                  x2={x2}
-                  y2={y + r + i * this.props.unitSize[1]}
-                  style={{
-                    transformOrigin: `${x2}px ${y}px`,
-                    transform: "rotate(45deg)"
-                  }}
-                />
-              ),
               typeof this.props.isAssigned === "boolean" && (
-                <AssignedCircle
+                <CurrentStatusCircle
+                  borderWidth={this.props.borderWidth}
                   isAssigned={this.props.isAssigned}
+                  connectionStatus={this.props.connectionStatus}
                   cx={(itsAWrap && xMax) || xEnd}
                   cy={y + i * this.props.unitSize[1]}
-                  r={r - 3}
+                  r={r}
+                />
+              ),
+              this.props.isAnchor && (
+                <circle
+                  cx={(itsAWrap && xMax) || xEnd}
+                  cy={y + i * this.props.unitSize[1]}
+                  r={r - 8}
+                  style={{ stroke: "#a2cade", strokeWidth: "3px", fill: "none" }}
                 />
               )
             ];
