@@ -19,9 +19,8 @@ let nextColor = id => {
 
 export const StyledProbeSetCircle = styled.g`
   stroke: ${props =>
-    (props.connectionStatus === 3 && atlasRed) ||
-    (props.connectionStatus === 1 && atlasGreen) ||
-    (props.connectionStatus === 2 && atlasRed) ||
+    (typeof props.isAssigned === "boolean" && props.isAssigned && atlasGreen) ||
+    (typeof props.isAssigned === "boolean" && atlasRed) ||
     oimSilver};
   stroke-width: ${props =>
     (props.borderWidth && `${props.borderWidth}px`) || "1px"};
@@ -55,6 +54,9 @@ const FirstPath = styled.path`
     // (props.isAssigned === false && "white") ||
     (typeof props.isAssigned === "boolean" && "white") ||
     nextColor(props.divsInUnits[0][1])};
+  stroke-width: ${props =>
+    (typeof props.isAssigned === "boolean" && !props.isAssigned && "2px") ||
+    "1px"};
 `;
 
 const SecondPath = styled.path`
@@ -63,6 +65,9 @@ const SecondPath = styled.path`
     // (props.isAssigned === false && "white") ||
     (typeof props.isAssigned === "boolean" && "white") ||
     nextColor(props.divsInUnits[props.divsInUnits.length - 1][1])};
+  stroke-width: ${props =>
+    (typeof props.isAssigned === "boolean" && !props.isAssigned && "2px") ||
+    "1px"};
 `;
 
 const ColoredClosedPath = styled.path`
@@ -79,9 +84,11 @@ const StyledCurrentStatusCircle = styled.g`
   stroke-opacity: 0.7;
 
   circle {
-    stroke: ${props => (props.isAssigned && atlasGreen) || atlasRed};
+    stroke: ${props =>
+      (props.connectionStatus === 3 && atlasRed) || atlasGreen};
     stroke-width: ${props =>
-      (props.isAssigned && `${props.borderWidth * 3}px`) || "0.5px"};
+      (props.connectionStatus === 1 && `${props.borderWidth * 3}px`) ||
+      "0.5px"};
     fill: none;
     border: none;
   }
@@ -92,19 +99,26 @@ const StyledCurrentStatusCircle = styled.g`
   }
 `;
 
+const StyledAnnotationText = styled.text`
+  text-anchor: middle;
+  font-size: 0.7em;
+  stroke: none;
+  fill: black;
+  fill-opacity: 1;
+`;
+
 export class CurrentStatusCircle extends React.Component {
   render() {
     const r = this.props.r - 4 * (this.props.borderWidth || 3);
     return (
       <StyledCurrentStatusCircle {...this.props}>
-        {(this.props.connectionStatus === 3 ||
-          this.props.connectionStatus === 2) && (
+        {this.props.connectionStatus === 3 && (
           <line
             // key={`cross_${i}_0`}
             x1={this.props.cx}
-            y1={this.props.cy - this.props.r}
+            y1={this.props.cy - r + 2}
             x2={this.props.cx}
-            y2={this.props.cy + this.props.r}
+            y2={this.props.cy + r - 2}
             style={{
               transformOrigin: `${this.props.cx}px ${this.props.cy}px`,
               transform: "rotate(45deg)"
@@ -114,17 +128,23 @@ export class CurrentStatusCircle extends React.Component {
         {this.props.connectionStatus === 3 && (
           <line
             x1={this.props.cx}
-            y1={this.props.cy - this.props.r}
+            y1={this.props.cy - r + 2}
             x2={this.props.cx}
-            y2={this.props.cy + this.props.r}
+            y2={this.props.cy + r - 2}
             style={{
               transformOrigin: `${this.props.cx}px ${this.props.cy}px`,
               transform: "rotate(-45deg)"
             }}
           />
         )}
-        <circle {...this.props} r={r + ((!this.props.isAssigned && 1) || 0)} />
-        {!this.props.isAssigned && <circle {...this.props} r={r - 2} />}
+        <circle
+          {...this.props}
+          r={r + ((this.props.connectionStatus !== 1 && 1) || 0)}
+        />
+        {/* // double inner circle for non-filled circles. */}
+        {this.props.connectionStatus !== 1 && (
+          <circle {...this.props} r={r - 2} />
+        )}
       </StyledCurrentStatusCircle>
     );
   }
@@ -290,8 +310,21 @@ export class ProbeCircle extends React.Component {
                   cx={(itsAWrap && xMax) || xEnd}
                   cy={y + i * this.props.unitSize[1]}
                   r={r - 8}
-                  style={{ stroke: "#a2cade", strokeWidth: "3px", fill: "none" }}
+                  style={{
+                    stroke: "#a2cade",
+                    strokeWidth: "3px",
+                    fill: "none"
+                  }}
                 />
+              ),
+              this.props.annotation && (
+                <StyledAnnotationText
+                  x={(itsAWrap && xMax) || xEnd}
+                  y={y + i * this.props.unitSize[1] + r + 12}
+                  style={{ textAnchor: "middle" }}
+                >
+                  {this.props.annotation}
+                </StyledAnnotationText>
               )
             ];
           })}

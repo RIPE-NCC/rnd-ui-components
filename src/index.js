@@ -32,7 +32,7 @@ export {
 export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
 
 // legends
-export { ParticpantLogLegend } from "./legends/participantlog.jsx";
+export { ParticipantLogLegend } from "./legends/participantlog.jsx";
 
 // specials
 export { ThumbBar } from "./specials/thumbbars.jsx";
