@@ -191,9 +191,14 @@ export class TimeStampBox extends React.Component {
       return null;
       Ì;
     }
+
+    const dateTime = new Date(parseInt(ts) * 1000);
     return {
-      utc: new Date(parseInt(ts) * 1000).toISOString(),
-      local: new Date(parseInt(ts) * 1000).toString()
+      utc: dateTime
+        .toUTCString()
+        .split(", ")[1]
+        .replace("GMT", "UTC"),
+      local: dateTime.toString()
     };
   }
 
