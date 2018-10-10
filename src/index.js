@@ -11,7 +11,7 @@ export {
 } from "./dialogs/progressIndeterminateDialog";
 
 // boxes
-export { SinglePropertyBox, TimeStampBox } from "./generic/simpleBoxes.jsx";
+export { SinglePropertyBox, TimeStampBox, RadioInputBox } from "./generic/simpleBoxes.jsx";
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";

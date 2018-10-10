@@ -224,3 +224,32 @@ export class TimeStampBox extends React.Component {
     );
   }
 }
+
+export class RadioInputBox extends React.Component {
+  render() {
+    return (
+      <form key="${this.props.id}_switch">
+        <fieldset>
+          <legend>
+            {this.props.legend}
+          </legend>
+          {this.props.choices.map(i => {
+            return (
+              <div>
+                <input
+                  type="radio"
+                  id={i.id}
+                  name={i.name}
+                  value={i.value}
+                  onChange={this.props.onChange}
+                  checked={this.props.checked == i.value}
+                />
+                <label htmlFor={i.name}>{i.name}</label>
+              </div>
+            );
+          })}
+        </fieldset>
+      </form>
+    );
+  }
+}
