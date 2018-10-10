@@ -111,7 +111,10 @@ export class CurrentStatusCircle extends React.Component {
   render() {
     const r = this.props.r - 4 * (this.props.borderWidth || 3);
     return (
-      <StyledCurrentStatusCircle {...this.props}>
+      <StyledCurrentStatusCircle
+        borderWidth={this.props.borderWidth}
+        connectionStatus={this.props.connectionStatus}
+      >
         {this.props.connectionStatus === 3 && (
           <line
             // key={`cross_${i}_0`}
