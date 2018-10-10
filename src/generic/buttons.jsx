@@ -52,21 +52,24 @@ const StyledExtraAction = styled.div`
 
 export class MinimalButton extends React.Component {
   render() {
-    return [
-      <StyledMinimalButton {...this.props}>
-        {this.props.stopicon && (
-          <StopCircle transform="translate(-4,7)" width="24" />
+    return (
+      <div>
+        <StyledMinimalButton {...this.props}>
+          {this.props.stopicon && (
+            <StopCircle transform="translate(-4,7)" width="24" />
+          )}
+          {this.props.checkIcon && (
+            <Check transform="translate(-4,7)" width="24" />
+          )}
+          {this.props.children}
+        </StyledMinimalButton>
+        {this.props.extraAction && (
+          <StyledExtraAction active={this.props.active}>
+            or{" "}
+            <span className="extra-action">{this.props.extraAction.text}</span>
+          </StyledExtraAction>
         )}
-        {this.props.checkIcon && (
-          <Check transform="translate(-4,7)" width="24" />
-        )}
-        {this.props.children}
-      </StyledMinimalButton>,
-      this.props.extraAction && (
-        <StyledExtraAction active={this.props.active}>
-          or <span className="extra-action">{this.props.extraAction.text}</span>
-        </StyledExtraAction>
-      )
-    ];
+      </div>
+    );
   }
 }
