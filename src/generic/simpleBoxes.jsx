@@ -141,7 +141,7 @@ export class SinglePropertyBox extends React.Component {
 
 SinglePropertyBox.propTypes = {
   type: PropTypes.string,
-  name: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), //.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
