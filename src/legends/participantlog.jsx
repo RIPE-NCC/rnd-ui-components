@@ -409,7 +409,7 @@ export class ParticipantLogLegend extends React.Component {
         <text className="cls-27" transform="translate(301.1 168.7)">
           country code
         </text>
-        <g className="cls-16">
+        {/* <g className="cls-16">
           <text
             className="cls-27"
             transform={`translate(${227.5 -
@@ -417,7 +417,8 @@ export class ParticipantLogLegend extends React.Component {
           >
             {this.props.annotationFieldName || "annotation"}
           </text>
-        </g>
+        </g> */}
+        <g>{this.props.extraBox}</g>
         <rect
           className="cls-28"
           x="192.85"
