@@ -230,17 +230,34 @@ export class TimeStampBox extends React.Component {
   }
 }
 
+const StyledRadioInputBox = styled.form`
+  color: ${oimAntracite};
+
+  fieldset {
+    border: none;
+    padding-left: 0;
+  }
+
+  input {
+    margin-left: 0;
+    padding-left: 0;
+    margin-right: 8px;
+  }
+
+  div {
+    line-height: 1.8em;
+  }
+`;
+
 export class RadioInputBox extends React.Component {
   render() {
     return (
-      <form key="${this.props.id}_switch">
+      <StyledRadioInputBox key="${this.props.id}_switch">
         <fieldset>
-          <legend>
-            {this.props.legend}
-          </legend>
+          {this.props.legend && <legend>{this.props.legend}</legend>}
           {this.props.choices.map(i => {
             return (
-              <div>
+              <div key={`in_${i.id}`}>
                 <input
                   type="radio"
                   id={i.id}
@@ -254,7 +271,7 @@ export class RadioInputBox extends React.Component {
             );
           })}
         </fieldset>
-      </form>
+      </StyledRadioInputBox>
     );
   }
 }
