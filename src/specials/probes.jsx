@@ -110,6 +110,7 @@ const StyledAnnotationText = styled.text`
 export class CurrentStatusCircle extends React.Component {
   render() {
     const r = this.props.r - 4 * (this.props.borderWidth || 3);
+    const coords = { cx: this.props.cx, cy: this.props.cy };
     return (
       <StyledCurrentStatusCircle
         borderWidth={this.props.borderWidth}
@@ -141,13 +142,11 @@ export class CurrentStatusCircle extends React.Component {
           />
         )}
         <circle
-          {...this.props}
+          {...coords}
           r={r + ((this.props.connectionStatus !== 1 && 1) || 0)}
         />
         {/* // double inner circle for non-filled circles. */}
-        {this.props.connectionStatus !== 1 && (
-          <circle {...this.props} r={r - 2} />
-        )}
+        {this.props.connectionStatus !== 1 && <circle {...coords} r={r - 2} />}
       </StyledCurrentStatusCircle>
     );
   }
@@ -300,6 +299,7 @@ export class ProbeCircle extends React.Component {
               />,
               typeof this.props.isAssigned === "boolean" && (
                 <CurrentStatusCircle
+                  key={`csc_${i}`}
                   borderWidth={this.props.borderWidth}
                   isAssigned={this.props.isAssigned}
                   connectionStatus={this.props.connectionStatus}
@@ -310,6 +310,7 @@ export class ProbeCircle extends React.Component {
               ),
               this.props.isAnchor && (
                 <circle
+                  key={`oc_${i}`}
                   cx={(itsAWrap && xMax) || xEnd}
                   cy={y + i * this.props.unitSize[1]}
                   r={r - 8}
@@ -322,6 +323,7 @@ export class ProbeCircle extends React.Component {
               ),
               this.props.annotation && (
                 <StyledAnnotationText
+                  key={`anno_${i}`}
                   x={(itsAWrap && xMax) || xEnd}
                   y={y + i * this.props.unitSize[1] + r + 12}
                   style={{ textAnchor: "middle" }}
