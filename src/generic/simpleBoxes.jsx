@@ -16,8 +16,8 @@ import { Clock } from "react-feather";
 const StyledProperyBox = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: ${props => (props.readOnly && "0 24px 0 12px") || "12px 32px 6px 0"};
-  margin: ${props => (props.readOnly && "12px 0 12px 12px") || "0"};
+  padding: ${props => (props.readOnly && "0 24px 0 12px !important") || "12px 32px 6px 0 !important"};
+  margin: ${props => (props.readOnly && "12px 0 12px 12px !important") || "0"};
   color: ${oimAntracite};
 
   border-left: ${props =>

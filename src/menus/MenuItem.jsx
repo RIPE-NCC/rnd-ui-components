@@ -138,15 +138,16 @@ const StyledTitleLine = styled.ul`
   max-width: 95%;
 
   li {
-    display: inline-block;
-    display: inline-block;
+    /* thanks template.css, I have to make
+    sure you're not messing up my display setting here */
+    display: inline-block !important;
     vertical-align: middle;
     padding-bottom: 0px;
     padding-right: 16px;
   }
 
   li.title {
-    display: inline-block;
+    display: inline-block !important;
     vertical-align: middle;
     padding-bottom: 0px;
     padding-right: 16px;
