@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const StyledLegend = styled.svg`
   margin-top: 42px;
-  margin-left: 56px;
+  /* margin-left: 56px; */
 
   .cls-1 {
     fill: #f2f9ff;
