@@ -130,12 +130,11 @@ const StyledMenuItem = styled.div`
 
 const StyledTitleLine = styled.ul`
   padding: 0 0 0 0;
-  margin: 2px 0;
+  margin: 2px 0 !important;
   text-align: left;
   vertical-align: top;
-  //margin-left: 0;
-  //padding-left: 0;
   max-width: 95%;
+  line-height: 21px;
 
   li {
     /* thanks template.css, I have to make
@@ -147,6 +146,7 @@ const StyledTitleLine = styled.ul`
   }
 
   li.title {
+    /* override template.cs list-item setting */
     display: inline-block !important;
     vertical-align: middle;
     padding-bottom: 0px;

@@ -11,6 +11,17 @@ import {
   StyledAnimatedStatusBar
 } from "../dialogs/progressIndeterminateDialog";
 
+const StyledExpansionPanelItem = styled.div`
+  /* override template h5 */
+  h5 {
+    margin: 0 !important;
+  }
+
+  .title-line {
+    line-height: 21px;
+  }
+`;
+
 export class ExpansionPanelItem extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +81,7 @@ export class ExpansionPanelItem extends React.Component {
         />
       );
     return (
-      <div>
+      <StyledExpansionPanelItem>
         <Dialog className={className} title={this.makeTitle()} />
         {this.state.showDetail &&
           ((!this.props.doNotInlineChildren && (
@@ -85,7 +96,7 @@ export class ExpansionPanelItem extends React.Component {
             </Dialog>
           )) ||
             this.props.children)}
-      </div>
+      </StyledExpansionPanelItem>
     );
   }
 }
