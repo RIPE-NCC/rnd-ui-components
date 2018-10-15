@@ -102,7 +102,7 @@ export class SinglePropertyBox extends React.Component {
       <StyledProperyBox
         readOnly={this.props.readOnly}
         isEditable={this.props.isEditable}
-        className={`${this.props.className} ${this.props.extraclasses || ""}`}
+        className={`${this.props.className || ""} ${this.props.extraclasses || ""}`}
       >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">
