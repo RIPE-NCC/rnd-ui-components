@@ -162,7 +162,7 @@ const StyledTimeStampBox = styled.div`
   margin: 0;
   padding: 0;
 
-  .tooltip {
+  .ripe-rnd-tooltip {
     display: none;
     position: absolute;
     max-width: 210px;
@@ -180,7 +180,7 @@ const StyledTimeStampBox = styled.div`
       (!props.inline && '"Menlo", "monospace"') || "inherit"};
   }
 
-  .date-primary:hover .tooltip {
+  .date-primary:hover .ripe-rnd-tooltip {
     display: block;
   }
 `;
@@ -220,7 +220,7 @@ export class TimeStampBox extends React.Component {
               " "
             ]}
             {dateFmt.utc}
-            <ToolTip className="tooltip" width={210} height={100}>
+            <ToolTip className="ripe-rnd-tooltip" width={210} height={100}>
               {dateFmt.local}
             </ToolTip>
           </div>

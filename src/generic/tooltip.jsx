@@ -42,7 +42,7 @@ const StyledToolTip = styled.div`
 export class ToolTip extends React.Component {
   render() {
     return (
-      <StyledToolTip className="tooltip" width={this.props.width} height={this.props.height}>
+      <StyledToolTip className="ripe-rnd-tooltip" width={this.props.width} height={this.props.height}>
         {this.props.children}
       </StyledToolTip>
     );
@@ -121,7 +121,7 @@ export class SvgToolTip extends React.Component {
     let curLine = numTextLines;
     return (
       <StyledSvgToolTip
-        className="tooltip"
+        className="ripe-rnd-tooltip"
         // a b dx = 1 0 dx
         // c d dy = 0 1 dy
         transform={`matrix(${1 / this.props.zoomFactor} 0 0 ${1 /
