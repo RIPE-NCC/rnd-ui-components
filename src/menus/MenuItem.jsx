@@ -158,7 +158,7 @@ const StyledTitleLine = styled.ul`
     font-size: 14px;
     color: #2a2a2a;
     text-overflow: ellipsis;
-    max-width: 69%;
+    max-width: 79%;
     white-space: nowrap;
     overflow: hidden;
     float: right;
