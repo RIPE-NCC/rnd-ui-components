@@ -1,5 +1,6 @@
 {
   "name": "@ripe-rnd/ui-components",
+  "sideEffects": false,
   "version": "0.0.1",
   "description": "Generic reusable UI components made with React",
   "main": "src/index.js",
