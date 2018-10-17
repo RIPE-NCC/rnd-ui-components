@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { SinglePropertyBox } from "@ripe-rnd/ui-components";
 
 export const MeasurementDetail = styled.div`
-  max-width: 915px;
+  max-width: 1120px;
   position: relative;
   margin-bottom: 24px;
 `;
