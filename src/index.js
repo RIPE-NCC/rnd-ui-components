@@ -11,7 +11,11 @@ export {
 } from "./dialogs/progressIndeterminateDialog";
 
 // boxes
-export { SinglePropertyBox, TimeStampBox, RadioInputBox } from "./generic/simpleBoxes.jsx";
+export {
+  SinglePropertyBox,
+  TimeStampBox,
+  RadioInputBox
+} from "./generic/simpleBoxes.jsx";
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";
@@ -22,6 +26,7 @@ export {
   ExpansionPanelItem,
   ExpansionPanelItemWithStatus
 } from "./generic/ExpansionPanel.jsx";
+export { SimpleTag } from "./generic/tags.jsx";
 
 // geo input specials
 export {
