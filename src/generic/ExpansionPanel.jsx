@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import { UpArrow, DownArrow, MenuButton } from "../generic/md.jsx";
 
@@ -30,6 +31,10 @@ export class ExpansionPanelItem extends React.Component {
     };
   }
 
+  toggleMenuItem = () => {
+    this.setState({ showDetail: !this.state.showDetail });
+  };
+
   componentWillReceiveProps(nextProps) {
     // Reset the showDetail state to the props every time
     // the component gets rendered.
@@ -38,10 +43,6 @@ export class ExpansionPanelItem extends React.Component {
         (!this.state.showDetail && nextProps.showDetail) ||
         this.state.showDetail
     });
-  }
-
-  toggleTraceroute() {
-    this.setState({ showDetail: !this.state.showDetail });
   }
 
   hideMenuItem() {
@@ -57,12 +58,13 @@ export class ExpansionPanelItem extends React.Component {
       <MenuItem
         title={this.props.title}
         annotations={this.props.annotations}
-        contextButton={DownArrow}
+        contextButton={this.props.expandable && DownArrow}
+        accuracyClick={!this.props.expandable}
         showDot={this.props.showDot}
         dotColor={this.props.dotColor}
         dotStyle={this.props.dotStyle}
-        toggleMenuItem={this.toggleTraceroute.bind(this)}
-        hideMenuItem={this.hideMenuItem.bind(this)}
+        toggleMenuItem={this.toggleMenuItem}
+        hideMenuItem={this.hideMenuItem}
         hideOnMouseLeave={false}
       />
     );
@@ -76,8 +78,8 @@ export class ExpansionPanelItem extends React.Component {
           title={this.props.expandedTitle || "SUMMARY"}
           contextButton={UpArrow}
           hideOnMouseLeave={false}
-          toggleMenuItem={this.toggleExpandedItem.bind(this)}
-          hideMenuItem={this.hideExpandedItem.bind(this)}
+          toggleMenuItem={this.toggleMenuItem}
+          hideMenuItem={this.hideMenuItem}
         />
       );
     return (
@@ -131,3 +133,15 @@ function createExpansionPanelItemWithStatus(ExpansionPanelItemComponent) {
 export const ExpansionPanelItemWithStatus = createExpansionPanelItemWithStatus(
   ExpansionPanelItem
 );
+
+ExpansionPanelItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  expandedTite: PropTypes.string,
+  expandable: PropTypes.bool,
+  annotations: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  doNotInlineChildren: PropTypes.bool
+};
+
+ExpansionPanelItem.defaultProps = {
+  expandable: true
+};
