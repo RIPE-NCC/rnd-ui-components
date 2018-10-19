@@ -6,6 +6,7 @@ import { UpArrow, DownArrow, MenuButton } from "../generic/md.jsx";
 
 import Dialog from "../dialogs/Dialog.jsx";
 import { MenuItem } from "../menus/MenuItem.jsx";
+import { oimSilver } from "../themes/colors";
 
 import {
   indeterminateAnimation,
@@ -16,6 +17,7 @@ const StyledExpansionPanelItem = styled.div`
   /* override template h5 */
   h5 {
     margin: 0 !important;
+    color: ${oimSilver};
   }
 
   .title-line {
