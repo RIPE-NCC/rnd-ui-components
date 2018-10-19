@@ -42,7 +42,11 @@ const StyledToolTip = styled.div`
 export class ToolTip extends React.Component {
   render() {
     return (
-      <StyledToolTip className="ripe-rnd-tooltip" width={this.props.width} height={this.props.height}>
+      <StyledToolTip
+        className="ripe-rnd-tooltip"
+        width={this.props.width}
+        height={this.props.height}
+      >
         {this.props.children}
       </StyledToolTip>
     );
@@ -115,19 +119,31 @@ export class SvgToolTip extends React.Component {
         return acc + ((typeof t === "object" && 3) || 1);
       }, 1),
       lineHeight = this.props.fontsize + 2,
-      height = numTextLines * lineHeight + 2 * this.margin;
+      height = numTextLines * lineHeight + 2 * this.margin,
+      posYFactor = ["bottom", "top", "mid"].indexOf(
+        this.props.positionRelativeToPointer
+      ),
+      posXTrans =
+        (this.props.positionRelativeToPointer === "top" &&
+          -this.props.minwidth / 2) ||
+        0,
+      x = this.props.x + posXTrans + this.props.dx / this.props.zoomFactor,
+      y =
+        this.props.y +
+        (this.props.dy - (height + this.props.extraHeight)) /
+          (posYFactor * this.props.zoomFactor);
+    console.log(posYFactor);
+
     //this.y = this.props.y - height;
     //x = this.props.x;
     let curLine = numTextLines;
     return (
       <StyledSvgToolTip
         className="ripe-rnd-tooltip"
-        // a b dx = 1 0 dx
-        // c d dy = 0 1 dy
+        // a c dx = 1 0 dx
+        // b d dy = 0 1 dy
         transform={`matrix(${1 / this.props.zoomFactor} 0 0 ${1 /
-          this.props.zoomFactor} ${this.props.x +
-          this.props.dx / this.props.zoomFactor} ${this.props.y -
-          height / (2 * this.props.zoomFactor)})`}
+          this.props.zoomFactor} ${x} ${y})`}
       >
         <rect
           className="tooltip-bg"
@@ -148,7 +164,6 @@ export class SvgToolTip extends React.Component {
         >
           {this.props.header}
         </text>
-
         {this.props.textlines.map((child, i) => {
           if (typeof child === "string") {
             curLine -= 1;
@@ -182,15 +197,29 @@ export class SvgToolTip extends React.Component {
             </StyledSvgText>
           ];
         })}
-        <polyline
-          points={`0, ${-this.props.dy +
-            height / 2 -
-            this.margin / Math.sqrt(2)} ${-this.margin}, ${0 +
-            height / 2 -
-            this.props.dy} 0, ${-this.props.dy +
-            height / 2 +
-            this.margin / Math.sqrt(2)} `}
-        />
+        {/* the triangle */}
+        {(this.props.positionRelativeToPointer === "top" && (
+          <polyline
+            points={`${this.props.minwidth/2 - this.margin}, ${height +
+              this.props.extraHeight},
+            ${this.props.minwidth/2}, ${height +
+              this.props.extraHeight +
+              this.margin},
+            ${this.props.minwidth/2 + this.margin}, ${height +
+              this.props.extraHeight}
+            `}
+          />
+        )) || (
+          <polyline
+            points={`0, ${-this.props.dy +
+              height / 2 -
+              this.margin / Math.sqrt(2)} ${-this.margin}, ${0 +
+              height / 2 -
+              this.props.dy} 0, ${-this.props.dy +
+              height / 2 +
+              this.margin / Math.sqrt(2)} `}
+          />
+        )}
         {this.props.children}
       </StyledSvgToolTip>
     );
@@ -198,6 +227,8 @@ export class SvgToolTip extends React.Component {
 }
 
 SvgToolTip.propTypes = {
+  // (x,y) describes the upper left corner of the tooltip window
+  // (dx,dy) describes the offset of the tooltip from the user's pointer
   dx: PropTypes.number,
   dy: PropTypes.number,
   x: PropTypes.number,
@@ -209,7 +240,8 @@ SvgToolTip.propTypes = {
   ),
   fontsize: PropTypes.number,
   minwidth: PropTypes.number,
-  zoomFactor: PropTypes.number
+  zoomFactor: PropTypes.number,
+  positionRelativeToPointer: PropTypes.string
 };
 
 SvgToolTip.defaultProps = {
@@ -217,5 +249,7 @@ SvgToolTip.defaultProps = {
   fontsize: 10,
   dx: 0,
   dy: 0,
-  extraHeight: 0
+  extraHeight: 0,
+  minwidth: 165,
+  positionRelativeToPointer: "mid"
 };
