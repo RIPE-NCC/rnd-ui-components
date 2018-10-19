@@ -127,15 +127,12 @@ export class SvgToolTip extends React.Component {
         (this.props.positionRelativeToPointer === "top" &&
           -this.props.minwidth / 2) ||
         0,
-      x = this.props.x + posXTrans + this.props.dx / this.props.zoomFactor,
-      y =
+      leftX = this.props.x + posXTrans + this.props.dx / this.props.zoomFactor,
+      topY =
         this.props.y +
         (this.props.dy - (height + this.props.extraHeight)) /
           (posYFactor * this.props.zoomFactor);
-    console.log(posYFactor);
 
-    //this.y = this.props.y - height;
-    //x = this.props.x;
     let curLine = numTextLines;
     return (
       <StyledSvgToolTip
@@ -143,7 +140,7 @@ export class SvgToolTip extends React.Component {
         // a c dx = 1 0 dx
         // b d dy = 0 1 dy
         transform={`matrix(${1 / this.props.zoomFactor} 0 0 ${1 /
-          this.props.zoomFactor} ${x} ${y})`}
+          this.props.zoomFactor} ${leftX} ${topY})`}
       >
         <rect
           className="tooltip-bg"
@@ -200,12 +197,12 @@ export class SvgToolTip extends React.Component {
         {/* the triangle */}
         {(this.props.positionRelativeToPointer === "top" && (
           <polyline
-            points={`${this.props.minwidth/2 - this.margin}, ${height +
+            points={`${this.props.minwidth / 2 - this.margin}, ${height +
               this.props.extraHeight},
-            ${this.props.minwidth/2}, ${height +
+            ${this.props.minwidth / 2}, ${height +
               this.props.extraHeight +
               this.margin},
-            ${this.props.minwidth/2 + this.margin}, ${height +
+            ${this.props.minwidth / 2 + this.margin}, ${height +
               this.props.extraHeight}
             `}
           />
