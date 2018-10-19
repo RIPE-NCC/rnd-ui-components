@@ -58,7 +58,7 @@ export class ExpansionPanelItem extends React.Component {
       <MenuItem
         title={this.props.title}
         annotations={this.props.annotations}
-        contextButton={this.props.expandable && DownArrow}
+        contextButton={(this.props.expandable && DownArrow) || null}
         accuracyClick={!this.props.expandable}
         showDot={this.props.showDot}
         dotColor={this.props.dotColor}
