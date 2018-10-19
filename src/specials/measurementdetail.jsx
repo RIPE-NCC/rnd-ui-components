@@ -4,8 +4,6 @@ import styled from "styled-components";
 import { SinglePropertyBox } from "@ripe-rnd/ui-components";
 
 export const MeasurementDetail = styled.div`
-  /* maximum in www template w/ sidebar enabled */
-  max-width: 866px;
   position: relative;
   margin-bottom: 24px;
 `;
