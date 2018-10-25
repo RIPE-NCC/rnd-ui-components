@@ -14,22 +14,30 @@ const StyledSubGroup = styled.div`
 
 export const StyledPropertiesGrid = styled.div`
   display: grid;
-  grid-template-columns: ${props =>
-    (props.forceRows &&
-      `repeat(${props.forceRows},${100 / props.forceRows}%)`) ||
-    "50% 50%"};
-  grid-auto-flow: ${props => (!props.forceRows && "column") || "unset"};
+  grid-template-columns: repeat(1, 1fr);
 
-  .property-box.left {
-    order: 0;
-    grid-column: 1 / 1;
+  @media (min-width: 766px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .property-box.right {
-    order: 1;
-    grid-column: 2 / 2;
+  @media (min-width: 916px) {
+    grid-template-columns: ${props =>
+      (props.forceRows &&
+        `repeat(${props.forceRows},${100 / props.forceRows}%)`) ||
+      "50% 50%"};
+    grid-auto-flow: ${props => (!props.forceRows && "column") || "unset"};
+
+    .property-box.left {
+      order: 0;
+      grid-column: 1 / 1;
+    }
+
+    .property-box.right {
+      order: 1;
+      grid-column: 2 / 2;
+    }
   }
-  
+
   .title {
     margin: 12px 0;
   }
@@ -45,7 +53,7 @@ export class SubGroup extends React.Component {
             if (!c) {
               return;
             }
-            
+
             if (this.props.forceRows) {
               return c;
             }
