@@ -14,6 +14,9 @@ import {
 } from "../dialogs/progressIndeterminateDialog";
 
 const StyledExpansionPanelItem = styled.div`
+  margin-bottom: 6px;
+  font: 1em sans-serif normal;
+
   /* override template h5 */
   h5 {
     margin: 0 !important;
@@ -75,18 +78,26 @@ export class ExpansionPanelItem extends React.Component {
   render() {
     const className = `${(this.state.showDetail && "expanded") ||
         "collapsed"} ${this.props.className || ""}`,
-      expandedTitle = (
-        <MenuItem
-          title={this.props.expandedTitle || "SUMMARY"}
-          contextButton={UpArrow}
-          hideOnMouseLeave={false}
-          toggleMenuItem={this.toggleMenuItem}
-          hideMenuItem={this.hideMenuItem}
-        />
-      );
+      // sort of legacy, probably
+      // we want to get rid of this expandedTitle altogether
+      expandedTitle =
+        (this.props.expandedTitle && (
+          <MenuItem
+            title={this.props.expandedTitle}
+            contextButton={UpArrow}
+            hideOnMouseLeave={false}
+            toggleMenuItem={this.toggleMenuItem}
+            hideMenuItem={this.hideMenuItem}
+          />
+        )) ||
+        null;
     return (
       <StyledExpansionPanelItem>
-        <Dialog className={className} title={this.makeTitle()} />
+        <Dialog
+          className={className}
+          title={this.makeTitle()}
+          expandable={this.props.expandable}
+        />
         {this.state.showDetail &&
           ((!this.props.doNotInlineChildren && (
             <Dialog

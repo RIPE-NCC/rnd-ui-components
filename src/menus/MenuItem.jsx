@@ -2,14 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import styled from "styled-components";
-import {
-  ripeMagenta,
-  oimCarrot,
-  oimSilver,
-  oimEmerald,
-  oimClouds,
-  lColor
-} from "../themes/colors";
+import { oimClouds, atlasDarkBlue, fColor } from "../themes/colors";
 
 import { dismissButton } from "../generic/md.jsx";
 
@@ -129,6 +122,7 @@ const StyledMenuItem = styled.div`
 `;
 
 const StyledTitleLine = styled.ul`
+  font-weight: 400;
   padding: 0 0 0 0;
   margin: 2px 0 !important;
   text-align: left;
@@ -148,26 +142,42 @@ const StyledTitleLine = styled.ul`
   li.title {
     /* override template.cs list-item setting */
     display: inline-block !important;
+    color: ${atlasDarkBlue};
     vertical-align: middle;
     padding-bottom: 0px;
     padding-right: 16px;
   }
 
   .annotations {
-    font-style: italic;
+    /* font-style: italic; */
     font-size: 14px;
-    color: #2a2a2a;
-    text-overflow: ellipsis;
-    max-width: 79%;
-    white-space: nowrap;
-    overflow: hidden;
-    float: right;
+    color: ${fColor};
+    /* text-overflow: ellipsis; */
+    /* max-width: 79%; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    font-weight: 400;
+    /* float: right; */
   }
 
-  .context-menu-icon:hover {
+  /* now in styled component */
+  /* .context-menu-icon:hover {
     cursor: pointer;
     border-radius: 12px;
     background-color: ${oimClouds};
+  } */
+`;
+
+const StyledButton = styled.li`
+  position: absolute;
+  right: 21px;
+  width: 24px;
+  height: 24px;
+
+  &:hover {
+    cursor: pointer;
+    border-radius: 12px;
+    background-color: white;
   }
 `;
 
@@ -255,15 +265,16 @@ export class MenuItem extends React.Component {
               {this.state.contextButton}
             </AccuracyLi>
           )}
-          <li className="title">{this.props.title}</li>
+          {this.props.contextButton &&
+            this.props.buttonPlacement === "right" && (
+              <StyledButton>{this.state.contextButton}</StyledButton>
+            )}
+          {this.props.title && <li className="title">{this.props.title}</li>}
           {this.props.annotations && (
             <li className="annotations">{this.props.annotations}</li>
           )}
           {this.props.onMinimise && (
             <li onClick={e => this.onMinimise(e)}>{dismissButton}</li>
-          )}
-          {this.props.buttonPlacement === "right" && (
-            <li>{this.state.contextButton}</li>
           )}
           {this.state.isOpen && (
             <ul className={`sub-item-list ${this.props.buttonPlacement}`}>

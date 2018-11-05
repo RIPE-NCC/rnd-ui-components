@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { SinglePropertyBox } from "@ripe-rnd/ui-components";
+import { SinglePropertyBox } from "../generic/simpleBoxes";
+import { fColor } from "../themes/colors";
 
 export const MeasurementDetail = styled.div`
   position: relative;
@@ -9,7 +10,14 @@ export const MeasurementDetail = styled.div`
 `;
 
 const StyledSubGroup = styled.div`
-  margin-bottom: 12px;
+  margin: 8px 0;
+
+  h5.title {
+    margin: 12px 6px;
+    font-weight: 400;
+    font-size: 14.3px;
+    color: ${fColor};
+  }
 `;
 
 export const StyledPropertiesGrid = styled.div`
@@ -36,10 +44,6 @@ export const StyledPropertiesGrid = styled.div`
       order: 1;
       grid-column: 2 / 2;
     }
-  }
-
-  .title {
-    margin: 12px 0;
   }
 `;
 

@@ -8,7 +8,7 @@ import {
   oimAntracite,
   oimSilver,
   atlasGreen,
-  atlasDarkBlue
+  atlasOrange
 } from "../themes/colors";
 import { ToolTip } from "@ripe-rnd/ui-components";
 import { Clock } from "react-feather";
@@ -30,8 +30,8 @@ const StyledProperyBox = styled.ul`
   .name {
     color: ${props =>
       (props.isEditable && atlasGreen) ||
-      (props.readOnly && oimSilver) ||
-      lColor};
+      (props.readOnly && fColor) ||
+      atlasOrange};
     font-size: 14px;
   }
 
@@ -39,7 +39,7 @@ const StyledProperyBox = styled.ul`
     /* color: "#dfdfdf"; */
     color: black;
     text-rendering: geometricPrecision;
-    font-style: italic;
+    /* font-style: italic; */
     font-weight: 100;
   }
 
