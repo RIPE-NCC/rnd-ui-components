@@ -33,8 +33,7 @@ export const StyledAnimatedStatusBar = styled.div`
           return atlasRed;
           break;
       }
-    }}
-    background-image: none;
+    }};
     animation: ${props =>
       (props.isLoading && `${indeterminateAnimation} 2s linear infinite`) ||
       `none`};
