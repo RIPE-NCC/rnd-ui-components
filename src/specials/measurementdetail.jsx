@@ -10,13 +10,19 @@ export const MeasurementDetail = styled.div`
 `;
 
 const StyledSubGroup = styled.div`
-  margin: 8px 0;
+  margin: 12px 0 24px;
 
   h5.title {
     margin: 12px 6px;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 14.3px;
     color: ${fColor};
+  }
+
+  .group-desc {
+    font-weight: 100;
+    max-width: 460px;
+    margin-top: 6px;
   }
 `;
 
@@ -52,6 +58,7 @@ export class SubGroup extends React.Component {
     return (
       <StyledSubGroup>
         {!this.props.hidden && <h5 className="title">{this.props.title}</h5>}
+        {this.props.description && <p className="group-desc">{this.props.description}</p>}
         <StyledPropertiesGrid forceRows={this.props.forceRows}>
           {React.Children.map(this.props.children, c => {
             if (!c) {
