@@ -136,7 +136,7 @@ const StyledTitleLine = styled.ul`
     display: inline-block !important;
     vertical-align: middle;
     padding-bottom: 0px;
-    padding-right: 16px;
+    /* padding-right: 16px; */
   }
 
   li.title {

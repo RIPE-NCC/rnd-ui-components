@@ -72,7 +72,7 @@ const ExpDialogHeader = styled.div`
   li.title {
     font-size: 14.3px;
     color: ${oimAntracite};
-    width: 206px;
+    width: 220px;
   }
 
   ul.title-line li {
