@@ -13,31 +13,36 @@ import {
 import { ToolTip } from "@ripe-rnd/ui-components";
 import { Clock } from "react-feather";
 
+const DEFAULT_COLOR = fColor;
+
 const StyledProperyBox = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: ${props => (props.readOnly && "0 24px 0 12px !important") || "12px 32px 6px 0 !important"};
+  padding: ${props =>
+    (props.readOnly && "0 24px 0 12px !important") ||
+    "12px 32px 6px 0 !important"};
   margin: ${props => (props.readOnly && "12px 0 12px 12px !important") || "0"};
-  color: ${oimAntracite};
+  /* color: ${oimAntracite}; */
 
   border-left: ${props =>
     (props.readOnly && `1px solid ${oimSilver}`) || "inherit"};
-
-    li {
+  color: ${props => (props.isDefault && DEFAULT_COLOR) || oimAntracite};
+  li {
       margin-left: 0;
-    }
+  }
 
   .name {
     color: ${props =>
       (props.isEditable && atlasGreen) ||
       (props.readOnly && fColor) ||
+      (props.isDefault && DEFAULT_COLOR) ||
       atlasOrange};
     font-size: 14px;
   }
 
   .desc {
     /* color: "#dfdfdf"; */
-    color: black;
+    color: ${props => (props.isDefault && DEFAULT_COLOR) || oimAntracite};
     text-rendering: geometricPrecision;
     /* font-style: italic; */
     font-weight: 100;
@@ -47,10 +52,6 @@ const StyledProperyBox = styled.ul`
     font-family: ${props =>
       (props.type === "integer" && '"Roboto mono","monospace"') || "inherit"};
     color: ${props => (props.isDefault && atlasGreen) || "inherit"};
-  }
-
-  .is-default {
-    color: ${atlasGreen};
   } */
 `;
 
@@ -101,8 +102,10 @@ export class SinglePropertyBox extends React.Component {
     return (
       <StyledProperyBox
         readOnly={this.props.readOnly}
+        isDefault={this.props.isDefault}
         isEditable={this.props.isEditable}
-        className={`${this.props.className || ""} ${this.props.extraclasses || ""}`}
+        className={`${this.props.className || ""} ${this.props.extraclasses ||
+          ""}`}
       >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">
@@ -141,7 +144,11 @@ export class SinglePropertyBox extends React.Component {
 
 SinglePropertyBox.propTypes = {
   type: PropTypes.string,
-  name: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.element]), //.isRequired,
+  name: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.element
+  ]), //.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
