@@ -17,6 +17,7 @@ const StyledSubGroup = styled.div`
     font-weight: 600;
     font-size: 14.3px;
     color: ${fColor};
+    text-decoration: underline;
   }
 
   .group-desc {
@@ -58,7 +59,9 @@ export class SubGroup extends React.Component {
     return (
       <StyledSubGroup>
         {!this.props.hidden && <h5 className="title">{this.props.title}</h5>}
-        {this.props.description && <p className="group-desc">{this.props.description}</p>}
+        {this.props.description && (
+          <p className="group-desc">{this.props.description}</p>
+        )}
         <StyledPropertiesGrid forceRows={this.props.forceRows}>
           {React.Children.map(this.props.children, c => {
             if (!c) {
