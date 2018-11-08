@@ -67,7 +67,7 @@ const ExpDialogHeader = styled.div`
   /* margin: 5px 0 10px; */
   /* margin-bottom: 3px; */
   font-size: 14.3px;
-  color: #bdc3c7;
+  color: ${oimSilver};
 
   li.title {
     font-size: 14.3px;
