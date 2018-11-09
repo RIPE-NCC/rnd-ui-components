@@ -19,25 +19,24 @@ export const indeterminateAnimation = keyframes`
 `;
 
 export const StyledAnimatedStatusBar = styled.div`
-    width: ${props => (props.isLoading && "25%") || "100%"};
-    height: 3px;
-    background-color: ${props => {
-      if (props.isLoading) {
-        return oimSilver;
-      }
-      switch (props.status) {
-        case "success":
-          return (props.showSuccess && "green") || "none";
-          break;
-        case "error":
-          return atlasRed;
-          break;
-      }
-    }};
-    animation: ${props =>
-      (props.isLoading && `${indeterminateAnimation} 2s linear infinite`) ||
-      `none`};
-    height: 3px;
+  width: ${props => (props.isLoading && "25%") || "100%"};
+  height: 3px;
+  background-color: ${props => {
+    if (props.isLoading) {
+      return oimSilver;
+    }
+    switch (props.status) {
+      case "success":
+        return (props.showSuccess && "green") || "none";
+        break;
+      case "error":
+        return atlasRed;
+        break;
+    }
+  }};
+  animation: ${props =>
+    (props.isLoading && `${indeterminateAnimation} 2s linear infinite`) ||
+    `none`};
 `;
 
 function progressIndeterminateWithDismissButton(DialogComponent) {
@@ -50,13 +49,18 @@ function progressIndeterminateWithDismissButton(DialogComponent) {
     }
 
     getIsVisibleClassName() {
-      return (!!this.props.status && "show") || "hidden";
+      return (
+        (this.props.closeOnSuccess &&
+          this.props.status === "success" &&
+          "hidden") ||
+        "show"
+      );
     }
 
     closeDialog = e => {
       e && e.stopPropagation(e);
       this.setState({ isOpen: false });
-      this.props.close(); // callback for THIS dialog
+      this.props.close && this.props.close(); // callback for THIS dialog
       this.props.onClose && this.props.onClose(); // callback for the parent element
     };
 
@@ -80,10 +84,10 @@ function progressIndeterminateWithDismissButton(DialogComponent) {
         ),
         footer = (
           <div className="context-dialog-footer">
-            {(!this.props.closeOnSuccess && (
+            {!this.props.closeOnSuccess && (
               <button onClick={this.closeDialog}>DISMISS</button>
-            )) ||
-              (this.props.status === "success" && this.props.messages.success)}
+            )}
+            {/* //(this.props.status === "success" && this.props.messages.success)} */}
           </div>
         ),
         progress = (
@@ -98,6 +102,7 @@ function progressIndeterminateWithDismissButton(DialogComponent) {
             <StyledAnimatedStatusBar
               status={this.props.status}
               isLoading={this.props.isLoading}
+              showSuccess={this.props.showSuccess}
             />
           </div>
         );
@@ -122,7 +127,14 @@ Dialog.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   messages: PropTypes.object,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  closeOnSuccess: PropTypes.bool,
+  showSuccess: PropTypes.bool
 };
+
+Dialog.defaultProps = {
+  showSuccess: true,
+  closeOnSuccess: false
+}
 
 export default progressIndeterminateWithDismissButton(Dialog);
