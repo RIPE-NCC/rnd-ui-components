@@ -93,10 +93,16 @@ export class ExpansionPanelItem extends React.Component {
         null;
     return (
       <StyledExpansionPanelItem>
+        {/* This is actually the header of the expansionpanel.
+            It needs to have the `expanded` property so it can
+            avoid showing the orange on-hover bar for already
+            expanded panels.
+        */}
         <Dialog
           className={className}
           title={this.makeTitle()}
           expandable={this.props.expandable}
+          expanded={this.state.showDetail}
         />
         {this.state.showDetail &&
           ((!this.props.doNotInlineChildren && (

@@ -40,21 +40,6 @@ const ExpStyledDialog = styled.div`
     font-style: normal;
   }
 
-  /* show an extra bar to the left, so that 
-     the on-hover bar appears inside the complete bar
-  */ 
-  margin-left: 8px;
-  box-shadow: ${props =>
-    `-8px 0 ${(props.status === "success" && "green") || atlasMist}`};
-
-  /* This is not an actual shadow, but an orange bar on the left */
-  ${props =>
-    props.expandable &&
-    `&:not(.expanded):hover {
-    margin-left: 8px;
-    box-shadow: -8px 0 ${atlasOrange}
-    }`};
-
   &.expanded {
     margin-left: 2px;
     box-shadow: -2px 0 ${atlasOrange};
@@ -63,11 +48,30 @@ const ExpStyledDialog = styled.div`
 
 const ExpDialogHeader = styled.div`
   background-color: ${atlasMist};
-  padding: 12px 24px;
+  /* keep right padding big (>=48px) to not have the titles flow 
+     into the expand button (esp. on mobile). 
+  */
+  padding: 12px 48px 12px 12px;
   /* margin: 5px 0 10px; */
   /* margin-bottom: 3px; */
   font-size: 14.3px;
   color: ${oimSilver};
+
+  /* show an extra bar to the left, so that 
+     the on-hover orange bar (see next entry) appears inside the complete bar
+  */
+  margin-left: 8px;
+  box-shadow: ${props =>
+    `-8px 0 ${(props.status === "success" && "green") || atlasMist}`};
+
+  /* This is not an actual shadow, but an orange bar on the left */
+  ${props =>
+    !props.expanded &&
+    props.expandable &&
+    `&:hover {
+    margin-left: 8px;
+    box-shadow: -8px 0 ${atlasOrange}
+    }`};
 
   li.title {
     font-size: 14.3px;
@@ -199,7 +203,7 @@ const StyledDialogDiv = styled.div`
   `;
 
 const DialogHeader = styled.div`
-  padding: 12px 24px;
+  padding: 12px 16px;
   margin: 5px 0 10px;
   font-size: 14px;
   color: #bdc3c7;
@@ -207,8 +211,8 @@ const DialogHeader = styled.div`
 
 const StyledDialogBody = styled.div`
   font-size: 14px;
-  margin-left: 24px;
-  padding-top: 8px;
+  margin-left: 0;
+  padding: 16px 24px;
 `;
 
 class Dialog extends React.Component {
@@ -232,7 +236,10 @@ class Dialog extends React.Component {
         key={"sub-item-" + this.props.id}
       >
         {this.props.title && (
-          <ExpDialogHeader expanded={this.props.expanded}>
+          <ExpDialogHeader
+            expanded={this.props.expanded}
+            expandable={this.props.expandable}
+          >
             <h5>
               {this.props.title} <span>{this.props.annotations}</span>
             </h5>
