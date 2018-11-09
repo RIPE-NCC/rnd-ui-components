@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import styled from "styled-components";
-import { oimClouds, atlasDarkBlue, fColor } from "../themes/colors";
+import { oimClouds, atlasDarkBlue, fColor, atlasOrange } from "../themes/colors";
 
 import { dismissButton } from "../generic/md.jsx";
 
@@ -142,10 +142,16 @@ const StyledTitleLine = styled.ul`
   li.title {
     /* override template.cs list-item setting */
     display: inline-block !important;
-    color: ${atlasDarkBlue};
+    color: ${atlasOrange};
+    text-transform: underline;
     vertical-align: middle;
     padding-bottom: 0px;
     padding-right: 16px;
+  }
+
+  li.title:hover {
+    text-decoration: underline;
+    cursor: default;
   }
 
   .annotations {

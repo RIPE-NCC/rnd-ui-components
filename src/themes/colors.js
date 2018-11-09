@@ -14,7 +14,7 @@ export const oimMarkerYellow="#ffff99";
 export const oimLand="#eff1d7";
 
 export const atlasOrange="#ffbb00";
-export const atlasMist = "#F0EEED"; // header-bg exp
+export const atlasMist = "#F4F4F1"; // header-bg exp
 export const atlasFog = "#FAFAFA"; // body-bg exp
 
 export const atlasGreen="#85a056";

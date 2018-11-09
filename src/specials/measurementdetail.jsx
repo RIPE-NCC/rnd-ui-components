@@ -17,7 +17,6 @@ const StyledSubGroup = styled.div`
     font-weight: 600;
     font-size: 14.3px;
     color: ${fColor};
-    text-decoration: underline;
   }
 
   .group-desc {
