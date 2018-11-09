@@ -30,6 +30,7 @@ const StyledSubGroup = styled.div`
 export const StyledPropertiesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
+  grid-gap: 12px 0;
 
   @media (min-width: 766px) {
     grid-template-columns: repeat(2, 1fr);

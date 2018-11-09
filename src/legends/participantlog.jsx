@@ -177,7 +177,9 @@ export class ParticipantLogLegend extends React.Component {
     return (
       <StyledLegend
         viewBox="0 0 442.74 777.96"
-        width={`${this.props.width || "375"}px`}
+        // width={`${this.props.width || "375"}px`}
+        // overflow somewhat to the right
+        width="calc(100% + 48px)"
       >
         <polygon
           className="cls-1"
