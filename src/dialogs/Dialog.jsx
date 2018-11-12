@@ -68,10 +68,7 @@ const ExpDialogHeader = styled.div`
   ${props =>
     !props.expanded &&
     props.expandable &&
-    `&:hover {
-    margin-left: 8px;
-    box-shadow: -8px 0 ${atlasOrange}
-    }`};
+    `&:hover { box-shadow: -8px 0 ${atlasOrange}; }`};
 
   li.title {
     font-size: 14.3px;
@@ -212,7 +209,7 @@ const DialogHeader = styled.div`
 const StyledDialogBody = styled.div`
   font-size: 14px;
   margin-left: 0;
-  padding: 16px 24px;
+  padding: 16px;
 `;
 
 class Dialog extends React.Component {

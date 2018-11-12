@@ -20,7 +20,7 @@ const StyledProperyBox = styled.ul`
   margin: 0;
   padding: ${props =>
     (props.readOnly && "0 12px 0") ||
-    "12px 32px 6px 0 !important"};
+    "0 32px 6px 0 !important"};
   margin: ${props => (props.readOnly && "0 !important") || "0"};
   /* color: ${oimAntracite}; */
 
