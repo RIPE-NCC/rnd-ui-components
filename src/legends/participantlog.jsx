@@ -460,7 +460,7 @@ export class ParticipantLogLegend extends React.Component {
           y2="300.78"
         />
         <text className="cls-29" transform="translate(16.81 35.08)">
-          PROBE
+          LEGEND & DISPLAY OPTIONS
         </text>
         <circle className="cls-30" cx="214.42" cy="495.17" r="13.15" />
         <circle className="cls-30" cx="214.42" cy="578.97" r="13.15" />
