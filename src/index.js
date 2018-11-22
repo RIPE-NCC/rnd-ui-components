@@ -42,7 +42,7 @@ export { ParticipantLogLegend } from "./legends/participantlog.jsx";
 // specials
 export { ThumbBar } from "./specials/thumbbars.jsx";
 export { ProbeCircle } from "./specials/probes";
-export { MeasurementDetail, SubGroup } from "./specials/measurementdetail";
+export { MeasurementDetail, SubGroup, FlowGroup } from "./specials/measurementdetail";
 
 // utils
 export {

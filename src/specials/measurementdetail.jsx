@@ -54,6 +54,11 @@ export const StyledPropertiesGrid = styled.div`
   }
 `;
 
+const StyledPropertiesFlow = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+`;
+
 export class SubGroup extends React.Component {
   render() {
     return (
@@ -80,6 +85,20 @@ export class SubGroup extends React.Component {
             );
           })}
         </StyledPropertiesGrid>
+      </StyledSubGroup>
+    );
+  }
+}
+
+export class FlowGroup extends React.Component {
+  render() {
+    return (
+      <StyledSubGroup>
+        {!this.props.hidden && <h5 className="title">{this.props.title}</h5>}
+        {this.props.description && (
+          <p className="group-desc">{this.props.description}</p>
+        )}
+        <StyledPropertiesFlow>{this.props.children}</StyledPropertiesFlow>
       </StyledSubGroup>
     );
   }
