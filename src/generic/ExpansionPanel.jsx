@@ -19,7 +19,7 @@ const StyledExpansionPanelItem = styled.div`
 
   /* override template h5 */
   h5 {
-    margin: 0 !important;
+    margin-top: 0 !important;
     color: ${oimSilver};
   }
 

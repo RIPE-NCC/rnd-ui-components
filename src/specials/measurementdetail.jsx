@@ -15,21 +15,22 @@ const StyledSubGroup = styled.div`
   h5.title {
     margin: 12px 6px;
     font-weight: 600;
-    font-size: 14.3px;
+    font-size: 15.6px;
     color: ${fColor};
   }
 
   .group-desc {
     font-weight: 100;
     max-width: 460px;
-    margin-top: 6px;
+    margin-left: 6px;
   }
 `;
 
-export const StyledPropertiesGrid = styled.div`
+const StyledPropertiesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 12px 0;
+  margin-left: 6px; /* conform to template */
 
   @media (min-width: 766px) {
     grid-template-columns: repeat(2, 1fr);

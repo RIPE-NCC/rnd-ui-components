@@ -142,6 +142,7 @@ const StyledTitleLine = styled.ul`
   li.title {
     /* override template.cs list-item setting */
     display: inline-block !important;
+    font-size: 15.6px;
     color: ${atlasOrange};
     text-transform: underline;
     vertical-align: middle;
