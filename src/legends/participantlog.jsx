@@ -4,7 +4,14 @@ import PropTypes from "prop-types";
 
 const StyledLegend = styled.svg`
   margin-top: 42px;
+  max-width: 347px;
+
   /* margin-left: 56px; */
+
+ label,legend {
+    font-weight: 400;
+    font-size: 1.1em;
+  }
 
   .cls-1 {
     fill: #f2f9ff;

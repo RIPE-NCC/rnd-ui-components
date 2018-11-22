@@ -37,6 +37,7 @@ export {
 export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
 
 // legends
+export { GenericLegend } from "./legends/legend.jsx";
 export { ParticipantLogLegend } from "./legends/participantlog.jsx";
 
 // specials
