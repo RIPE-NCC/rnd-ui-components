@@ -17,11 +17,12 @@ const DEFAULT_COLOR = fColor;
 
 const StyledProperyBox = styled.ul`
   list-style-type: none;
-  margin: 0;
   padding: ${props =>
     (props.readOnly && "0 12px 0") ||
     "0 32px 6px 0 !important"};
+  /* unfortunately we need to override the template with !important here */
   margin: ${props => (props.readOnly && "0 !important") || "0"};
+  margin-left: ${props => props.spanAllColumns && "6px !important"};
   /* color: ${oimAntracite}; */
 
   border-left: ${props =>
@@ -104,6 +105,7 @@ export class SinglePropertyBox extends React.Component {
         readOnly={this.props.readOnly}
         isDefault={this.props.isDefault}
         isEditable={this.props.isEditable}
+        spanAllColumns={this.props.spanAllColumns}
         className={`${this.props.className || ""} ${this.props.extraclasses ||
           ""}`}
       >
