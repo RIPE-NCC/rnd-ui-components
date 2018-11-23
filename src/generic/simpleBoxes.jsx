@@ -22,7 +22,8 @@ const StyledProperyBox = styled.ul`
     "0 32px 6px 0 !important"};
   /* unfortunately we need to override the template with !important here */
   margin: ${props => (props.readOnly && "0 !important") || "0"};
-  margin-left: ${props => props.spanAllColumns && "6px !important"};
+  /* margin-left: ${props => props.spanAllColumns && "6px !important"}; */
+  max-width: ${props => props.spanAllColumns && "750px"}; /* ensure readability by wrapping too long texts */
   /* color: ${oimAntracite}; */
 
   border-left: ${props =>
@@ -159,11 +160,13 @@ SinglePropertyBox.propTypes = {
     PropTypes.element
   ]),
   annotation: PropTypes.string,
-  isDefault: PropTypes.bool
+  isDefault: PropTypes.bool,
+  spanAllColumns: PropTypes.bool
 };
 
 SinglePropertyBox.defaultProps = {
-  type: "string"
+  type: "string",
+  spanAllColumns: false
 };
 
 const StyledTimeStampBox = styled.div`

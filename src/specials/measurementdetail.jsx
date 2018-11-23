@@ -21,7 +21,7 @@ const StyledSubGroup = styled.div`
 
   .group-desc {
     font-weight: 100;
-    max-width: 460px;
+    max-width: 750px;
     margin-left: 6px;
   }
 `;
@@ -52,6 +52,11 @@ const StyledPropertiesGrid = styled.div`
       order: 1;
       grid-column: 2 / 2;
     }
+
+    .property-box.span-all-columns {
+      order: 0;
+      grid-column: 1 / -1;
+    }
   }
 `;
 
@@ -80,6 +85,7 @@ export class SubGroup extends React.Component {
             return (
               React.cloneElement(c, {
                 extraclasses:
+                  (c.props.spanAllColumns && "property-box span-all-columns") ||
                   (c.props && c.props.readOnly && "property-box right") ||
                   "property-box left"
               }) || <SinglePropertyBox name="NOT AVAILABLE" value="-" />
