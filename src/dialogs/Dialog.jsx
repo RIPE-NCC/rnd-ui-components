@@ -47,6 +47,8 @@ const ExpStyledDialog = styled.div`
 `;
 
 const ExpDialogHeader = styled.div`
+  /* make children with position: absolute stick to this */
+  position: relative;
   background-color: ${atlasMist};
   /* keep right padding big (>=48px) to not have the titles flow 
      into the expand button (esp. on mobile). 

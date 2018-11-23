@@ -34,6 +34,11 @@ const StyledPropertiesGrid = styled.div`
 
   @media (min-width: 766px) {
     grid-template-columns: repeat(2, 1fr);
+
+    /* spanAllColumns boxes keep on spanning */
+    .property-box.span-all-columns {
+      grid-column: 1/-1;
+    }
   }
 
   @media (min-width: 916px) {
@@ -54,7 +59,7 @@ const StyledPropertiesGrid = styled.div`
     }
 
     .property-box.span-all-columns {
-      order: 0;
+      /* order: 0; */
       grid-column: 1 / -1;
     }
   }
