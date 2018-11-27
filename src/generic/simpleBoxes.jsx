@@ -18,12 +18,13 @@ const DEFAULT_COLOR = fColor;
 const StyledProperyBox = styled.ul`
   list-style-type: none;
   padding: ${props =>
-    (props.readOnly && "0 12px 0") ||
-    "0 32px 6px 0 !important"};
+    (props.readOnly && "0 12px 0") || "0 32px 6px 0 !important"};
   /* unfortunately we need to override the template with !important here */
   margin: ${props => (props.readOnly && "0 !important") || "0"};
   /* margin-left: ${props => props.spanAllColumns && "6px !important"}; */
-  max-width: ${props => props.spanAllColumns && "750px"}; /* ensure readability by wrapping too long texts */
+  max-width: ${props =>
+    props.spanAllColumns &&
+    "750px"}; /* ensure readability by wrapping too long texts */
   /* color: ${oimAntracite}; */
 
   border-left: ${props =>
@@ -173,19 +174,31 @@ const StyledTimeStampBox = styled.div`
   display: ${props => (props.inline && "inline-grid") || "inline-block"};
   margin: 0;
   padding: 0;
+  font-size: 14px;
+  /* position: relative; */
+
+  h5 {
+    font-size: 14px;
+    font-weight: 100;
+    margin: 8px 0 2px;
+  }
 
   .ripe-rnd-tooltip {
     display: none;
     position: absolute;
-    max-width: 210px;
-    overflow: hidden;
+    max-width: 230px;
+    min-width: 210px;
+    overflow-y: visible;
     white-space: normal;
-    background-color: black;
+    /* background-color: black; */
     color: white;
     padding: 18px;
+    top: -125px;
   }
 
   .date-primary {
+    position: relative;
+    box-sizing: border-box;
     padding-right: 0;
     cursor: pointer;
     font-family: ${props =>
@@ -195,24 +208,66 @@ const StyledTimeStampBox = styled.div`
   .date-primary:hover .ripe-rnd-tooltip {
     display: block;
   }
+
+  .success {
+    color: green;
+  }
 `;
 
 export class TimeStampBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clipBoardCopied: false
+    };
+  }
+
   representTimeStamp(ts) {
     if (!ts) {
       return null;
-      Ì;
     }
 
     const dateTime = new Date(parseInt(ts) * 1000);
     return {
-      utc: dateTime
-        .toUTCString()
-        .split(", ")[1]
-        .replace("GMT", "UTC"),
-      local: dateTime.toString()
+      utcAsHuman: dateTime.toLocaleString("us", {
+        timeZone: "UTC",
+        timeZoneName: "short",
+        hourCycle: "h24",
+        weekday: "short",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric"
+      }),
+      localAsHuman: dateTime.toLocaleString(
+        // "us" here refers to the formatting style,
+        // *NOT* the timezone.
+        "us",
+        {
+          // not setting timeZone means it will use
+          // the browser setting
+          hourCycle: "h24",
+          weekday: "short",
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+          timeZoneName: "short",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric"
+        }
+      ),
+      utcAsISO: dateTime.toISOString().replace(".000", "")
     };
   }
+
+  copyTsToClipBoard = () => {
+    console.log("copy to cb");
+    navigator.clipboard.writeText(this.props.timeStamp);
+    this.setState({ clipBoardCopied: true });
+  };
 
   render() {
     const dateFmt = this.representTimeStamp(this.props.timeStamp);
@@ -221,7 +276,7 @@ export class TimeStampBox extends React.Component {
         <StyledTimeStampBox inline={this.props.inline}>-</StyledTimeStampBox>
       )) || (
         <StyledTimeStampBox inline={this.props.inline}>
-          <div className="date-primary">
+          <div className="date-primary" onClick={this.copyTsToClipBoard}>
             {!this.props.inline && [
               <Clock
                 size={21}
@@ -231,9 +286,16 @@ export class TimeStampBox extends React.Component {
               />,
               " "
             ]}
-            {dateFmt.utc}
+            {dateFmt.utcAsISO}
             <ToolTip className="ripe-rnd-tooltip" width={210} height={100}>
-              {dateFmt.local}
+              <h5>UTC date and time</h5>
+              {dateFmt.utcAsHuman}
+              <h5>Local date and time</h5>
+              {dateFmt.localAsHuman}
+              <h5>UNIX Timestamp (seconds)</h5>
+              {this.props.timeStamp}
+              {this.state.clipBoardCopied && <div className="success">Timestamp copied to clipboard!</div> || 
+            <div>(click to copy timestamp to clipboard)</div>}
             </ToolTip>
           </div>
         </StyledTimeStampBox>
