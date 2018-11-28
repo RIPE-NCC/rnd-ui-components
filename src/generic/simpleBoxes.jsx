@@ -58,7 +58,7 @@ const StyledProperyBox = styled.ul`
   } */
 `;
 
-const StyledValue = styled.li`
+const StyledValue = styled.div`
   font-family: ${props =>
     (props.type !== "text" &&
       ((typeof props.value === "string" ||
@@ -68,6 +68,9 @@ const StyledValue = styled.li`
     "inherit"};
   font-weight: ${props => (props.isDefault && "300") || "400"};
 
+  ${props =>
+    props.asListItem &&
+    "li {list-style-type: circle !important; display: list-item !important; list-style-position: inside !important; }"};
   /* div {
     font-family: ${props =>
       (props.type === "array" && '"Roboto mono","monospace"') || "inherit"};
@@ -129,6 +132,7 @@ export class SinglePropertyBox extends React.Component {
                 type={this.props.type}
                 value={p}
                 key={`prop_${i}`}
+                asListItem={this.props.valuesAsList}
               >
                 {valueOrAnnotation[0]}
                 {(this.props.isDefault &&
@@ -162,12 +166,14 @@ SinglePropertyBox.propTypes = {
   ]),
   annotation: PropTypes.string,
   isDefault: PropTypes.bool,
-  spanAllColumns: PropTypes.bool
+  spanAllColumns: PropTypes.bool, // span the complete width of the grid
+  valuesAsList: PropTypes.bool // render the value(s) with bullets
 };
 
 SinglePropertyBox.defaultProps = {
   type: "string",
-  spanAllColumns: false
+  spanAllColumns: false,
+  valuesAsList: false
 };
 
 const StyledTimeStampBox = styled.div`
