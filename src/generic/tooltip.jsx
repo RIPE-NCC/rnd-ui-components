@@ -8,19 +8,20 @@ const StyledToolTip = styled.div`
   font-weight: 100;
   font-family: "Open Sans", Helvetica, Arial, "sans-serif";
   font-style: normal;
-  //transform: translate(3 0 0);
+  /* //transform: translate(3 0 0); */
   fill: white;
   stroke: none;
   cursor: default;
   display: none;
   position: absolute;
-  max-width: ${props => (props.width && `${props.width}px`) || "100px"};
+  width: ${props => (props.width && `${props.width}px`) || "unset"};
+  height: ${props => (props.height && `${props.height}px` || "unset")};
   overflow: visbible;
   white-space: normal;
   color: white;
-  //transform: translateX(100px);
+  /* //transform: translateX(100px); */
   transform: ${props => `translateX(${-props.width / 4}px)`};
-  transform: ${props => `translateY(${-props.height}px)`};
+  transform: ${props => `translateY(${-props.height - 44}px)`};
 
   padding: 9px;
 
@@ -40,6 +41,7 @@ const StyledToolTip = styled.div`
 `;
 
 const DownArrow = styled.div`
+  box-sizing: border-box;
   position: absolute;
   margin-top: 18px;
   margin-left: 33%;

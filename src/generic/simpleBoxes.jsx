@@ -180,20 +180,19 @@ const StyledTimeStampBox = styled.div`
   h5 {
     font-size: 14px;
     font-weight: 100;
-    margin: 8px 0 2px;
+    margin: 0 0 -4px; /* margin-top will always be overridden by template override */
   }
 
   .ripe-rnd-tooltip {
+    /* don't set height and width here 
+      set in in the components prop
+    */
     display: none;
-    position: absolute;
-    max-width: 230px;
-    min-width: 210px;
     overflow-y: visible;
     white-space: normal;
     /* background-color: black; */
     color: white;
-    padding: 18px;
-    top: -125px;
+    padding: 17px;
   }
 
   .date-primary {
@@ -273,7 +272,9 @@ export class TimeStampBox extends React.Component {
     const dateFmt = this.representTimeStamp(this.props.timeStamp);
     return (
       (!dateFmt && (
-        <StyledTimeStampBox inline={this.props.inline}>-</StyledTimeStampBox>
+        <StyledTimeStampBox width={275} inline={this.props.inline}>
+          -
+        </StyledTimeStampBox>
       )) || (
         <StyledTimeStampBox inline={this.props.inline}>
           <div className="date-primary" onClick={this.copyTsToClipBoard}>
@@ -287,15 +288,16 @@ export class TimeStampBox extends React.Component {
               " "
             ]}
             {dateFmt.utcAsISO}
-            <ToolTip className="ripe-rnd-tooltip" width={210} height={100}>
+            <ToolTip className="ripe-rnd-tooltip" width={260} height={161}>
               <h5>UTC date and time</h5>
               {dateFmt.utcAsHuman}
               <h5>Local date and time</h5>
               {dateFmt.localAsHuman}
               <h5>UNIX Timestamp (seconds)</h5>
               {this.props.timeStamp}
-              {this.state.clipBoardCopied && <div className="success">Timestamp copied to clipboard!</div> || 
-            <div>(click to copy timestamp to clipboard)</div>}
+              {(this.state.clipBoardCopied && (
+                <div className="success">Timestamp copied to clipboard!</div>
+              )) || <div>(click to copy timestamp to clipboard)</div>}
             </ToolTip>
           </div>
         </StyledTimeStampBox>
