@@ -20,7 +20,6 @@ const StyledToolTip = styled.div`
   white-space: normal;
   color: white;
   /* margin-top: ${props => `${-props.height - 44}px`}; */
-  margin-top: ${props => props.inline && "-134%" || "-94%"};
   /* //transform: translateX(100px); */
   /* transform: ${props => `translateX(${-props.width / 4}px)`}; */
   /* transform: ${props => `translateY(${-props.height - 44}px)`}; */

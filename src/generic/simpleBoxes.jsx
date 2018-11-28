@@ -193,6 +193,7 @@ const StyledTimeStampBox = styled.div`
     /* don't set height and width here 
       set in in the components prop
     */
+    margin-top: ${props => (props.inline && "-159%") || "-112%"};
     display: none;
     overflow-y: visible;
     white-space: normal;
@@ -284,13 +285,18 @@ export class TimeStampBox extends React.Component {
       )) || (
         <StyledTimeStampBox inline={this.props.inline}>
           <div className="date-primary" onClick={this.copyTsToClipBoard}>
-            <ToolTip className="ripe-rnd-tooltip" width={260} height={161} inline={this.props.inline}>
+            <ToolTip
+              className="ripe-rnd-tooltip"
+              width={260}
+              height={161}
+              inline={this.props.inline}
+            >
               <h5>UTC date and time</h5>
-              {dateFmt.utcAsHuman}
+              <p>{dateFmt.utcAsHuman}</p>
               <h5>Local date and time</h5>
-              {dateFmt.localAsHuman}
+              <p>{dateFmt.localAsHuman}</p>
               <h5>UNIX Timestamp (seconds)</h5>
-              {this.props.timeStamp}
+              <p>{this.props.timeStamp}</p>
               {(this.state.clipBoardCopied && (
                 <div className="success">Timestamp copied to clipboard!</div>
               )) || <div>(click to copy timestamp to clipboard)</div>}
