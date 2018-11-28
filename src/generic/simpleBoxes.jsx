@@ -284,17 +284,7 @@ export class TimeStampBox extends React.Component {
       )) || (
         <StyledTimeStampBox inline={this.props.inline}>
           <div className="date-primary" onClick={this.copyTsToClipBoard}>
-            {!this.props.inline && [
-              <Clock
-                size={21}
-                key="c"
-                strokeWidth={1}
-                transform="translate(0,5)"
-              />,
-              " "
-            ]}
-            {dateFmt.utcAsISO}
-            <ToolTip className="ripe-rnd-tooltip" width={260} height={161}>
+            <ToolTip className="ripe-rnd-tooltip" width={260} height={161} inline={this.props.inline}>
               <h5>UTC date and time</h5>
               {dateFmt.utcAsHuman}
               <h5>Local date and time</h5>
@@ -305,6 +295,16 @@ export class TimeStampBox extends React.Component {
                 <div className="success">Timestamp copied to clipboard!</div>
               )) || <div>(click to copy timestamp to clipboard)</div>}
             </ToolTip>
+            {!this.props.inline && [
+              <Clock
+                size={21}
+                key="c"
+                strokeWidth={1}
+                transform="translate(0,5)"
+              />,
+              " "
+            ]}
+            {dateFmt.utcAsISO}
           </div>
         </StyledTimeStampBox>
       )

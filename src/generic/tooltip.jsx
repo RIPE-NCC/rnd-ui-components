@@ -15,13 +15,15 @@ const StyledToolTip = styled.div`
   display: none;
   position: absolute;
   width: ${props => (props.width && `${props.width}px`) || "unset"};
-  height: ${props => (props.height && `${props.height}px` || "unset")};
+  /* height: ${props => (props.height && `${props.height}px`) || "unset"}; */
   overflow: visbible;
   white-space: normal;
   color: white;
+  /* margin-top: ${props => `${-props.height - 44}px`}; */
+  margin-top: ${props => props.inline && "-134%" || "-94%"};
   /* //transform: translateX(100px); */
-  transform: ${props => `translateX(${-props.width / 4}px)`};
-  transform: ${props => `translateY(${-props.height - 44}px)`};
+  /* transform: ${props => `translateX(${-props.width / 4}px)`}; */
+  /* transform: ${props => `translateY(${-props.height - 44}px)`}; */
 
   padding: 9px;
 
@@ -43,7 +45,7 @@ const StyledToolTip = styled.div`
 const DownArrow = styled.div`
   box-sizing: border-box;
   position: absolute;
-  margin-top: 18px;
+  margin-top: 17px;
   margin-left: 33%;
   width: 0;
   height: 0;
@@ -61,6 +63,7 @@ export class ToolTip extends React.Component {
         className="ripe-rnd-tooltip"
         width={this.props.width}
         height={this.props.height}
+        inline={this.props.inline}
       >
         {this.props.children}
         <DownArrow />
