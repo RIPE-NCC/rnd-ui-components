@@ -22,6 +22,10 @@ const StyledLegend = styled.div`
   form {
       margin-bottom: 0;
   }
+
+  .legend-extra {
+    margin-top: 24px;
+  }
 `;
 
 export class GenericLegend extends React.Component {
