@@ -8,7 +8,8 @@ const StyledLegend = styled.svg`
 
   /* margin-left: 56px; */
 
- label,legend {
+  label,
+  legend {
     font-weight: 400;
     font-size: 1.1em;
   }
@@ -467,6 +468,10 @@ export class ParticipantLogLegend extends React.Component {
         <circle className="cls-30" cx="214.42" cy="661.72" r="13.15" />
         <circle className="cls-30" cx="74.13" cy="493.8" r="13.15" />
         <circle className="cls-30" cx="74.13" cy="577.99" r="13.15" />
+
+        <text className="cls-29" transform="translate(16.81 757.08)">
+          showing probes information for current date
+        </text>
       </StyledLegend>
     );
   }

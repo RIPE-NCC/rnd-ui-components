@@ -22,11 +22,12 @@ const StyledLegend = styled.div`
   }
 
   form {
-    margin-bottom: 0;
+    margin-bottom: 24px;
   }
 
   .legend-extra {
     margin-top: 24px;
+    margin-bottom: 4px;
   }
 `;
 
