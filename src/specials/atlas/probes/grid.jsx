@@ -76,7 +76,8 @@ export class ProbesGridSvg extends React.Component {
     let textLines = [
       `probe is ${(!p[1] && "not ") || ""}assigned`,
       "",
-      "current status",
+      (this.props.msmStatus === "Stopped" && "historical status") ||
+        "current status",
       `${(p[0].status && probeStatusMap(p[0].status.id)) || "abandoned"}`
     ];
     if (p[0].status) {
@@ -118,64 +119,72 @@ export class ProbesGridSvg extends React.Component {
   };
 
   render() {
-    return [
-      <div key={`no_probes_${this.props.rI}`}>{`${
-        this.state.assignedLength
-      } probe${(this.state.assignedLength > 1 && "s") || ""} assigned / ${this
-        .state.notAssignedLength || "none"} rejected`}</div>,
-      this.state.assignedLength > MAX_SHOW_PROBES && (
-        <div>{`Showing ${MAX_SHOW_PROBES} probes`}</div>
-      ),
-      <svg
-        key={`pr_svg_${this.props.rI}`}
-        width={`${this.props.cols * this.props.cellWidth}px`}
-        height={`${(Math.floor(
-          (this.props.pl.slice(0, MAX_SHOW_PROBES).length - 1) / this.props.cols
-        ) +
-          1) *
-          this.props.cellHeight}px`}
-        style={{ marginTop: "24px", overflow: "visible" }}
-        ref={this.probesOverviewSvg}
-      >
-        {this.props.pl.slice(0, MAX_SHOW_PROBES).map((p, i) => {
-          const thisTotalU = i;
-          return (
-            <ProbeCircle
-              title={`probe ${p[0].id}`}
-              key={`pc_probe_${p[0].id}`}
-              primaryKey={p[0].id}
-              lengthInUnits={1}
-              divsInUnits={this.props.pl.map(v => [v, (p[1] && 4) || 1])}
-              unitSize={[this.props.cellWidth, this.props.cellHeight]}
-              widthInUnits={this.props.cols}
-              r={this.props.r}
-              i={i}
-              unitStart={[
-                thisTotalU % this.props.cols,
-                Math.floor(thisTotalU / this.props.cols)
-              ]}
-              borderWidth={1}
-              text={p[0].country_code}
-              colorize={true}
-              isAssigned={p[1]}
-              isAnchor={p[0].is_anchor}
-              annotation={
-                this.props.showProbeAnnotation &&
-                p[0][this.props.annotationField]
-              }
-              connectionStatus={(p[0].status && p[0].status.id) || 3}
-              showToolTip={d => this.showProbeToolTip({ d, p, i })}
-              hideToolTip={d => this.hideProbeToolTip({ d, p })}
-            />
-          );
-        })}
-        {this.state.probeTooltip}
-      </svg>,
-      this.props.pl.length > MAX_SHOW_PROBES && (
-        <div key={`more_prb_${this.props.rI}`}>{`...and ${this.props.pl.length -
-          MAX_SHOW_PROBES} more assigned probes`}</div>
-      )
-    ];
+    return (
+      <>
+        {this.props.requestedLength && (
+          <div>
+            {`${this.state.assignedLength} probe${(this.state.assignedLength >
+              1 &&
+              "s") ||
+              ""} assigned / ${this.state.notAssignedLength ||
+              "none"} rejected`}
+          </div>
+        )}
+        {this.state.assignedLength > MAX_SHOW_PROBES && (
+          <div>{`Showing ${MAX_SHOW_PROBES} probes`}</div>
+        )}
+        <svg
+          key={`pr_svg_${this.props.rI}`}
+          width={`${this.props.cols * this.props.cellWidth}px`}
+          height={`${(Math.floor(
+            (this.props.pl.slice(0, MAX_SHOW_PROBES).length - 1) /
+              this.props.cols
+          ) +
+            1) *
+            this.props.cellHeight}px`}
+          style={{ marginTop: "24px", overflow: "visible" }}
+          ref={this.probesOverviewSvg}
+        >
+          {this.props.pl.slice(0, MAX_SHOW_PROBES).map((p, i) => {
+            const thisTotalU = i;
+            return (
+              <ProbeCircle
+                title={`probe ${p[0].id}`}
+                key={`pc_probe_${p[0].id}`}
+                primaryKey={p[0].id}
+                lengthInUnits={1}
+                divsInUnits={this.props.pl.map(v => [v, (p[1] && 4) || 1])}
+                unitSize={[this.props.cellWidth, this.props.cellHeight]}
+                widthInUnits={this.props.cols}
+                r={this.props.r}
+                i={i}
+                unitStart={[
+                  thisTotalU % this.props.cols,
+                  Math.floor(thisTotalU / this.props.cols)
+                ]}
+                borderWidth={1}
+                text={p[0].country_code}
+                colorize={true}
+                isAssigned={p[1]}
+                isAnchor={p[0].is_anchor}
+                annotation={
+                  this.props.showProbeAnnotation &&
+                  p[0][this.props.annotationField]
+                }
+                connectionStatus={(p[0].status && p[0].status.id) || 3}
+                showToolTip={d => this.showProbeToolTip({ d, p, i })}
+                hideToolTip={d => this.hideProbeToolTip({ d, p })}
+              />
+            );
+          })}
+          {this.state.probeTooltip}
+        </svg>
+        {this.props.pl.length > MAX_SHOW_PROBES && (
+          <div>{`...and ${this.props.pl.length -
+            MAX_SHOW_PROBES} more assigned probes`}</div>
+        )}
+      </>
+    );
   }
 }
 
@@ -187,7 +196,10 @@ ProbesGridSvg.propTypes = {
   cols: PropTypes.number,
   cellWidth: PropTypes.number,
   cellHeight: PropTypes.number,
-  annotationField: PropTypes.string
+  annotationField: PropTypes.string,
+  showProbeAnnotation: PropTypes.bool,
+  // the msm status name, used to indicate whether the status is historical or current.
+  status: PropTypes.string
 };
 
 ProbesGridSvg.defaultProps = {
@@ -196,5 +208,6 @@ ProbesGridSvg.defaultProps = {
   cols: 9,
   cellWidth: 42,
   cellHeight: 42 + 14, // this.props.showProbeAnnotation && 14
-  annotationField: "id"
+  annotationField: "id",
+  showProbeAnnotation: true
 };
