@@ -42,8 +42,16 @@ export { ParticipantLogLegend } from "./legends/participantlog.jsx";
 
 // specials
 export { ThumbBar } from "./specials/thumbbars.jsx";
-export { ProbeCircle } from "./specials/probes";
-export { MeasurementDetail, SubGroup, FlowGroup } from "./specials/measurementdetail";
+export {
+  MeasurementDetail,
+  SubGroup,
+  FlowGroup
+} from "./specials/measurementdetail";
+
+// atlas specific
+export { ProbeCircle } from "./specials/atlas/probes/probes.jsx";
+export { AggregatedProbesSvg } from "@ripe-rnd/ui-components/src/specials/atlas/probes/aggregated";
+export { ProbesGridSvg } from "@ripe-rnd/ui-components/src/specials/atlas/probes/grid";
 
 // utils
 export {
