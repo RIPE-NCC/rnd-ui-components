@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { atlasSky } from "../themes/colors";
 
 const StyledLegend = styled.div`
-  background-color: #f2f9ff;
+  background-color: ${atlasSky};
   padding: 12px 16px;
   /* margin-top: 42px; */
   margin: 0 24px 24px 0;
@@ -10,17 +11,18 @@ const StyledLegend = styled.div`
   font-size: 11.9px;
   text-rendering: geometricPrecision;
 
-  label,legend {
+  label,
+  legend {
     font-weight: 400;
     font-size: 11.9px;
   }
 
   .title {
-      margin-bottom: 24px;
+    margin-bottom: 24px;
   }
 
   form {
-      margin-bottom: 0;
+    margin-bottom: 0;
   }
 
   .legend-extra {
