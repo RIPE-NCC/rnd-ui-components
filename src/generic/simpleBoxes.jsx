@@ -180,7 +180,7 @@ const StyledTimeStampBox = styled.div`
   display: ${props => (props.inline && "inline-grid") || "inline-block"};
   margin: 0;
   padding: 0;
-  font-size: 14px;
+  font-size: 1.0em; /* make sure that we stick with the scaling set by the parent */
   /* position: relative; */
 
   h5 {
@@ -319,7 +319,7 @@ export class TimeStampBox extends React.Component {
 }
 
 const StyledRadioInputBox = styled.form`
-  color: ${oimAntracite};
+  color: ${props => (props.disabled && oimSilver) || oimAntracite};
 
   fieldset {
     border: none;
@@ -337,10 +337,22 @@ const StyledRadioInputBox = styled.form`
   }
 `;
 
+const StyledCheckBox = styled.form`
+  color: ${props => (props.disabled && oimSilver) || oimAntracite};
+
+  fieldset {
+    margin-bottom: 24px;
+
+    label {
+      margin-left: 10px;
+    }
+  }
+`;
+
 export class RadioInputBox extends React.Component {
   render() {
     return (
-      <StyledRadioInputBox key="${this.props.id}_switch">
+      <StyledRadioInputBox key="${this.props.id}_switch" disabled={this.props.disabled}>
         <fieldset>
           {this.props.legend && <legend>{this.props.legend}</legend>}
           {this.props.choices.map(i => {
@@ -353,6 +365,7 @@ export class RadioInputBox extends React.Component {
                   value={i.value}
                   onChange={this.props.onChange}
                   checked={this.props.checked == i.value}
+                  disabled={this.props.disabled}
                 />
                 <label htmlFor={i.name}>{i.name}</label>
               </div>
@@ -360,6 +373,28 @@ export class RadioInputBox extends React.Component {
           })}
         </fieldset>
       </StyledRadioInputBox>
+    );
+  }
+}
+
+export class CheckBoxInput extends React.Component {
+  render() {
+    return (
+      <StyledCheckBox disabled={this.props.disabled}>
+        <fieldset>
+          {this.props.legend && <legend>{this.props.legend}</legend>}
+          <input
+            type="checkbox"
+            id={this.props.id}
+            name={this.props.name || null}
+            onChange={this.props.onChange}
+            checked={this.props.value}
+          />
+          {this.props.name && (
+            <label htmlFor={this.props.name}>{this.props.name}</label>
+          )}
+        </fieldset>
+      </StyledCheckBox>
     );
   }
 }

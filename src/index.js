@@ -14,7 +14,8 @@ export {
 export {
   SinglePropertyBox,
   TimeStampBox,
-  RadioInputBox
+  RadioInputBox,
+  CheckBoxInput
 } from "./generic/simpleBoxes.jsx";
 
 // generic
