@@ -122,16 +122,16 @@ export class ProbesGridSvg extends React.Component {
     return (
       <>
         {this.props.requestedLength && (
-          <div>
+          <p>
             {`${this.state.assignedLength} probe${(this.state.assignedLength >
               1 &&
               "s") ||
               ""} assigned / ${this.state.notAssignedLength ||
               "none"} rejected`}
-          </div>
+          </p>
         )}
         {this.state.assignedLength > MAX_SHOW_PROBES && (
-          <div>{`Showing ${MAX_SHOW_PROBES} probes`}</div>
+          <p>{`Showing ${MAX_SHOW_PROBES} probes`}</p>
         )}
         <svg
           key={`pr_svg_${this.props.rI}`}
@@ -142,7 +142,7 @@ export class ProbesGridSvg extends React.Component {
           ) +
             1) *
             this.props.cellHeight}px`}
-          style={{ marginTop: "24px", overflow: "visible" }}
+          style={{ overflow: "visible" }}
           ref={this.probesOverviewSvg}
         >
           {this.props.pl.slice(0, MAX_SHOW_PROBES).map((p, i) => {
