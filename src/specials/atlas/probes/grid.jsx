@@ -45,6 +45,9 @@ import { SvgToolTip } from "../../../generic/tooltip";
           ],
           [{...},<bool>],...
        ]
+
+  requestedLength: used to display the line `n probes assigned / m rejected`
+  (for participation requests). If null/undefined line will be omitted.
 */
 
 const MAX_SHOW_PROBES = 200;
