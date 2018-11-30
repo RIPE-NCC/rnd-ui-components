@@ -193,10 +193,10 @@ ProbesGridSvg.propTypes = {
   requestedLength: PropTypes.number,
   r: PropTypes.number,
   rI: PropTypes.number,
-  cols: PropTypes.number,
-  cellWidth: PropTypes.number,
-  cellHeight: PropTypes.number,
-  annotationField: PropTypes.string,
+  cols: PropTypes.number.isRequired,
+  cellWidth: PropTypes.number.isRequired,
+  cellHeight: PropTypes.number.isRequired,
+  annotationField: PropTypes.string.isRequired,
   showProbeAnnotation: PropTypes.bool,
   // the msm status name, used to indicate whether the status is historical or current.
   status: PropTypes.string
