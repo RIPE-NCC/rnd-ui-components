@@ -469,7 +469,7 @@ export class ParticipantLogLegend extends React.Component {
         <circle className="cls-30" cx="74.13" cy="493.8" r="13.15" />
         <circle className="cls-30" cx="74.13" cy="577.99" r="13.15" />
 
-        <text className="cls-29" transform="translate(16.81 757.08)">
+        <text className="cls-27" transform="translate(16.81 757.08)">
           showing probes information for current date
         </text>
       </StyledLegend>
