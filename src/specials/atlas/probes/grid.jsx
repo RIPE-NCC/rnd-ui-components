@@ -145,7 +145,7 @@ export class ProbesGridSvg extends React.Component {
           ) +
             1) *
             this.props.cellHeight}px`}
-          style={{ overflow: "visible" }}
+          style={{ overflow: "visible", flexBasis: "100%" }}
           ref={this.probesOverviewSvg}
         >
           {this.props.pl.slice(0, MAX_SHOW_PROBES).map((p, i) => {
