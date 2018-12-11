@@ -36,6 +36,7 @@ export {
 
 // geo
 export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
+export { HexBins } from "./geo/probeshexbinmap.jsx";
 
 // legends
 export { GenericLegend } from "./legends/legend.jsx";
