@@ -1,27 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import { StopCircle, Check } from "react-feather";
+import { StopCircle, Check, XCircle } from "react-feather";
 
 import {
   oimClouds,
   oimSilver,
   atlasDarkBlue,
-  atlasGreen
+  atlasGreen,
+  ripeMagenta
 } from "../themes/colors";
 
 const StyledMinimalButton = styled.button`
-  margin: 10px 0 0;
-  padding: 0 12px 5px 12px;
+  margin: 28px 0 0;
+  padding: 4px 20px 14px 18px;
   outline: none;
-  border: 1px solid ${oimSilver};
-  border-radius: 4px;
-  background-color: inherit;
+  border: 0;
+  border-radius: 0;
+  background-color: ${atlasDarkBlue};
   font-size: 14px;
   font-weight: 200;
   /* border: ${props => props.outline && `1px solid ${atlasDarkBlue}`}; */
   color: ${props => (props.active && atlasGreen) || "white"};
   line-height: ${props => (props.stopicon && "28px") || "inherit"};
   /* background-color: ${oimClouds}; */
+  svg {
+    stroke-width: 2px;
+  }
 
   &:hover {
     background-color: ${atlasDarkBlue};
@@ -60,6 +64,9 @@ export class MinimalButton extends React.Component {
           )}
           {this.props.checkIcon && (
             <Check transform="translate(-4,7)" width="24" />
+          )}
+          {this.props.cancelicon && (
+            <XCircle transform="translate(-4,7)" width="24" strokeWidth="2" />
           )}
           {this.props.children}
         </StyledMinimalButton>
