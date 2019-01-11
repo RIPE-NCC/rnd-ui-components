@@ -24,3 +24,6 @@ export const atlasRed="#f84417";
 export const atlasDarkBlue="#060039";
 
 export const jediAntracite = "#363738";
+
+export const ripeGreen="#11a900";
+export const ripeSecLightGrey="#F6F6F6"

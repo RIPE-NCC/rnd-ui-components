@@ -9,7 +9,8 @@ import {
   oimSilver,
   atlasGreen,
   atlasOrange,
-  ripeYellow
+  ripeYellow,
+  ripeSecLightGrey
 } from "../themes/colors";
 import { ToolTip, atlasDarkBlue } from "@ripe-rnd/ui-components";
 import { Clock } from "react-feather";
@@ -481,13 +482,23 @@ ModalBox.defaultProps = {
 };
 
 const StyledInfoBox = styled.div`
-  background-color: ${ripeYellow};
+  background-color: ${props =>
+    (props.status === "success" && ripeYellow) || ripeSecLightGrey};
+  /* color: ${props => props.status === "success" && "white"}; */
   padding: 12px;
   max-width: 90%;
 `;
 
 export class InfoBox extends React.Component {
   render() {
-    return <StyledInfoBox>{this.props.children}</StyledInfoBox>;
+    return (
+      <StyledInfoBox status={this.props.status}>
+        {this.props.children}
+      </StyledInfoBox>
+    );
   }
 }
+
+InfoBox.propTypes = {
+  status: PropTypes.string
+};
