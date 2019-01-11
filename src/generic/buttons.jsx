@@ -73,3 +73,23 @@ export class MinimalButton extends React.Component {
     );
   }
 }
+
+const StyledLinkButton = styled.a`
+  border: none;
+  text-decoration-line: none;
+  color: ${ripeMagenta};
+
+  &:hover {
+    text-decoration-line: underline;
+  }
+`;
+
+export class LinkButton extends React.Component {
+  render() {
+    return (
+      <StyledLinkButton className="link-button" href="#" onClick={this.props.onClick}>
+        {this.props.children}
+      </StyledLinkButton>
+    );
+  }
+}

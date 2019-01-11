@@ -20,7 +20,7 @@ export {
 
 // generic
 export { TextInput } from "./generic/inputs.jsx";
-export { MinimalButton } from "./generic/buttons.jsx";
+export { MinimalButton, LinkButton } from "./generic/buttons.jsx";
 export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
 export { ToolTip, SvgToolTip } from "./generic/tooltip.jsx";
 export {
