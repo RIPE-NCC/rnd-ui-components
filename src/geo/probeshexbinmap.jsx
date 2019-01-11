@@ -6,8 +6,17 @@ import { scaleSqrt, scaleTime, scaleLinear } from "d3-scale";
 import styled, { keyframes } from "styled-components";
 import { GeoMap } from "./map";
 
-// import { geoEqualEarth as projection } from "d3-geo";
-import { geoCylindricalStereographic as projection } from "d3-geo-projection";
+import { geoEqualEarth as projection } from "d3-geo";
+// import { geoCylindricalStereographic as projection } from "d3-geo-projection";
+
+import { SvgToolTip } from "../generic/tooltip";
+import { ThumbBar } from "../specials/thumbbars";
+
+import {
+  loadAllProbesWithOfflineStorage,
+  loadNewProbeInfo,
+  loadCountryGeoInfo
+} from "@ripe-rnd/ui-datastores";
 
 export const transformProbesData = (probesData, projection) => {
   return probesData.map(d => {
@@ -25,7 +34,6 @@ export const transformProbesData = (probesData, projection) => {
   });
 };
 
-
 const blip = keyframes`
     from: { transform: scale(1.0) translate(0,0); }
     50% { transform: scale(9.0) translate(0,0); }
@@ -33,11 +41,12 @@ const blip = keyframes`
 `;
 
 const StyledProbeStatusChanger = styled.circle`
-  stroke-width: 0.2;
+  stroke-width: 1;
   //fill: ${props => (props.status === "connect" && "#00B213") || "#FF0050"};
   fill: none;
   stroke: ${props => (props.status === "connect" && "#00B213") || "#FF0050"};
   animation: ${blip} 1.6s ease-in 5;
+  /* vector-effect: non-scaling-stroke; */
 `;
 
 export class ProbeStatusChanger extends React.Component {
@@ -45,15 +54,18 @@ export class ProbeStatusChanger extends React.Component {
     return (
       <g
         transform={`translate(${this.props.dx},${this.props.dy})`}
-        style={{ transformOrigin: `${this.props.dx}px ${this.props.dy}px` }}
+        style={{
+          transformOrigin: `${this.props.dx}px ${this.props.dy}px`
+          //   vectorEffect: "non-scaling-stroke"
+        }}
       >
         <StyledProbeStatusChanger
           //transformOrigin={`${this.props.dx}px ${this.props.dy}px`}
           r={1 / this.props.zoomFactor}
           status={this.props.status}
-          dx={this.props.dx}
-          dy={this.props.dy}
-          vectorEffect="non-scaling-stroke"
+          //   dx={this.props.dx}
+          //   dy={this.props.dy}
+          //   vectorEffect="non-scaling-stroke"
         />
       </g>
     );
@@ -68,7 +80,8 @@ export class ProbesHexbinMap extends React.Component {
       countries: null,
       changedProbes: [], // these are all the new probe events from DOM ready
       lightProbes: [], // these are the most recent probe that need to be lighted
-      webWorkerAvailability: true
+      webWorkerAvailability: true,
+      startListenDateTime: new Date()
     };
   }
 
@@ -137,9 +150,14 @@ export class ProbesHexbinMap extends React.Component {
       }
     );
 
-    loadProbesInfo().then(
+    loadAllProbesWithOfflineStorage({ apiServer: this.props.apiServer }).then(
       probesData => {
         console.log("probes data loaded...");
+        // - kick out probes without a location (we cannot render them, can we?)
+        // - add two nulls for d3's sake. It will override those with its own stuff.
+        probesData = probesData
+          .filter(p => p[6] && p[7])
+          .map(p => [null, null, ...p]);
 
         if (this.props.dataAdapter) {
           this.props.dataAdapter().then(data => {
@@ -154,6 +172,7 @@ export class ProbesHexbinMap extends React.Component {
         if (window.Worker) {
           const probeUpdater = new Worker("/worker.js");
           probeUpdater.onmessage = m => {
+            console.log(m);
             const newProbeStatus = JSON.parse(m.data);
             let thisProbe = probesData.find(
               p => p[2] === newProbeStatus.prb_id
@@ -161,7 +180,7 @@ export class ProbesHexbinMap extends React.Component {
 
             if (!thisProbe) {
               thisProbe = loadNewProbeInfo(newProbeStatus.prb_id).then(d => {
-                const coords = this.props.projection([
+                const coords = projection([
                   d.geometry.coordinates[0],
                   d.geometry.coordinates[1]
                 ]);
@@ -225,6 +244,9 @@ export class ProbesHexbinMap extends React.Component {
               }
             }
           };
+          this.setState({
+            startListenDateTime: new Date()
+          });
         } else {
           this.setState({ webWorkerAvailability: false });
         }
@@ -239,41 +261,50 @@ export class ProbesHexbinMap extends React.Component {
 
   render() {
     return (
-      <GeoMap
-        viewMode="sheet"
-        landFillColor="white"
-        key="m1"
-        id="map1"
-        ref="map1"
-        scale={235.0}
-        width={1480}
-        height={942}
-        rotate={[0, 0]}
-        translate={[740, 470]}
-        projection={projection}
-        countries={this.state.countries}
-        maxZoomFactor={24}
-      >
-        {this.props.children({
-          paths: this.state.probes,
-          probeChangedEvents: this.state.changedProbes.length,
-          width: this.props.width,
-          height: this.props.height,
-          showToolTip: this.showToolTip,
-          hideToolTip: this.hideToolTip
-        })}
+      <>
+        <GeoMap
+          viewMode="sheet"
+          landFillColor="white"
+          key="m1"
+          id="map1"
+          ref="map1"
+          scale={235.0}
+          width={1480}
+          height={942}
+          rotate={[0, 0]}
+          translate={[740, 470]}
+          projection={projection}
+          countries={this.state.countries}
+          maxZoomFactor={24}
+        >
+          {this.props.render({
+            paths: this.state.probes,
+            probeChangedEvents: this.state.changedProbes.length,
+            width: this.props.width,
+            height: this.props.height,
+            showToolTip: this.showToolTip,
+            hideToolTip: this.hideToolTip
+          })}
 
-        {this.state.changedProbes.length > 0 &&
-          this.state.lightProbes.map((ps, i) => (
-            <ProbeStatusChanger
-              key={`ps_${ps.prb_id}_${ps.status}_${i}`}
-              dx={ps.dx}
-              dy={ps.dy}
-              status={ps.status}
-            />
-          ))}
-        {this.state.tooltip}
-      </GeoMap>
+          {this.state.changedProbes.length > 0 &&
+            this.state.lightProbes.map((ps, i) => (
+              <ProbeStatusChanger
+                key={`ps_${ps.prb_id}_${ps.status}_${i}`}
+                dx={ps.dx}
+                dy={ps.dy}
+                status={ps.status}
+              />
+            ))}
+          {this.state.tooltip}
+        </GeoMap>
+        <ul>
+          <li>
+            {`probes changed since ${this.state.startListenDateTime.toUTCString()}: ${
+              this.state.changedProbes.length
+            }`}
+          </li>
+        </ul>
+      </>
     );
   }
 }
