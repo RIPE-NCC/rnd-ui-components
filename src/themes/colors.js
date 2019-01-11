@@ -1,5 +1,6 @@
 export const ripeMagenta="#00abab"; // supportcolor text on www
 export const ripeOrange="#ff9600";
+export const ripeYellow="#f5e075"
 export const fColor="#58595b";
 export const lColor="#00abab";
 
@@ -20,6 +21,6 @@ export const atlasSky = "#f2f9ff"; // background legends
 
 export const atlasGreen="#85a056";
 export const atlasRed="#f84417";
-export const atlasDarkBlue="#080037";
+export const atlasDarkBlue="#060039";
 
 export const jediAntracite = "#363738";

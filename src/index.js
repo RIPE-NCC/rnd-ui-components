@@ -15,7 +15,9 @@ export {
   SinglePropertyBox,
   TimeStampBox,
   RadioInputBox,
-  CheckBoxInput
+  CheckBoxInput,
+  ModalBox,
+  InfoBox
 } from "./generic/simpleBoxes.jsx";
 
 // generic
@@ -35,8 +37,8 @@ export {
 } from "./inputs/CountryAutoCompleteInput.jsx";
 
 // geo
-export { GeoMap, loadCountryGeoInfo } from "./geo/map.jsx";
-export { HexBins } from "./geo/probeshexbinmap.jsx";
+export { GeoMap } from "./geo/map.jsx";
+export { ProbesHexbinMap, HexBins } from "./geo/probeshexbinmap.jsx";
 
 // legends
 export { GenericLegend } from "./legends/legend.jsx";
@@ -52,11 +54,29 @@ export {
 
 // atlas specific
 export { ProbeCircle } from "./specials/atlas/probes/probes.jsx";
-export { AggregatedProbesSvg } from "@ripe-rnd/ui-components/src/specials/atlas/probes/aggregated";
-export { ProbesGridSvg } from "@ripe-rnd/ui-components/src/specials/atlas/probes/grid";
-
-// utils
 export {
-  aggregationReducer,
-  aggregationReversor
-} from "./utils/probesReducers";
+  AggregatedProbesSvg
+} from "@ripe-rnd/ui-components/src/specials/atlas/probes/aggregated";
+export {
+  ProbesGridSvg
+} from "@ripe-rnd/ui-components/src/specials/atlas/probes/grid";
+
+// // adapters
+// export {
+//   loadCountryGeoInfo,
+//   loadProbesInfo,
+//   loadRttForProbesData,
+//   loadNewProbeInfo
+// } from "./datastores/adapters";
+
+// // atlas adapters
+// export {
+//   loadAllProbesWithOfflineStorage,
+//   loadHistoricalProbesPropertiesOnDate
+// } from "./datastores/atlas/adapters";
+
+// // utils
+// export {
+//   aggregationReducer,
+//   aggregationReversor
+// } from "./utils/probesReducers";

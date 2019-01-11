@@ -14,6 +14,7 @@ import {
 } from "../dialogs/progressIndeterminateDialog";
 
 const StyledExpansionPanelItem = styled.div`
+  position: relative;
   margin-bottom: 6px;
   font: 1em sans-serif normal;
 
@@ -93,6 +94,7 @@ export class ExpansionPanelItem extends React.Component {
         null;
     return (
       <StyledExpansionPanelItem>
+        {this.props.showOverlay && this.props.overlayChildren}
         {/* This is actually the header of the expansionpanel.
             It needs to have the `expanded` property so it can
             avoid showing the orange on-hover bar for already

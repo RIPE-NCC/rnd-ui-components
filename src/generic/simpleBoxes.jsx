@@ -8,9 +8,10 @@ import {
   oimAntracite,
   oimSilver,
   atlasGreen,
-  atlasOrange
+  atlasOrange,
+  ripeYellow
 } from "../themes/colors";
-import { ToolTip } from "@ripe-rnd/ui-components";
+import { ToolTip, atlasDarkBlue } from "@ripe-rnd/ui-components";
 import { Clock } from "react-feather";
 
 const DEFAULT_COLOR = fColor;
@@ -180,7 +181,7 @@ const StyledTimeStampBox = styled.div`
   display: ${props => (props.inline && "inline-grid") || "inline-block"};
   margin: 0;
   padding: 0;
-  font-size: 1.0em; /* make sure that we stick with the scaling set by the parent */
+  font-size: 1em; /* make sure that we stick with the scaling set by the parent */
   /* position: relative; */
 
   h5 {
@@ -352,7 +353,10 @@ const StyledCheckBox = styled.form`
 export class RadioInputBox extends React.Component {
   render() {
     return (
-      <StyledRadioInputBox key="${this.props.id}_switch" disabled={this.props.disabled}>
+      <StyledRadioInputBox
+        key="${this.props.id}_switch"
+        disabled={this.props.disabled}
+      >
         <fieldset>
           {this.props.legend && <legend>{this.props.legend}</legend>}
           {this.props.choices.map(i => {
@@ -396,5 +400,94 @@ export class CheckBoxInput extends React.Component {
         </fieldset>
       </StyledCheckBox>
     );
+  }
+}
+
+const StyledModal = styled.div`
+  .box {
+    z-index: 11;
+    opacity: 1;
+    font-family: "Open Sans", Arial, sans-serif;
+    background-color: white;
+    position: absolute;
+    left: ${props => `calc(50% - ${(props.width && props.width / 2) || 0}px)`};
+    width: ${props => (props.width && `${props.width}px`) || "unset"};
+    height: ${props => (props.height && `${props.height}px`) || "unset"};
+    top: ${props => `calc(50% - ${(props.height && props.height / 2) || 0}px)`};
+    padding: 0;
+
+    .title {
+      padding: 20px;
+      font-size: 16px;
+      background-color: ${atlasDarkBlue};
+      color: white;
+    }
+
+    .body,
+    .footer {
+      font-size: 14px;
+      padding: 20px 20px 0;
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .overlay {
+    /* weird, but we need to cover the entire screen 
+       not just the 100%, 100% of the parent Element.
+       Note that we can't make this work by propagating
+       this up to the root React element, because
+       it would have to live directly under body,
+       *not* under the React root element.
+    */
+    position: fixed;
+    height: 3200%;
+    width: 3200%;
+    top: -800%;
+    left: -800%;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 10;
+  }
+`;
+
+export class ModalBox extends React.Component {
+  render() {
+    return (
+      <>
+        <StyledModal width={this.props.width} height={this.props.height}>
+          <div className="overlay" />
+          <div className="box">
+            <div className="title">{this.props.title}</div>
+            <div className="body">{this.props.body}</div>
+            <div className="footer">{this.props.footer}</div>
+          </div>
+        </StyledModal>
+      </>
+    );
+  }
+}
+
+ModalBox.propTypes = {
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  footer: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  dismissable: PropTypes.bool
+};
+
+ModalBox.defaultProps = {
+  dismissable: true
+};
+
+const StyledInfoBox = styled.div`
+  background-color: ${ripeYellow};
+  padding: 12px;
+  max-width: 90%;
+`;
+
+export class InfoBox extends React.Component {
+  render() {
+    return <StyledInfoBox>{this.props.children}</StyledInfoBox>;
   }
 }
