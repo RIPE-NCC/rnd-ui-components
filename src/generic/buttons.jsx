@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { StopCircle, Check, XCircle } from "react-feather";
+import { StopCircle, Check, XCircle, AlertCircle } from "react-feather";
 
 import {
   oimClouds,
   oimSilver,
   atlasDarkBlue,
   atlasGreen,
-  ripeMagenta
+  ripeMagenta,
+  ripeSecLightGrey
 } from "../themes/colors";
 
 const StyledMinimalButton = styled.button`
@@ -20,7 +21,7 @@ const StyledMinimalButton = styled.button`
   font-size: 14px;
   font-weight: 200;
   /* border: ${props => props.outline && `1px solid ${atlasDarkBlue}`}; */
-  color: ${props => (props.active && atlasGreen) || "white"};
+  color: ${props => (props.active && "white") || ripeSecLightGrey};
   line-height: ${props => (props.stopicon && "28px") || "inherit"};
   /* background-color: ${oimClouds}; */
   svg {
@@ -29,7 +30,7 @@ const StyledMinimalButton = styled.button`
 
   &:hover {
     background-color: ${atlasDarkBlue};
-    border: 1px solid ${atlasDarkBlue}
+    /* border: 1px solid ${atlasDarkBlue}; */
     color: white;
     cursor: ${props => (props.active && "pointer") || "inherit"};
 
@@ -40,7 +41,7 @@ const StyledMinimalButton = styled.button`
 
   svg {
     fill: none;
-    stroke-width: 1px;
+    stroke-width: 2px;
   }
 `;
 
@@ -68,6 +69,13 @@ export class MinimalButton extends React.Component {
           {this.props.cancelicon && (
             <XCircle transform="translate(-4,7)" width="24" strokeWidth="2" />
           )}
+          {this.props.alerticon && (
+            <AlertCircle
+              transform="translate(-4,7)"
+              width="24"
+              strokeWidth="2"
+            />
+          )}
           {this.props.children}
         </StyledMinimalButton>
         {this.props.extraAction && (
@@ -94,7 +102,11 @@ const StyledLinkButton = styled.a`
 export class LinkButton extends React.Component {
   render() {
     return (
-      <StyledLinkButton className="link-button" href="#" onClick={this.props.onClick}>
+      <StyledLinkButton
+        className="link-button"
+        href="#"
+        onClick={this.props.onClick}
+      >
         {this.props.children}
       </StyledLinkButton>
     );

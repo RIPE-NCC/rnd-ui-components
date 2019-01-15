@@ -21,9 +21,12 @@ export const atlasSky = "#f2f9ff"; // background legends
 
 export const atlasGreen="#85a056";
 export const atlasRed="#f84417";
-export const atlasDarkBlue="#060039";
+export const atlasDarkBlue="#070039";
 
 export const jediAntracite = "#363738";
 
 export const ripeGreen="#11a900";
 export const ripeSecLightGrey="#F6F6F6"
+export const ripeRed="#A94442";
+export const ripeDarkBlue="#070038";
+export const ripeSupDarkGrey="#777777"

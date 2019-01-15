@@ -61,6 +61,9 @@ export {
   ProbesGridSvg
 } from "@ripe-rnd/ui-components/src/specials/atlas/probes/grid";
 
+// RIPE icons
+export { RipePlusIcon, RipeEditIcon } from "./generic/icons.jsx";
+
 // // adapters
 // export {
 //   loadCountryGeoInfo,

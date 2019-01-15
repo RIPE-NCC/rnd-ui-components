@@ -10,10 +10,12 @@ import {
   atlasGreen,
   atlasOrange,
   ripeYellow,
-  ripeSecLightGrey
+  ripeSecLightGrey,
+  ripeRed
 } from "../themes/colors";
+
 import { ToolTip, atlasDarkBlue } from "@ripe-rnd/ui-components";
-import { Clock } from "react-feather";
+import { Clock, X } from "react-feather";
 
 const DEFAULT_COLOR = fColor;
 
@@ -24,9 +26,6 @@ const StyledProperyBox = styled.ul`
   /* unfortunately we need to override the template with !important here */
   margin: ${props => (props.readOnly && "0 !important") || "0"};
   /* margin-left: ${props => props.spanAllColumns && "6px !important"}; */
-  max-width: ${props =>
-    props.spanAllColumns &&
-    "750px"}; /* ensure readability by wrapping too long texts */
   /* color: ${oimAntracite}; */
 
   border-left: ${props =>
@@ -47,10 +46,17 @@ const StyledProperyBox = styled.ul`
 
   .desc {
     /* color: "#dfdfdf"; */
+    max-width: ${props =>
+      props.spanAllColumns &&
+      "750px"}; /* ensure readability by wrapping too long texts */
     color: ${props => (props.isDefault && DEFAULT_COLOR) || oimAntracite};
     text-rendering: geometricPrecision;
     /* font-style: italic; */
     font-weight: 100;
+  }
+
+  .err {
+    color: ${ripeRed};
   }
 
   /* li.value {
@@ -344,6 +350,9 @@ const StyledCheckBox = styled.form`
 
   fieldset {
     margin-bottom: 24px;
+    border: none;
+    padding-left: 0;
+    margin-left: 0;
 
     label {
       margin-left: 10px;
@@ -410,12 +419,13 @@ const StyledModal = styled.div`
     opacity: 1;
     font-family: "Open Sans", Arial, sans-serif;
     background-color: white;
-    position: absolute;
+    position: fixed;
     left: ${props => `calc(50% - ${(props.width && props.width / 2) || 0}px)`};
     width: ${props => (props.width && `${props.width}px`) || "unset"};
     height: ${props => (props.height && `${props.height}px`) || "unset"};
     top: ${props => `calc(50% - ${(props.height && props.height / 2) || 0}px)`};
     padding: 0;
+    margin: 0;
 
     .title {
       padding: 20px;
@@ -424,13 +434,17 @@ const StyledModal = styled.div`
       color: white;
     }
 
-    .body,
-    .footer {
+    .body {
       font-size: 14px;
       padding: 20px 20px 0;
       p {
         margin: 0;
       }
+    }
+    .footer {
+      font-size: 14px;
+      padding: 10px 20px 0 20px;
+      margin-bottom: 0;
     }
   }
 
@@ -482,23 +496,38 @@ ModalBox.defaultProps = {
 };
 
 const StyledInfoBox = styled.div`
+  position: relative;
   background-color: ${props =>
     (props.status === "success" && ripeYellow) || ripeSecLightGrey};
   /* color: ${props => props.status === "success" && "white"}; */
-  padding: 12px;
-  max-width: 90%;
+  padding: 12px 12px 0;
+  margin: 0;
+  min-height: 36px;
+  max-width: ${props => props.maxWidth || "90%"};
+
+  .dismiss-icon {
+    position: absolute;
+    right: 6px;
+    top: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 export class InfoBox extends React.Component {
   render() {
     return (
-      <StyledInfoBox status={this.props.status}>
+      <StyledInfoBox status={this.props.status} maxWidth={this.props.maxWidth}>
         {this.props.children}
+        {this.props.dismissable && <X className="dismiss-icon" onClick={this.props.onClick}/>}
       </StyledInfoBox>
     );
   }
 }
 
 InfoBox.propTypes = {
-  status: PropTypes.string
+  status: PropTypes.string,
+  dismissable: PropTypes.bool
 };
