@@ -169,7 +169,7 @@ export class TextInput extends React.Component {
 
   handleChange = event => {
     event.persist();
-        this.props.runOnFocus();
+    this.props.runOnFocus();
 
     if (event.target.value !== this.props.defaultValue) {
       this.props.runOnFocus();
@@ -194,7 +194,7 @@ export class TextInput extends React.Component {
     this.inputRef.current.select();
   };
 
-  looseFocus = () => {
+  loseFocus = () => {
     this.setState({ underEdit: false });
     if (this.props.closeSuggestionPane) {
       this.props.closeSuggestionPane();
@@ -203,14 +203,22 @@ export class TextInput extends React.Component {
 
   discardInput = () => {
     this.setState({ value: this.props.defaultValue });
-    this.looseFocus();
+    this.loseFocus();
   };
 
   submitInput = e => {
     e.preventDefault();
-    this.looseFocus();
+    this.loseFocus();
     if (this.state.value !== this.props.defaultValue) {
-      this.props.submit(this.state.value);
+      this.props.submit(this.state.value).then(
+        success => {
+          this.loseFocus();
+        },
+        failure => {
+          this.setState({ underEdit: true});
+          this.focus();
+        }
+      );
     }
   };
 
@@ -257,8 +265,12 @@ export class TextInput extends React.Component {
 
 TextInput.propTypes = {
   defaultValue: PropTypes.string.isRequired,
+  // Make sure submit returns a Promise!
   submit: PropTypes.func.isRequired,
   enterkeyhint: PropTypes.string,
+  // This is the function that gets run when
+  // a TextInput gets focus. So things
+  // like resetting warning|error boxes etc.
   runOnFocus: PropTypes.func
 };
 
