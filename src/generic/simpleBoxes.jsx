@@ -497,8 +497,11 @@ ModalBox.defaultProps = {
 
 const StyledInfoBox = styled.div`
   position: relative;
+  color: ${props => (props.status === "error" && "white") || "black"};
   background-color: ${props =>
-    (props.status === "success" && ripeYellow) || ripeSecLightGrey};
+    (props.status === "success" && ripeYellow) ||
+    (props.status === "error" && ripeRed) ||
+    ripeSecLightGrey};
   /* color: ${props => props.status === "success" && "white"}; */
   padding: 12px 12px 0;
   margin: 0;
@@ -521,7 +524,9 @@ export class InfoBox extends React.Component {
     return (
       <StyledInfoBox status={this.props.status} maxWidth={this.props.maxWidth}>
         {this.props.children}
-        {this.props.dismissable && <X className="dismiss-icon" onClick={this.props.onClick}/>}
+        {this.props.dismissable && (
+          <X className="dismiss-icon" onClick={this.props.onClick} />
+        )}
       </StyledInfoBox>
     );
   }
