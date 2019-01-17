@@ -56,7 +56,7 @@ const StyledTextInput = styled.form`
     /* border-right: none; */
     outline: none;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     margin-top: 6px;
     padding: 6px 12px;
     height: 36px;

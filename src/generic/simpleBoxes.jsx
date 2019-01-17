@@ -503,15 +503,15 @@ const StyledInfoBox = styled.div`
     (props.status === "error" && ripeRed) ||
     ripeSecLightGrey};
   /* color: ${props => props.status === "success" && "white"}; */
-  padding: 12px 12px 0;
-  margin: 0;
+  padding: 12px 42px 12px 16px;
+  margin: 6px 0 0;
   min-height: 36px;
-  max-width: ${props => props.maxWidth || "90%"};
+  max-width: ${props => props.maxWidth || "100%"};
 
   .dismiss-icon {
     position: absolute;
-    right: 6px;
-    top: 10px;
+    right: 9px;
+    top: 9px;
 
     &:hover {
       cursor: pointer;
