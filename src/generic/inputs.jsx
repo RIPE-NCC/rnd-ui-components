@@ -25,7 +25,7 @@ const StyledTextInput = styled.form`
   width: 100%;
   min-width: 300px;
   font-size: 1em;
-  margin: 0 0 12px;
+  margin: 0;
   padding: 0;
 
   label {
@@ -38,11 +38,12 @@ const StyledTextInput = styled.form`
   }
 
   div.enterkeyhint {
-    position: absolute;
+    /* position: absolute; */
     font-size: 12px;
     color: ${ripeSupDarkGrey};
-    left: 13px;
-    bottom: -6px;
+    margin-left: 12px;
+    /* left: 13px; */
+    /* bottom: -6px; */
   }
 
   input[type="text"],
@@ -56,7 +57,7 @@ const StyledTextInput = styled.form`
     /* border-right: none; */
     outline: none;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     margin-top: 6px;
     padding: 6px 12px;
     height: 36px;
@@ -215,7 +216,7 @@ export class TextInput extends React.Component {
           this.loseFocus();
         },
         failure => {
-          this.setState({ underEdit: true});
+          this.setState({ underEdit: true });
           this.focus();
         }
       );
