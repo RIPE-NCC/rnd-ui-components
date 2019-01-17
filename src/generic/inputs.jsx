@@ -56,7 +56,7 @@ const StyledTextInput = styled.form`
     /* border-right: none; */
     outline: none;
     width: 100%;
-    margin-bottom: 0;
+    margin-bottom: 15px;
     margin-top: 6px;
     padding: 6px 12px;
     height: 36px;
@@ -250,11 +250,26 @@ export class TextInput extends React.Component {
         </div>
         {this.state.underEdit && (
           <>
-            <Check className="submit-icon" onClick={this.submitInput} />
-            <X className="cancel-icon" onClick={this.discardInput} />
+            <Check
+              className="submit-icon"
+              onClick={this.submitInput}
+              width="36"
+              height="36"
+            />
+            <X
+              className="cancel-icon"
+              onClick={this.discardInput}
+              width="36"
+              height="36"
+            />
           </>
         )}
-        <Edit3 className="edit-icon" onClick={this.focus} />
+        <Edit3
+          className="edit-icon"
+          onClick={this.focus}
+          height="36"
+          width="36"
+        />
         {this.state.underEdit && (
           <div className="enterkeyhint">{this.props.enterkeyhint}</div>
         )}
