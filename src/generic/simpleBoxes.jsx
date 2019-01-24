@@ -126,7 +126,6 @@ export class SinglePropertyBox extends React.Component {
         <li className="name">
           {(negateValue && negateName) || this.props.name}
         </li>
-        <li className="desc">{this.props.description}</li>
         {this.props.type !== "assertion" &&
           propArray.map((p, i) => {
             valueOrAnnotation = booleanOrNonExistingValueToString({
@@ -152,6 +151,9 @@ export class SinglePropertyBox extends React.Component {
           })}
         {(this.props.annotation || valueOrAnnotation[1]) && (
           <li>({this.props.annotation || valueOrAnnotation[1]})</li>
+        )}
+        {this.props.description && (
+          <li className="desc">{this.props.description}</li>
         )}
       </StyledProperyBox>
     );
