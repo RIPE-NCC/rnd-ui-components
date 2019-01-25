@@ -135,27 +135,27 @@ export class SinglePropertyBox extends React.Component {
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
         <li className="name">{this.name}</li>
         {propArray.map((p, i) => {
-            valueOrAnnotation = booleanOrNonExistingValueToString({
-              ...this.props,
-              value: p
-            });
-            return (
-              <StyledValue
-                className="value"
-                isDefault={this.props.isDefault}
-                type={this.props.type}
-                value={p}
-                key={`prop_${i}`}
-                asListItem={this.props.valuesAsList}
-              >
-                {valueOrAnnotation[0]}
-                {(this.props.isDefault &&
-                  this.props.value !== undefined &&
-                  " (default)") ||
-                  ""}
-              </StyledValue>
-            );
-          })}
+          valueOrAnnotation = booleanOrNonExistingValueToString({
+            ...this.props,
+            value: p
+          });
+          return (
+            <StyledValue
+              className="value"
+              isDefault={this.props.isDefault}
+              type={this.props.type}
+              value={p}
+              key={`prop_${i}`}
+              asListItem={this.props.valuesAsList}
+            >
+              {valueOrAnnotation[0]}
+              {(this.props.isDefault &&
+                this.props.value !== undefined &&
+                " (default)") ||
+                ""}
+            </StyledValue>
+          );
+        })}
         {(this.props.annotation || valueOrAnnotation[1]) && (
           <li>({this.props.annotation || valueOrAnnotation[1]})</li>
         )}
@@ -545,3 +545,21 @@ InfoBox.propTypes = {
   status: PropTypes.string,
   dismissable: PropTypes.bool
 };
+
+const StyledIndentBox = styled.div`
+  & > div {
+    border-left: 8px solid ${atlasOrange};
+    padding-left: 2px;
+    margin-top: 6px;
+  }
+`;
+
+export class IndentBox extends React.Component {
+  render() {
+    return (
+      <StyledIndentBox depth={this.props.depth}>
+        {this.props.children}
+      </StyledIndentBox>
+    );
+  }
+}
