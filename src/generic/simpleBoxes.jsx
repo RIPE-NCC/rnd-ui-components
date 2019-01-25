@@ -90,13 +90,15 @@ const booleanOrNonExistingValueToString = props => {
     annotation = null;
   switch (props.value) {
     case false:
-      stringValue = "FALSE";
+      stringValue = props.negateName || "false";
       break;
     case true:
-      stringValue = "TRUE";
+      stringValue =
+        (props.type === "assertion" && props.negateName && props.name) ||
+        "true";
       break;
     case null:
-      stringValue = "-";
+      stringValue = (props.type === "assertion" && props.negateName) || "-";
       break;
     case undefined:
       annotation = "No value set and no default defined";
@@ -106,6 +108,14 @@ const booleanOrNonExistingValueToString = props => {
 };
 
 export class SinglePropertyBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.name =
+      (props.type === "assertion" &&
+        `${props.name} ${(props.negateName && `OR ${props.negateName}`) ||
+          ""}`) ||
+      props.name;
+  }
   render() {
     const negateValue = !(this.props.type === "assertion"
         ? this.props.value === true
@@ -123,11 +133,8 @@ export class SinglePropertyBox extends React.Component {
           ""}`}
       >
         {/* If we get a false value we either have a negateName and display that OR we display 'NOT <name>' */}
-        <li className="name">
-          {(negateValue && negateName) || this.props.name}
-        </li>
-        {this.props.type !== "assertion" &&
-          propArray.map((p, i) => {
+        <li className="name">{this.name}</li>
+        {propArray.map((p, i) => {
             valueOrAnnotation = booleanOrNonExistingValueToString({
               ...this.props,
               value: p
