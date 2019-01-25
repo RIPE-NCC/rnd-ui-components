@@ -17,7 +17,8 @@ export {
   RadioInputBox,
   CheckBoxInput,
   ModalBox,
-  InfoBox
+  InfoBox,
+  IndentBox
 } from "./generic/simpleBoxes.jsx";
 
 // generic
