@@ -1,14 +1,14 @@
-export { TestComponent } from "./test.jsx";
+export { TestComponent } from "./react/test.jsx";
 
 // colors
 export * from "./themes/colors";
 
 // dialogs
-export { default as Dialog } from "./dialogs/Dialog.jsx";
-export { default as EditCountryDialog } from "./dialogs/EditCountryDialog.jsx";
+export { default as Dialog } from "./react/dialogs/Dialog.jsx";
+export { default as EditCountryDialog } from "./react/dialogs/EditCountryDialog.jsx";
 export {
   default as ProgressIndeterminateDialog
-} from "./dialogs/progressIndeterminateDialog";
+} from "./react/dialogs/progressIndeterminateDialog";
 
 // boxes
 export {
@@ -19,65 +19,45 @@ export {
   ModalBox,
   InfoBox,
   IndentBox
-} from "./generic/simpleBoxes.jsx";
+} from "./react/generic/simpleBoxes.jsx";
 
 // generic
-export { TextInput } from "./generic/inputs.jsx";
-export { MinimalButton, LinkButton } from "./generic/buttons.jsx";
-export { default as SuggestionPane } from "./generic/SuggestionPane.jsx";
-export { ToolTip, SvgToolTip } from "./generic/tooltip.jsx";
+export { TextInput } from "./react/generic/inputs.jsx";
+export { MinimalButton, LinkButton } from "./react/generic/buttons.jsx";
+export { default as SuggestionPane } from "./react/generic/SuggestionPane.jsx";
+export { ToolTip, SvgToolTip } from "./react/generic/tooltip.jsx";
 export {
   ExpansionPanelItem,
   ExpansionPanelItemWithStatus
-} from "./generic/ExpansionPanel.jsx";
-export { SimpleTag } from "./generic/tags.jsx";
+} from "./react/generic/ExpansionPanel.jsx";
+export { SimpleTag } from "./react/generic/tags.jsx";
 
 // geo input specials
 export {
   default as CountryAutoCompleteInput
-} from "./inputs/CountryAutoCompleteInput.jsx";
+} from "./react/inputs/CountryAutoCompleteInput.jsx";
 
 // geo
-export { GeoMap } from "./geo/map.jsx";
-export { ProbesHexbinMap, HexBins } from "./geo/probeshexbinmap.jsx";
+export { GeoMap } from "./react/geo/map.jsx";
+export { ProbesHexbinMap, HexBins } from "./react/geo/probeshexbinmap.jsx";
 
 // legends
-export { GenericLegend } from "./legends/legend.jsx";
-export { ParticipantLogLegend } from "./legends/participantlog.jsx";
+export { GenericLegend } from "./react/legends/legend.jsx";
+export { ParticipantLogLegend } from "./react/legends/participantlog.jsx";
 
 // specials
-export { ThumbBar } from "./specials/thumbbars.jsx";
+export { ThumbBar } from "./react/specials/thumbbars.jsx";
 export {
   MeasurementDetail,
   SubGroup,
   FlowGroup
-} from "./specials/measurementdetail";
+} from "./react/specials/measurementdetail";
 
 // atlas specific
-export { ProbeCircle } from "./specials/atlas/probes/probes.jsx";
+export { ProbeCircle } from "./react/specials/atlas/probes/probes.jsx";
 export {
   AggregatedProbesSvg
-} from "@ripe-rnd/ui-components/src/specials/atlas/probes/aggregated";
+} from "./react/specials/atlas/probes/aggregated";
 export {
   ProbesGridSvg
-} from "@ripe-rnd/ui-components/src/specials/atlas/probes/grid";
-
-// // adapters
-// export {
-//   loadCountryGeoInfo,
-//   loadProbesInfo,
-//   loadRttForProbesData,
-//   loadNewProbeInfo
-// } from "./datastores/adapters";
-
-// // atlas adapters
-// export {
-//   loadAllProbesWithOfflineStorage,
-//   loadHistoricalProbesPropertiesOnDate
-// } from "./datastores/atlas/adapters";
-
-// // utils
-// export {
-//   aggregationReducer,
-//   aggregationReversor
-// } from "./utils/probesReducers";
+} from "./react/specials/atlas/probes/grid";
