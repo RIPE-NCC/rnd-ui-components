@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { oimSilver, oimAntracite, oimMarkerYellow } from "../../themes/colors";
+import {
+  oimSilver,
+  oimAntracite,
+  oimMarkerYellow,
+  atlasRed
+} from "../../themes/colors";
 
 const StyledSuggestionPane = styled.div`
   position: absolute;
   display: block;
-  background-color: white;
+  background-color: ${oimAntracite};
   z-index: 1;
   padding: 0;
   margin: 0;
@@ -24,17 +29,22 @@ const StyledSuggestionPane = styled.div`
     padding-left: 0;
 
     & > li {
-      width: calc(100% + 15px);
+      width: calc(100% + 16px);
       overflow-x: hidden;
       padding: 10px 0 10px 15px;
-      margin-left: -15px;
-      margin-right: 15px;
+      margin-left: 0;
+      margin-right: 36px;
       margin-bottom: 0;
     }
 
     & > li.hover {
-      background-color: ${oimMarkerYellow};
+      background-color: transparent;
+      color: ${atlasRed};
       cursor: pointer;
+      margin-left: -8px;
+      /* padding-right: 0; */
+      /* width: calc(100% - 16px); */
+      padding-left: 24px;
     }
   }
 

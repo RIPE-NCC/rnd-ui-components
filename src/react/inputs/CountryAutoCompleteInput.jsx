@@ -9,7 +9,8 @@ class CountryAutoCompleteInPut extends React.Component {
     super(props);
     this.state = {
       suggestionPaneOpen: false,
-      selectedLocationName: this.props.initialCountry.properties.countryNameLong,
+      selectedLocationName: this.props.initialCountry.properties
+        .countryNameLong,
       locationCanceled: false
     };
   }
@@ -87,7 +88,7 @@ class CountryAutoCompleteInPut extends React.Component {
     if (this.state.locationCanceled) {
       this.setState({
         locationCanceled: false
-      })
+      });
     }
   };
 
@@ -108,21 +109,28 @@ class CountryAutoCompleteInPut extends React.Component {
     return (
       <div className="context-dialog">
         <TextInput
-          title="Country"
+          // title="Country"
           defaultValue={this.props.initialCountry.properties.countryNameLong}
           valueHasChanged={this.valueHasChanged}
-          updatedValue={this.state.locationCanceled && this.state.selectedLocationName || null}
+          updatedValue={
+            (this.state.locationCanceled && this.state.selectedLocationName) ||
+            null
+          }
           emptyHint={this.props.emptyHint}
+          enterkeyhint={""} // no keyhintr here, it will start before user hits enter
           closeSuggestionPane={this.closeSuggestionPane}
+          runOnFocus={() => {
+            console.log("focus!");
+          }}
+          underEdit={this.state.suggestionPaneOpen}
         />
-        {this.state.suggestionPaneOpen &&
-          this.state.filteredSuggestions && (
-            <SuggestionPane
-              suggestionArray={this.state.filteredSuggestions}
-              confirmSuggestion={this.changeCountry}
-              closeSuggestionPane={this.closeSuggestionPane}
-            />
-          )}
+        {this.state.suggestionPaneOpen && this.state.filteredSuggestions && (
+          <SuggestionPane
+            suggestionArray={this.state.filteredSuggestions}
+            confirmSuggestion={this.changeCountry}
+            closeSuggestionPane={this.closeSuggestionPane}
+          />
+        )}
       </div>
     );
   }
