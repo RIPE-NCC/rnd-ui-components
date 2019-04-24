@@ -5,7 +5,7 @@ import {
   oimAntracite,
   oimMarkerYellow,
   atlasRed
-} from "../themes/colors";
+} from "../../themes/colors";
 
 const StyledSuggestionPane = styled.div`
   position: absolute;

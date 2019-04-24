@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SinglePropertyBox } from "../generic/simpleBoxes";
-import { fColor } from "../themes/colors";
+import { fColor } from "../../themes/colors";
 
 export const MeasurementDetail = styled.div`
   position: relative;

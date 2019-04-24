@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { atlasSky } from "../themes/colors";
+import { atlasSky } from "../../themes/colors";
 
 const StyledLegend = styled.div`
   background-color: ${atlasSky};

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import styled from "styled-components";
-import { oimClouds, atlasDarkBlue, fColor, atlasOrange } from "../themes/colors";
+import { oimClouds, atlasDarkBlue, fColor, atlasOrange } from "../../themes/colors";
 
 import { dismissButton } from "../generic/md.jsx";
 

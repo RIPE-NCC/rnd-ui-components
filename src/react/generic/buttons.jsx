@@ -9,7 +9,7 @@ import {
   atlasGreen,
   ripeMagenta,
   ripeSecLightGrey
-} from "../themes/colors";
+} from "../../themes/colors";
 
 const StyledMinimalButton = styled.button`
   margin: 28px 0 0;

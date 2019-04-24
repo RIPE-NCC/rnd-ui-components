@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { jediAntracite, lColor } from "../themes/colors";
+import { jediAntracite, lColor } from "../../themes/colors";
 
 const StyledToolTip = styled.div`
   font-size: 12px;

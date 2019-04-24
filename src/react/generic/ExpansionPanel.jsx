@@ -6,7 +6,7 @@ import { UpArrow, DownArrow, MenuButton } from "../generic/md.jsx";
 
 import Dialog from "../dialogs/Dialog.jsx";
 import { MenuItem } from "../menus/MenuItem.jsx";
-import { oimSilver } from "../themes/colors";
+import { oimSilver } from "../../themes/colors";
 
 import {
   indeterminateAnimation,

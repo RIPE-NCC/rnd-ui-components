@@ -12,7 +12,7 @@ import {
   ripeYellow,
   ripeSecLightGrey,
   ripeRed
-} from "../themes/colors";
+} from "../../themes/colors";
 
 import { ToolTip, atlasDarkBlue } from "@ripe-rnd/ui-components";
 import { Clock, X } from "react-feather";

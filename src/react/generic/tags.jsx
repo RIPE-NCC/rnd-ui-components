@@ -7,7 +7,7 @@ import {
   oimSilver,
   atlasGreen,
   atlasDarkBlue
-} from "../themes/colors";
+} from "../../themes/colors";
 
 const StyledSimpleTag = styled.div`
   box-sizing: border-box;

@@ -30,7 +30,7 @@ import {
   oimEmerald,
   oimAntracite,
   lColor
-} from "../themes/colors";
+} from "../../themes/colors";
 
 const StyledGeoMap = styled.svg`/* all browsers except Chrome only want to transform from the transform-origin 0 0 */
 /* so we set it explicitly here to align all browsers */

@@ -13,7 +13,7 @@ import {
   atlasOrange,
   atlasFog,
   atlasMist
-} from "../themes/colors";
+} from "../../themes/colors";
 
 const ExpStyledDialog = styled.div`
   background-color: ${atlasFog};

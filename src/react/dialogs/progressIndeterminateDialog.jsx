@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { keyframes } from "styled-components";
 
 import Dialog from "./Dialog.jsx";
-import { oimSilver, atlasRed } from "../themes/colors";
+import { oimSilver, atlasRed } from "../../themes/colors";
 
 export const indeterminateAnimation = keyframes`
   0% {

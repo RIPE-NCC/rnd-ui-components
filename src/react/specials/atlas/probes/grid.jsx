@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { ProbeCircle } from "./probes";
-import { probeStatusMap } from "../../../utils/probes";
+import { probeStatusMap } from "../../../../utils/probes";
 import { SvgToolTip } from "../../../generic/tooltip";
 
 /*

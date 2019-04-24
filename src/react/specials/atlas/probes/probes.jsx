@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { atlasGreen, oimClouds, oimSilver, atlasRed } from "../../../themes/colors";
+import { atlasGreen, oimClouds, oimSilver, atlasRed } from "../../../../themes/colors";
 
 let nextColor = id => {
   if (typeof id === "string") {

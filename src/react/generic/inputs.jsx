@@ -15,7 +15,7 @@ import {
   ripeSupDarkGrey,
   oimUniverse,
   atlasFog
-} from "../themes/colors";
+} from "../../themes/colors";
 
 import { RipePlusIcon } from "./icons.jsx";
 import { Edit3, Check, X } from "react-feather";
