@@ -79,6 +79,8 @@ const StyledTextInput = styled.form`
   }
 
   svg[class*="-icon"] {
+    /* take out bootstratp mangling */
+    box-sizing: content-box;
     background-color: ${ripeDarkBlue};
     padding: 6px;
     stroke: white;
@@ -254,22 +256,16 @@ export class TextInput extends React.Component {
             <Check
               className="submit-icon"
               onClick={this.submitInput}
-              width="36"
-              height="36"
             />
             <X
               className="cancel-icon"
               onClick={this.discardInput}
-              width="36"
-              height="36"
             />
           </>
         )}
         <Edit3
           className="edit-icon"
           onClick={this.focus}
-          height="36"
-          width="36"
         />
         {this.state.underEdit && (
           <div className="enterkeyhint">{this.props.enterkeyhint}</div>
