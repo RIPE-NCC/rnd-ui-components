@@ -1,4 +1,4 @@
-const TRENDS_API_SERVER = "openipmap-pipeline-dev";
+const TRENDS_API_SERVER = "trends.atlas.ripe.net";
 const GRAPH_HOR = 350;
 const GRAPH_VERT = 273;
 const GRAPH_OFFSET_HOR = 50;
