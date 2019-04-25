@@ -1,14 +1,14 @@
 {
   "name": "@ripe-rnd/ui-components",
   "sideEffects": false,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generic reusable UI components made with React",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "preversion": "npm set registry http://pulpo.ripe.net:4873 && git checkout release",
-    "postversion": "git push && git push --tags && npm publish",
-    "publish_public": "npm set registry https://registry.npmjs.org/ && npm publish && npm set registry http://pulpo.ripe.net:4873"
+    "postversion": "git push && git push --tags && npm publish && git checkout master && git checkout release package.json",
+    "publish_public": "npm set registry https://registry.npmjs.org/ && git checkout release && npm publish && npm set registry http://pulpo.ripe.net:4873 && git checkout master"
   },
   "repository": {
     "type": "git",
