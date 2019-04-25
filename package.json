@@ -5,7 +5,10 @@
   "description": "Generic reusable UI components made with React",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preversion": "npm set registry http://pulpo.ripe.net:4873 && git checkout release",
+    "postversion": "git push && git push --tags && npm publish",
+    "publish_public": "npm set registry https://registry.npmjs.org/ && npm publish && npm set registry http://pulpo.ripe.net:4873"
   },
   "repository": {
     "type": "git",
