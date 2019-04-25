@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "preversion": "git checkout release",
     "postversion": "git push && git push --tags && npm --registry http://pulpo.ripe.net:4873 publish && git checkout master && git checkout release package.json",
-    "publish_public": "git checkout release && npm --registry https://registry.npmjs.org/ publish && git checkout master"
+    "publish_public": "git pull github && git checkout release && npm --registry https://registry.npmjs.org/ publish && git checkout master"
+>>>>>>> Stashed changes
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,7 @@
   ],
   "author": "Jasper den Hertog",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@turf/turf": "^5.1.6",
     "babel-plugin-styled-components": "^1.8.0",
     "d3-ease": "^1.0.3",
@@ -33,9 +34,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-feather": "^1.1.0",
-    "styled-components": "^3.3.2"
-  },
-  "dependencies": {
+    "styled-components": "^3.3.2",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.3",
     "d3-hexbin": "^0.2.2",
     "d3-scale": "^2.1.2",
