@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@bitbucket.ripe.net:7999/rnd/ui-components.git"
+    "url": "https://github.com/RIPE-NCC/rnd-ui-components.git"
   },
   "keywords": [
     "react",
