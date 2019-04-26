@@ -1,7 +1,7 @@
 {
   "name": "@ripe-rnd/ui-components",
   "sideEffects": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Generic reusable UI components made with React",
   "main": "src/index.js",
   "scripts": {
